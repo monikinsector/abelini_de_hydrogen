@@ -1,0 +1,93 @@
+name: CI → SonarCloud → Deploy to Oxygen
+
+on:
+  push:
+    branches:
+      - main
+      - stage
+      - dev
+  pull_request:
+    types: [synchronize]
+
+permissions:
+  contents: read
+  deployments: write
+  id-token: write
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # - name: Run tests
+      #   run: npm test --if-present
+
+      # Uncomment SonarCloud step when ready
+      # - name: SonarCloud Scan
+      #   uses: SonarSource/sonarcloud-github-action@ffc3010689be73b8e5ae0c57ce35968afd7909e8
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     args: >
+      #       -Dsonar.projectKey=devops509_abelini-de
+      #       -Dsonar.organization=devops509
+      #       -Dsonar.sources=.
+      #       -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/.react-router/**,**/.shopify/**
+      #       -Dsonar.qualitygate.wait=false
+
+  deploy:
+    name: Deploy to Oxygen (Only if Sonar Passed)
+    runs-on: ubuntu-latest
+    needs: sonarcloud
+    if: success()
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          check-latest: true
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build and Publish to Oxygen
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            echo "Deploying Main to Store 2 (PRODUCTION)..."
+            npx shopify hydrogen deploy --token="${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000071583 }}"
+
+          elif [ "${GITHUB_REF_NAME}" = "stage" ]; then
+            echo "Deploying Stage to Store 1 (STAGE)..."
+            npx shopify hydrogen deploy --token="${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000075758 }}"
+
+          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
+            echo "Deploying Stage to Store 1 (DEV)..."
+            npx shopify hydrogen deploy --token="${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000075758 }}"
+            
+          else
+            echo "Unknown branch or event. Skipping deployment."
+            exit 1
+          fi
