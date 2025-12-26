@@ -47,7 +47,7 @@ jobs:
             -Dsonar.projectKey=devops509_abelini-de
             -Dsonar.organization=devops509
             -Dsonar.sources=.
-            -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/.react-router/**,**/.shopify/**
+            -Dsonar.coverage.exclusions=**
             -Dsonar.qualitygate.wait=true
 
   deploy:
