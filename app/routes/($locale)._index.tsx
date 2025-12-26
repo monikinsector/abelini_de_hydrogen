@@ -12,6 +12,8 @@ export const meta: Route.MetaFunction = () => {
   return [{title: 'Hydrogen | Home'}];
 };
 
+console.log('test');
+
 export async function loader(args: Route.LoaderArgs) {
   // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
