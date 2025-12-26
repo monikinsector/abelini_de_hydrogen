@@ -1,0 +1,22 @@
+{
+  "rules": [
+    {
+      "id": "NO_DIRECT_PROD_ENV",
+      "level": "CRITICAL",
+      "description": "Direct usage of PROD environment variables is not allowed",
+      "pattern": "process\\.env\\.PROD"
+    },
+    {
+      "id": "NO_HARDCODED_SECRET",
+      "level": "CRITICAL",
+      "description": "Hardcoded secrets or tokens detected",
+      "pattern": "(API_KEY|SECRET|PASSWORD|TOKEN)\\s*=\\s*['\"]"
+    },
+    {
+      "id": "NO_DIRECT_PROD_API_CALL",
+      "level": "CRITICAL",
+      "description": "Direct call to production API detected",
+      "pattern": "https://prod\\."
+    }
+  ]
+}
