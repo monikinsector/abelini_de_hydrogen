@@ -1,3 +1,4 @@
+import { Image } from '@shopify/hydrogen';
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router';
 
@@ -24,7 +25,10 @@ const HeroBanner = ({ data }: any) => {
       <div className="grid grid-cols-1 pb-2 md:pb-0 md:grid-cols-5 min-h-[50vh] bg-[url('/assets/images/sale_background.webp')] bg-cover">
 
             <div className='col-span-2 flex justify-center'>
-            <img src="/assets/images/hero_model.webp" alt="Hero Model" className="h-[400px] mx-auto"/>
+              {/* Desktop Image */}
+              <Image src="/assets/images/hero_model.webp" alt="Hero Model" className="mx-auto md:block hidden"/>
+            {/* Mobile Image */}
+            <Image src="/assets/images/mobile/hero_model.webp" alt="Hero Model" className="h-[400px] mx-auto block md:hidden "/>
             </div>
     
             <div className="flex justify-center items-center w-full col-span-3">

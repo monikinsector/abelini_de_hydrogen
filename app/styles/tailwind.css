@@ -3,14 +3,14 @@
 @import "tailwindcss";
 
 button.btn-black {
-    @apply bg-black text-white font-bold text-[1rem] py-2 px-16 border border-white rounded-[24px] cursor-pointer hover:bg-white hover:text-black transition-all duration-450;
+    @apply bg-black text-white font-bold text-[1rem] py-2 px-16 border border-white rounded-[24px] cursor-pointer hover:bg-white hover:border-black hover:text-black transition-all duration-450;
 }
 button.btn-white {
     @apply bg-white text-black font-bold text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
 }
 
 a.btn-black {
-    @apply bg-black text-white font-bold text-[1rem] py-2 px-16 border border-white rounded-[24px] cursor-pointer hover:bg-white hover:text-black transition-all duration-450;
+    @apply bg-black text-white font-bold text-[1rem] py-3 px-8 border border-white rounded-[24px] cursor-pointer hover:bg-white hover:border-black hover:text-black transition-all duration-450;
 }
 a.btn-white {
     @apply bg-white text-black font-bold text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
