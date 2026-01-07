@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { fetchGoogleReviews } from '~/lib/swagger';
+import {useNonce} from '@shopify/hydrogen';
 
 // Type definitions
 interface GoogleReview {
@@ -69,7 +69,12 @@ declare global {
   }
 }
 
-const TestimonialsSection = () => {
+interface TestimonialsSectionProps {
+  googleReviewsData?: ReviewData | null;
+}
+
+const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) => {
+  const nonce = useNonce();
   const [activeTab, setActiveTab] = useState<'trustpilot' | 'trustshop' | 'google'>('trustpilot');
   const [scriptsLoaded, setScriptsLoaded] = useState({
     trustpilot: false,
@@ -82,7 +87,6 @@ const TestimonialsSection = () => {
   const [googleReviewsRating, setGoogleReviewsRating] = useState(0);
   const [totalTrustedShopsReviews, setTotalTrustedShopsReviews] = useState(0);
   const [trustedShopsReviewsRating, setTrustedShopsReviewsRating] = useState(0);
-  const [loading, setLoading] = useState(false);
 
   const scrollGoogle = (offset: number) => {
     if (googleContainerRef.current) {
@@ -122,24 +126,16 @@ const TestimonialsSection = () => {
     }
   }, []);
 
+  // Use data from server-side loader
   useEffect(() => {
-    const loadGoogleReviews = async () => {
-      setLoading(true);
-      try {
-        const data = (await fetchGoogleReviews()) as ReviewData;
-        setGoogleReviews(data?.google_reviews || []);
-        setTotalGoogleReviews(data?.google_total_review?.total_review || 0);
-        setGoogleReviewsRating(data?.google_total_review?.percentage || 0);
-        setTotalTrustedShopsReviews(data?.trust_shops_total_review?.total_review || 0);
-        setTrustedShopsReviewsRating(data?.trust_shops_total_review?.percentage || 0);
-      } catch (err) {
-        console.error('Error loading Google reviews:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadGoogleReviews();
-  }, []);
+    if (googleReviewsData) {
+      setGoogleReviews(googleReviewsData?.google_reviews || []);
+      setTotalGoogleReviews(googleReviewsData?.google_total_review?.total_review || 0);
+      setGoogleReviewsRating(googleReviewsData?.google_total_review?.percentage || 0);
+      setTotalTrustedShopsReviews(googleReviewsData?.trust_shops_total_review?.total_review || 0);
+      setTrustedShopsReviewsRating(googleReviewsData?.trust_shops_total_review?.percentage || 0);
+    }
+  }, [googleReviewsData]);
 
   useEffect(() => {
     const loadScripts = () => {
@@ -157,6 +153,9 @@ const TestimonialsSection = () => {
         const trustpilotScript = document.createElement('script');
         trustpilotScript.src = 'https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js';
         trustpilotScript.async = true;
+        if (nonce) {
+          trustpilotScript.setAttribute('nonce', nonce);
+        }
         trustpilotScript.onload = () => {
           setScriptsLoaded(prev => ({ ...prev, trustpilot: true }));
         };
@@ -181,6 +180,9 @@ const TestimonialsSection = () => {
         const etrustedScript = document.createElement('script');
         etrustedScript.src = 'https://integrations.etrusted.com/applications/widget.js/v2';
         etrustedScript.defer = true;
+        if (nonce) {
+          etrustedScript.setAttribute('nonce', nonce);
+        }
         etrustedScript.onload = () => {
           setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
         };
