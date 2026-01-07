@@ -4,46 +4,56 @@ import { Link } from 'react-router';
 
 const SupportIcons = () => {
 
-  const supportIcons = [
-    {
-      name: 'Assay Office London',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/assay_office_london_logo_230x90.avif?v=1750488327',
-    },
-    {
-      name: 'Assay Assured',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/assay_assured_230x90.avif?v=1750488328',
-    },
-    {
-      name: 'Stop Blood Diamonds',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/gia_logo_230x90.avif?v=1750488328',
-    },
-    {
-      name: 'The National Association of Jewellers',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/stop_blood_icon_230x90.avif?v=1750488328',
-    },
-    {
-      name: 'GIA',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/the_national_icon_230x90.avif?v=1750488337',
-    },
-  ]
+ const supportIcons = [
+  {
+    name: 'Assay Office London',
+    image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/assay_office_london_logo_230x90.avif?v=1750488327',
+  },
+  {
+    name: 'Assay Assured',
+    image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/assay_assured_230x90.avif?v=1750488328',
+  },
+  {
+    name: 'Stop Blood Diamonds',
+    image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/stop_blood_icon_230x90.avif?v=1750488328',
+  },
+  {
+    name: 'The National Association of Jewellers',
+    image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/the_national_icon_230x90.avif?v=1750488337',
+  },
+  {
+    name: 'GIA',
+    image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/gia_logo_230x90.avif?v=1750488328',
+  },
+];
+
   return (
     <div className="my-16 w-full flex justify-center">
-      <div className="w-full grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-8 px-6 justify-items-center items-center">
+      <div className="w-full grid px-6 gap-x-6 gap-y-8 grid-cols-6 lg:grid-cols-5 justify-items-center items-center">
 
         {supportIcons.map((icon, index) => (
-          <Image
-            key={index}
-            src={icon.image}
-            alt={icon.name}
-            width={230}
-            height={90}
-            className="object-contain mx-auto"
-            loading="lazy"
-          />
+          <div
+            key={icon.name}
+            className={`flex justify-center items-center col-span-2 
+              ${index === 3 ? 'col-start-2' : ''} 
+              lg:col-span-1 lg:col-start-auto
+            `}
+          >
+            <Image
+              src={icon.image}
+              alt={icon.name}
+              width={230}
+              height={90}
+              className="object-contain"
+              loading="lazy"
+            />
+          </div>
         ))}
 
       </div>
     </div>
+
+
 
   );
 };
