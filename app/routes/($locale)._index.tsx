@@ -4,6 +4,8 @@ import CategorySection from '~/components/Homepage/CategorySection';
 import SpotlightSection from '~/components/Homepage/SpotlightSection';
 import AbeliniOccasion from '~/components/Homepage/AbeliniOccasion';
 import BespokeSection from '~/components/Homepage/BespokeSection';
+import BookAppointmentSection from '~/components/Homepage/BookAppointmentSection';
+import UspIcons from '~/components/Homepage/UspIcons';
 import WhyAbeliniSection from '~/components/Homepage/WhyAbeliniSection';
 import OurStore from '~/components/Homepage/OurStore';
 
@@ -20,8 +22,10 @@ export default function Homepage() {
     <SpotlightSection />
     <AbeliniOccasion />
     <BespokeSection />
+    <BookAppointmentSection />
     <WhyAbeliniSection />
     <OurStore />
+    <UspIcons />
     </>
   );
 }
