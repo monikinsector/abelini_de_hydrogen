@@ -120,7 +120,7 @@ function FooterMenu({
   publicStoreDomain: string;
 }) {
   return (
-    <nav className="footer-menu mt-8 bg-[#f4f4f4]" role="navigation">
+    <nav className="footer-menu bg-[#f4f4f4]" role="navigation">
 
       {/* Footer Top Section - Newsletter */}
       <div className="px-10 items-center grid grid-cols-3 gap-6 border-b border-t border-[#dee2e6] pb-6 pt-6">
@@ -145,13 +145,16 @@ function FooterMenu({
               type="text"
               placeholder="Your Name *"
               required
-              className="px-4 py-0 !focus:shadow-none rounded-[24px] !border-[2px] border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#111111] text-[12px] font-regular flex-1"
+              style={{
+                boxShadow: "none !important"
+              }}
+              className="px-4 py-0 rounded-[24px] !border-[2px] border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-[#111111] text-[12px] font-regular flex-1"
             />
             <input
               type="email"
               placeholder="Your email *"
               required
-              className="px-4 py-0 !focus:shadow-none rounded-[24px] !border-[2px]  border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#111111] text-[12px] flex-1"
+              className="px-4 py-0 !focus:shadow-none rounded-[24px] !border-[2px]  border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-[#111111] text-[12px] flex-1"
             />
             <button
               type="submit"
