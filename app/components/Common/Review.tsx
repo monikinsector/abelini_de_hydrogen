@@ -31,11 +31,7 @@ declare global {
   }
 }
 
-interface TestimonialsSectionProps {
-  googleReviewsData?: ReviewData | null;
-}
-
-const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) => {
+const ReviewSection = () => {
   const [activeTab, setActiveTab] = useState<'trustpilot' | 'trustshop' | 'google'>('trustpilot');
   
   const trustpilotWidgetRef = useRef<HTMLDivElement>(null);
@@ -204,4 +200,4 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
   );
 };
 
-export default TestimonialsSection;
+export default ReviewSection;
