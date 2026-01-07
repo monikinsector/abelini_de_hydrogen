@@ -31,7 +31,7 @@ const BespokeSection = () => {
               ABELINI Jewellery can transform the latest trends and preferences of style into bespoke jewellery through exquisite design. So if you are looking for a unique design that has been made for you, ABELINI will make your dream a reality.
               </p>
 
-              <Link to="/bespoke" className="cursor-pointer rounded-[24px] border border-black bg-transparent px-16 py-2 text-[14px] text-base hover:bg-black hover:text-white text-black transition-all duration-[450ms] w-full sm:w-auto">
+              <Link to="/bespoke" className="mt-3 btn-transparent">
               Request Bespoke Design
               </Link>
           </div>

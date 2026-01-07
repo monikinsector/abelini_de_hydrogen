@@ -395,7 +395,7 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
 
   return (
     <section className="bg-[#f6f6f6] py-8">
-      <div className="testimonial-container mx-auto max-w-[1400px] px-4">
+      <div className="testimonial-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <p className="title mt-3 text-[14px] leading-[20px] font-light text-[#111] mb-2 tracking-[0.8px]">TESTIMONIALS</p>
           <h2 className="select_category flex capitalize m-0 text-[28px] leading-[34px] md:text-[36px] md:leading-[42px] lg:text-[42px] lg:leading-[48px] font-semibold text-[#111111] my-4 tracking-[1px] flex justify-center">Our Customers Love Us</h2>
