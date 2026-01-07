@@ -1,5 +1,5 @@
+import { Image } from '@shopify/hydrogen';
 import React, { useState, useEffect, useRef } from 'react';
-import {useNonce} from '@shopify/hydrogen';
 
 // Type definitions
 interface GoogleReview {
@@ -43,7 +43,14 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
   const etrustedWidgetRef = useRef<HTMLDivElement>(null);
   const etrustedReviewsRef = useRef<HTMLDivElement>(null);
 
-
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !document.querySelector('script[src*="widget.trustpilot.com"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
 
   const tabContent = {
     trustpilot: (
@@ -85,25 +92,24 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
     <section className="bg-[#f6f6f6] py-8">
       <div className="testimonial-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <p className="title mt-3 text-[14px] leading-[20px] font-light text-[#111] mb-2 tracking-[0.8px]">TESTIMONIALS</p>
-          <h2 className="select_category flex capitalize m-0 text-[28px] leading-[34px] md:text-[36px] md:leading-[42px] lg:text-[42px] lg:leading-[48px] font-semibold text-[#111111] my-4 tracking-[1px] flex justify-center">Our Customers Love Us</h2>
-          <p className="title mt-3 text-[14px] leading-[20px] font-light text-[#111] mb-2 tracking-[0.8px]">More than 10000 happy customers all over Europe</p>
+          <p className="mt-3 text-[14px] leading-[20px] font-light text-[#111111] mb-2 tracking-[0.8px]">TESTIMONIALS</p>
+          <h2 className="flex capitalize m-0 text-[42px] leading-[48px] font-semibold text-[#111111] my-4 tracking-[1px] flex justify-center">Our Customers Love Us</h2>
+          <p className="mt-3 text-[14px] leading-[20px] font-light text-[#111111] mb-2 tracking-[0.8px]">More than 10000 happy customers all over Europe</p>
         </div>
 
          <div className="grid grid-cols-3 lg:gap-4 mb-8 tabs-tite-container border-b border-[#E4E4E4]">
           <div className="text-center">
-            <div 
-              className={`p-4 cursor-pointer border-b-4 transition-all duration-200 h-[99px] tab-title-wrapper ${
+            <div className={`p-4 cursor-pointer border-b-4 transition-all duration-200 h-[99px] tab-title-wrapper ${
                 activeTab === 'trustpilot' ? 'border-[#EF9000]' : 'border-transparent hover:border-gray-200'
               }`}
                 onClick={() => setActiveTab('trustpilot')}
             >
-              <img
-                src="https://cdn.shopify.com/s/files/1/0933/1789/0388/files/trustpilot_logo.png?v=1739877934" 
+              <Image
+                src="/assets/images/reviews/trustpilot.png" 
                 alt="trustpilot" 
                 className="mx-auto mb-2 px-2" 
-                width="130" 
-                height="30" 
+                width={130}
+                height={30}
               />
               <div className="flex items-center justify-center">
                 <div 
@@ -131,19 +137,19 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
               }`}
               onClick={() => setActiveTab('trustshop')}
             >
-              <img 
-                src="https://cdn.shopify.com/s/files/1/0933/1789/0388/files/trusted_shop_logo.png?v=1739878966" 
+              <Image 
+                src="/assets/images/reviews/trusted_shop.png" 
                 alt="Trusted Shop Logo" 
                 className="mx-auto mb-2 px-2" 
-                width="130" 
-                height="30" 
+                width={130} 
+                height={30} 
               />
               <div className="flex items-center justify-center">
                 <div 
                   ref={etrustedWidgetRef}
                   className="pointer-events-none"
                 >
-                  <p className="text-sm tab-title-text">
+                  <p className="text-[14px] leading-[20px] font-light text-[#111111] mb-2 tracking-[0.8px]">
                     Trust Shop 4.9 | 3171 reviews
                   </p>
                 </div>
@@ -158,15 +164,15 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
               }`}
               onClick={() => setActiveTab('google')}
             >
-              <img 
-                src="https://cdn.shopify.com/s/files/1/0933/1789/0388/files/google_logo.png?v=1739878966" 
+              <Image 
+                src="/assets/images/reviews/google.png" 
                 alt="Google Logo" 
                 className="mx-auto mb-2 px-2" 
-                width="130" 
-                height="30" 
+                width={130} 
+                height={30} 
               />
               <div className="flex items-center justify-center">
-                <p className="text-sm block tab-title-text">
+                <p className="text-[14px] leading-[20px] font-light text-[#111111] mb-2 tracking-[0.8px]">
                   Google 4.9 | 3171 reviews
                 </p>
                 
