@@ -38,15 +38,26 @@ export default async function handleRequest(
     );
   }
   
-  // Add style-src for Google Fonts
+  // Add style-src for Google Fonts and eTrusted widget
   const styleSrcMatch = header.match(/style-src[^;]+/);
   if (styleSrcMatch) {
     header = header.replace(
       /(style-src[^;]+)/,
-      `$1 https://fonts.googleapis.com https://fonts.gstatic.com`
+      `$1 https://fonts.googleapis.com https://fonts.gstatic.com https://integrations.etrusted.com`
     );
   } else {
-    header = header + `; style-src 'self' 'unsafe-inline' https://cdn.shopify.com https://fonts.googleapis.com https://fonts.gstatic.com http://localhost:*`;
+    header = header + `; style-src 'self' 'unsafe-inline' https://cdn.shopify.com https://fonts.googleapis.com https://fonts.gstatic.com https://integrations.etrusted.com http://localhost:*`;
+  }
+  
+  // Add font-src for Google Fonts
+  const fontSrcMatch = header.match(/font-src[^;]+/);
+  if (fontSrcMatch) {
+    header = header.replace(
+      /(font-src[^;]+)/,
+      `$1 https://fonts.gstatic.com`
+    );
+  } else {
+    header = header + `; font-src 'self' https://fonts.gstatic.com https://cdn.shopify.com`;
   }
   
   // Add connect-src for widget API calls

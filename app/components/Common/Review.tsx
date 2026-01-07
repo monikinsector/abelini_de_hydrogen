@@ -97,10 +97,10 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
     }
   };
   
-  const trustpilotWidgetRef = useRef(null);
-  const trustpilotReviewsRef = useRef(null);
-  const etrustedWidgetRef = useRef(null);
-  const etrustedReviewsRef = useRef(null);
+  const trustpilotWidgetRef = useRef<HTMLDivElement>(null);
+  const trustpilotReviewsRef = useRef<HTMLDivElement>(null);
+  const etrustedWidgetRef = useRef<HTMLDivElement>(null);
+  const etrustedReviewsRef = useRef<HTMLDivElement>(null);
   const widgetsInitialized = useRef({
     trustpilot: false,
     etrusted: false
@@ -170,6 +170,17 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
       
       // Check if eTrusted script already exists
       const existingETrustedScript = document.querySelector('script[src*="etrusted.com"]');
+      const existingETrustedCSS = document.querySelector('link[href*="etrusted.com"]');
+      
+      // Load eTrusted CSS if not already loaded
+      if (!existingETrustedCSS) {
+        const etrustedCSS = document.createElement('link');
+        etrustedCSS.rel = 'stylesheet';
+        etrustedCSS.href = 'https://integrations.etrusted.com/applications/widget.css/v2';
+        etrustedCSS.type = 'text/css';
+        document.head.appendChild(etrustedCSS);
+      }
+      
       if (!existingETrustedScript) {
         // Check if already loaded via window object
         if ((window as any).eTrustedWidget) {
@@ -179,20 +190,40 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
         
         const etrustedScript = document.createElement('script');
         etrustedScript.src = 'https://integrations.etrusted.com/applications/widget.js/v2';
-        etrustedScript.defer = true;
+        etrustedScript.async = true; // Changed from defer to async for faster loading
         if (nonce) {
           etrustedScript.setAttribute('nonce', nonce);
         }
         etrustedScript.onload = () => {
-          setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+          // Wait a bit for the widget to register itself
+          setTimeout(() => {
+            if ((window as any).eTrustedWidget) {
+              setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+            } else {
+              console.warn('eTrusted script loaded but eTrustedWidget not found on window');
+              setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+            }
+          }, 100);
         };
         etrustedScript.onerror = () => {
           console.error('Failed to load eTrusted script');
         };
         document.head.appendChild(etrustedScript);
-      } else if ((window as any).eTrustedWidget) {
-        // Script exists and is loaded
-        setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+      } else {
+        // Script exists, check if widget is available
+        if ((window as any).eTrustedWidget) {
+          setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+        } else {
+          // Script exists but widget not ready yet, wait for it
+          const checkWidget = setInterval(() => {
+            if ((window as any).eTrustedWidget) {
+              setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+              clearInterval(checkWidget);
+            }
+          }, 100);
+          // Stop checking after 5 seconds
+          setTimeout(() => clearInterval(checkWidget), 5000);
+        }
       }
     };
 
@@ -230,13 +261,13 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
     }
   }, [scriptsLoaded.trustpilot, activeTab]);
 
-  // Initialize eTrusted widget
+  // Initialize eTrusted widget when script loads
   useEffect(() => {
     if (scriptsLoaded.etrusted && typeof window !== 'undefined' && (window as any).eTrustedWidget) {
       const initializeETrusted = () => {
         try {
           if ((window as any).eTrustedWidget && (window as any).eTrustedWidget.init) {
-            // Always initialize, but ensure it happens when tab is active
+            // Initialize globally - the widget should auto-detect custom elements
             (window as any).eTrustedWidget.init();
             widgetsInitialized.current.etrusted = true;
           }
@@ -245,11 +276,47 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
         }
       };
 
-      // Delay to ensure DOM is ready, longer when tab is active
-      const timer = setTimeout(initializeETrusted, activeTab === 'trustshop' ? 400 : 200);
+      const timer = setTimeout(initializeETrusted, 300);
       return () => clearTimeout(timer);
     }
-  }, [scriptsLoaded.etrusted, activeTab]);
+  }, [scriptsLoaded.etrusted]);
+
+  // Re-initialize eTrusted widget when trustshop tab becomes active
+  useEffect(() => {
+    if (activeTab === 'trustshop' && scriptsLoaded.etrusted && typeof window !== 'undefined') {
+      const reinitializeETrusted = () => {
+        try {
+          const widgetElement = etrustedReviewsRef.current?.querySelector('etrusted-widget');
+          
+          if (widgetElement && (window as any).eTrustedWidget) {
+            // Check if widget has already rendered content
+            const hasContent = widgetElement.shadowRoot || widgetElement.children.length > 0;
+            
+            if (!hasContent) {
+              // Widget hasn't rendered, try to trigger it
+              // Dispatch a custom event to trigger widget initialization
+              const event = new CustomEvent('etrusted-widget-init', { bubbles: true });
+              widgetElement.dispatchEvent(event);
+              
+              // Also try global init as fallback
+              if ((window as any).eTrustedWidget.init) {
+                (window as any).eTrustedWidget.init();
+              }
+            }
+          } else if ((window as any).eTrustedWidget && (window as any).eTrustedWidget.init) {
+            // Element not found yet, try global init
+            (window as any).eTrustedWidget.init();
+          }
+        } catch (error) {
+          console.error('Error re-initializing eTrusted widget:', error);
+        }
+      };
+
+      // Wait for tab transition to complete (300ms CSS transition + buffer)
+      const timer = setTimeout(reinitializeETrusted, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [activeTab, scriptsLoaded.etrusted]);
 
 
   const tabContent = {
@@ -335,11 +402,11 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
           <p className="title mt-3 text-[14px] leading-[20px] font-light text-[#111] mb-2 tracking-[0.8px]">More than 10000 happy customers all over Europe</p>
         </div>
 
-         <div className="grid grid-cols-3 lg:gap-4 mb-8 tabs-tite-container">
+         <div className="grid grid-cols-3 lg:gap-4 mb-8 tabs-tite-container border-b border-[#E4E4E4]">
           <div className="text-center">
             <div 
               className={`p-4 cursor-pointer border-b-4 transition-all duration-200 h-[99px] tab-title-wrapper ${
-                activeTab === 'trustpilot' ? 'border-orange-500' : 'border-transparent hover:border-gray-200'
+                activeTab === 'trustpilot' ? 'border-[#EF9000]' : 'border-transparent hover:border-gray-200'
               }`}
                 onClick={() => setActiveTab('trustpilot')}
             >
@@ -372,7 +439,7 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
           <div className="text-center">
             <div 
               className={`p-4 cursor-pointer border-b-4 transition-all duration-200 h-[99px] tab-title-wrapper ${
-                activeTab === 'trustshop' ? 'border-orange-500' : 'border-transparent hover:border-gray-200'
+                activeTab === 'trustshop' ? 'border-[#EF9000]' : 'border-transparent hover:border-gray-200'
               }`}
               onClick={() => setActiveTab('trustshop')}
             >
@@ -399,7 +466,7 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
           <div className="text-center">
             <div 
               className={`p-4 cursor-pointer border-b-4 transition-all duration-200 h-[99px] tab-title-wrapper ${
-                activeTab === 'google' ? 'border-orange-500' : 'border-transparent hover:border-gray-200'
+                activeTab === 'google' ? 'border-[#EF9000]' : 'border-transparent hover:border-gray-200'
               }`}
               onClick={() => setActiveTab('google')}
             >
