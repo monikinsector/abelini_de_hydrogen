@@ -42,7 +42,7 @@ const CategorySection = () => {
   ];
 
   return (
-    <section className="px-4 py-8 flex home-category">
+    <section className="lg:px-10 py-8 flex flex-col bg-[#FCF4EC] text-center overflow-x-hidden home-category">
       <div>
         <div className="flex justify-between items-center mb-10 md:mb-[30px] border-b border-[#d6d6d6]">
           <h2 className="select_category flex capitalize m-0 text-[28px] leading-[34px] md:text-[36px] md:leading-[42px] lg:text-[42px] lg:leading-[48px] font-semibold text-[#111111] my-4 tracking-[1px]">
