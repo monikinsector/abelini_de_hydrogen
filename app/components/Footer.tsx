@@ -121,6 +121,61 @@ function FooterMenu({
 }) {
   return (
     <nav className="footer-menu px-10 py-8 bg-[#f4f4f4]" role="navigation">
+
+      {/* Footer Top Section - Newsletter */}
+      <div className="grid grid-cols-3 gap-6 border-b border-t border-[#dee2e6] pb-6 pt-6">
+        {/* Heading */}
+        <div className="col-span-1 text-center md:text-left">
+          <h2 className="text-[18px] sm:text-[34px] lg:text-[42px] font-bold text-[#111111] leading-[30px] sm:leading-[38px] lg:leading-[48px] tracking-[1px] capitalize">
+            Stay In Touch!
+          </h2>
+        </div>
+        
+        {/* Newsletter Form */}
+        <div className="col-span-2 flex flex-col gap-4">
+          <form 
+            className="flex flex-col sm:flex-row gap-3"
+            onSubmit={(e) => {
+              e.preventDefault();
+              // Handle form submission here
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Your Name *"
+              required
+              className="px-4 py-2 rounded-md border border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#111111] min-w-[200px] flex-1"
+            />
+            <input
+              type="email"
+              placeholder="Your email *"
+              required
+              className="px-4 py-2 rounded-md border border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#111111] min-w-[200px] flex-1"
+            />
+            <button
+              type="submit"
+              className="btn-black"
+            >
+              Subscribe
+            </button>
+          </form>
+          
+          {/* Privacy Notice */}
+          <p className="text-[#626262] text-[13px] leading-5">
+            By subscribing, some personal data such as your name and email address are collected and stored securely for the purposes of sending you order updates, special offers, and other promotional materials. For further information on how we manage your data, please see our{' '}
+            <a 
+              href="/policies/privacy-policy" 
+              className="underline font-semibold text-[#111111] hover:opacity-70 transition-opacity"
+            >
+              Privacy Notice
+            </a>
+          </p>
+        </div>
+      </div>
+
+
+
+
       <div className="flex justify-between items-center mb-6">
         <div className="flex flex-col gap-4 w-full">
           <div className="row m-0 flex justify-around gap-4">
