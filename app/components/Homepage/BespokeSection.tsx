@@ -27,7 +27,7 @@ const BespokeSection = () => {
               Bespoke Design Service
               </h2>
 
-              <p className="mt-3 text-[14px] leading-[20px] font-light text-[#111] mb-2 tracking-[0.8px]">
+              <p className="text-[13px] sm:text-[15px] font-light text-[#111111] mb-8 tracking-[0.8px]">
               ABELINI Jewellery can transform the latest trends and preferences of style into bespoke jewellery through exquisite design. So if you are looking for a unique design that has been made for you, ABELINI will make your dream a reality.
               </p>
 

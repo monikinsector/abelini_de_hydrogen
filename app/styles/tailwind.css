@@ -9,7 +9,7 @@ button.btn-white {
     @apply bg-white text-black font-bold text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
 }
 button.btn-transparent {
-    @apply bg-transparent text-black font-bold text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
+    @apply bg-transparent text-black font-normal text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
 }
 
 a.btn-black {
@@ -19,7 +19,7 @@ a.btn-white {
     @apply bg-white text-black font-bold text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
 }
 a.btn-transparent {
-    @apply bg-transparent text-black font-bold text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
+    @apply bg-transparent text-black font-normal text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
 }
 
 button.theme_button_navbar {

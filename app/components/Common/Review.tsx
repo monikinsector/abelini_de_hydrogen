@@ -137,185 +137,210 @@ const TestimonialsSection = ({ googleReviewsData }: TestimonialsSectionProps) =>
     }
   }, [googleReviewsData]);
 
-  useEffect(() => {
-    const loadScripts = () => {
-      if (typeof window === 'undefined') return;
-      
-      // Check if Trustpilot script already exists
-      const existingTrustpilotScript = document.querySelector('script[src*="trustpilot.com"]');
-      if (!existingTrustpilotScript) {
-        // Check if already loaded via window object
-        if ((window as any).Trustpilot) {
-          setScriptsLoaded(prev => ({ ...prev, trustpilot: true }));
-          return;
-        }
-        
-        const trustpilotScript = document.createElement('script');
-        trustpilotScript.src = 'https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js';
-        trustpilotScript.async = true;
-        if (nonce) {
-          trustpilotScript.setAttribute('nonce', nonce);
-        }
-        trustpilotScript.onload = () => {
-          setScriptsLoaded(prev => ({ ...prev, trustpilot: true }));
-        };
-        trustpilotScript.onerror = () => {
-          console.error('Failed to load Trustpilot script');
-        };
-        document.head.appendChild(trustpilotScript);
-      } else if ((window as any).Trustpilot) {
-        // Script exists and is loaded
+  // Helper function to load Trustpilot script
+  const loadTrustpilotScript = () => {
+    const existingTrustpilotScript = document.querySelector('script[src*="trustpilot.com"]');
+    if (existingTrustpilotScript) {
+      if ((window as any).Trustpilot) {
         setScriptsLoaded(prev => ({ ...prev, trustpilot: true }));
       }
-      
-      // Check if eTrusted script already exists
-      const existingETrustedScript = document.querySelector('script[src*="etrusted.com"]');
-      const existingETrustedCSS = document.querySelector('link[href*="etrusted.com"]');
-      
-      // Load eTrusted CSS if not already loaded
-      if (!existingETrustedCSS) {
-        const etrustedCSS = document.createElement('link');
-        etrustedCSS.rel = 'stylesheet';
-        etrustedCSS.href = 'https://integrations.etrusted.com/applications/widget.css/v2';
-        etrustedCSS.type = 'text/css';
-        document.head.appendChild(etrustedCSS);
-      }
-      
-      if (!existingETrustedScript) {
-        // Check if already loaded via window object
-        if ((window as any).eTrustedWidget) {
-          setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
-          return;
-        }
-        
-        const etrustedScript = document.createElement('script');
-        etrustedScript.src = 'https://integrations.etrusted.com/applications/widget.js/v2';
-        etrustedScript.async = true; // Changed from defer to async for faster loading
-        if (nonce) {
-          etrustedScript.setAttribute('nonce', nonce);
-        }
-        etrustedScript.onload = () => {
-          // Wait a bit for the widget to register itself
-          setTimeout(() => {
-            if ((window as any).eTrustedWidget) {
-              setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
-            } else {
-              console.warn('eTrusted script loaded but eTrustedWidget not found on window');
-              setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
-            }
-          }, 100);
-        };
-        etrustedScript.onerror = () => {
-          console.error('Failed to load eTrusted script');
-        };
-        document.head.appendChild(etrustedScript);
-      } else {
-        // Script exists, check if widget is available
-        if ((window as any).eTrustedWidget) {
-          setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
-        } else {
-          // Script exists but widget not ready yet, wait for it
-          const checkWidget = setInterval(() => {
-            if ((window as any).eTrustedWidget) {
-              setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
-              clearInterval(checkWidget);
-            }
-          }, 100);
-          // Stop checking after 5 seconds
-          setTimeout(() => clearInterval(checkWidget), 5000);
-        }
-      }
-    };
+      return;
+    }
 
-    loadScripts();
+    if ((window as any).Trustpilot) {
+      setScriptsLoaded(prev => ({ ...prev, trustpilot: true }));
+      return;
+    }
+    
+    const trustpilotScript = document.createElement('script');
+    trustpilotScript.src = 'https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js';
+    trustpilotScript.async = true;
+    if (nonce) {
+      trustpilotScript.setAttribute('nonce', nonce);
+    }
+    trustpilotScript.onload = () => {
+      setScriptsLoaded(prev => ({ ...prev, trustpilot: true }));
+    };
+    trustpilotScript.onerror = () => {
+      console.error('Failed to load Trustpilot script');
+    };
+    document.head.appendChild(trustpilotScript);
+  };
+
+  // Helper function to handle eTrusted script onload
+  const handleETrustedScriptLoad = () => {
+    setTimeout(() => {
+      if ((window as any).eTrustedWidget) {
+        setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+      } else {
+        console.warn('eTrusted script loaded but eTrustedWidget not found on window');
+        setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+      }
+    }, 100);
+  };
+
+  // Helper function to check eTrusted widget availability
+  const checkETrustedWidget = () => {
+    const checkWidget = setInterval(() => {
+      if ((window as any).eTrustedWidget) {
+        setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+        clearInterval(checkWidget);
+      }
+    }, 100);
+    setTimeout(() => clearInterval(checkWidget), 5000);
+  };
+
+  // Helper function to load eTrusted script
+  const loadETrustedScript = () => {
+    const existingETrustedScript = document.querySelector('script[src*="etrusted.com"]');
+    const existingETrustedCSS = document.querySelector('link[href*="etrusted.com"]');
+    
+    if (!existingETrustedCSS) {
+      const etrustedCSS = document.createElement('link');
+      etrustedCSS.rel = 'stylesheet';
+      etrustedCSS.href = 'https://integrations.etrusted.com/applications/widget.css/v2';
+      etrustedCSS.type = 'text/css';
+      document.head.appendChild(etrustedCSS);
+    }
+    
+    if (existingETrustedScript) {
+      if ((window as any).eTrustedWidget) {
+        setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+      } else {
+        checkETrustedWidget();
+      }
+      return;
+    }
+
+    if ((window as any).eTrustedWidget) {
+      setScriptsLoaded(prev => ({ ...prev, etrusted: true }));
+      return;
+    }
+    
+    const etrustedScript = document.createElement('script');
+    etrustedScript.src = 'https://integrations.etrusted.com/applications/widget.js/v2';
+    etrustedScript.async = true;
+    if (nonce) {
+      etrustedScript.setAttribute('nonce', nonce);
+    }
+    etrustedScript.onload = handleETrustedScriptLoad;
+    etrustedScript.onerror = () => {
+      console.error('Failed to load eTrusted script');
+    };
+    document.head.appendChild(etrustedScript);
+  };
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    loadTrustpilotScript();
+    loadETrustedScript();
   }, []); // Only run once on mount
+
+  // Helper function to initialize Trustpilot widget header
+  const initializeTrustpilotHeader = () => {
+    if (!trustpilotWidgetRef.current) return;
+    (window as any).Trustpilot.loadFromElement(trustpilotWidgetRef.current, true);
+  };
+
+  // Helper function to initialize Trustpilot reviews widget
+  const initializeTrustpilotReviews = () => {
+    if (!trustpilotReviewsRef.current) return;
+    (window as any).Trustpilot.loadFromElement(trustpilotReviewsRef.current, true);
+  };
 
   // Initialize Trustpilot widgets
   useEffect(() => {
-    if (scriptsLoaded.trustpilot && typeof window !== 'undefined' && (window as any).Trustpilot) {
-      const initializeTrustpilot = () => {
-        try {
-          // Always initialize the widget in the tab header (rating display)
-          if (trustpilotWidgetRef.current) {
-            (window as any).Trustpilot.loadFromElement(trustpilotWidgetRef.current, true);
-          }
-          // Initialize/reload the reviews widget when trustpilot tab is active
-          if (trustpilotReviewsRef.current) {
-            if (activeTab === 'trustpilot') {
-              // Force reload when tab becomes active
-              (window as any).Trustpilot.loadFromElement(trustpilotReviewsRef.current, true);
-            } else {
-              // Still initialize even if not active (for pre-loading)
-              (window as any).Trustpilot.loadFromElement(trustpilotReviewsRef.current, true);
-            }
-          }
-          widgetsInitialized.current.trustpilot = true;
-        } catch (error) {
-          console.error('Error initializing Trustpilot widget:', error);
-        }
-      };
-
-      // Delay to ensure DOM is ready
-      const timer = setTimeout(initializeTrustpilot, activeTab === 'trustpilot' ? 400 : 200);
-      return () => clearTimeout(timer);
+    if (!scriptsLoaded.trustpilot || typeof window === 'undefined' || !(window as any).Trustpilot) {
+      return;
     }
+
+    const initializeTrustpilot = () => {
+      try {
+        initializeTrustpilotHeader();
+        initializeTrustpilotReviews();
+        widgetsInitialized.current.trustpilot = true;
+      } catch (error) {
+        console.error('Error initializing Trustpilot widget:', error);
+      }
+    };
+
+    const delay = activeTab === 'trustpilot' ? 400 : 200;
+    const timer = setTimeout(initializeTrustpilot, delay);
+    return () => clearTimeout(timer);
   }, [scriptsLoaded.trustpilot, activeTab]);
+
+  // Helper function to initialize eTrusted widget
+  const initializeETrustedWidget = () => {
+    if (!(window as any).eTrustedWidget || !(window as any).eTrustedWidget.init) {
+      return;
+    }
+    (window as any).eTrustedWidget.init();
+    widgetsInitialized.current.etrusted = true;
+  };
 
   // Initialize eTrusted widget when script loads
   useEffect(() => {
-    if (scriptsLoaded.etrusted && typeof window !== 'undefined' && (window as any).eTrustedWidget) {
-      const initializeETrusted = () => {
-        try {
-          if ((window as any).eTrustedWidget && (window as any).eTrustedWidget.init) {
-            // Initialize globally - the widget should auto-detect custom elements
-            (window as any).eTrustedWidget.init();
-            widgetsInitialized.current.etrusted = true;
-          }
-        } catch (error) {
-          console.error('Error initializing eTrusted widget:', error);
-        }
-      };
-
-      const timer = setTimeout(initializeETrusted, 300);
-      return () => clearTimeout(timer);
+    if (!scriptsLoaded.etrusted || typeof window === 'undefined' || !(window as any).eTrustedWidget) {
+      return;
     }
+
+    const initializeETrusted = () => {
+      try {
+        initializeETrustedWidget();
+      } catch (error) {
+        console.error('Error initializing eTrusted widget:', error);
+      }
+    };
+
+    const timer = setTimeout(initializeETrusted, 300);
+    return () => clearTimeout(timer);
   }, [scriptsLoaded.etrusted]);
+
+  // Helper function to trigger eTrusted widget initialization
+  const triggerETrustedWidgetInit = (widgetElement: HTMLElement) => {
+    const event = new CustomEvent('etrusted-widget-init', { bubbles: true });
+    widgetElement.dispatchEvent(event);
+    
+    if ((window as any).eTrustedWidget?.init) {
+      (window as any).eTrustedWidget.init();
+    }
+  };
+
+  // Helper function to reinitialize eTrusted widget when tab becomes active
+  const reinitializeETrustedWidget = () => {
+    const widgetElement = etrustedReviewsRef.current?.querySelector('etrusted-widget') as HTMLElement | null;
+    const eTrustedWidget = (window as any).eTrustedWidget;
+    
+    if (!widgetElement || !eTrustedWidget) {
+      if (eTrustedWidget?.init) {
+        eTrustedWidget.init();
+      }
+      return;
+    }
+
+    const hasContent = widgetElement.shadowRoot || widgetElement.children.length > 0;
+    if (!hasContent) {
+      triggerETrustedWidgetInit(widgetElement);
+    }
+  };
 
   // Re-initialize eTrusted widget when trustshop tab becomes active
   useEffect(() => {
-    if (activeTab === 'trustshop' && scriptsLoaded.etrusted && typeof window !== 'undefined') {
-      const reinitializeETrusted = () => {
-        try {
-          const widgetElement = etrustedReviewsRef.current?.querySelector('etrusted-widget');
-          
-          if (widgetElement && (window as any).eTrustedWidget) {
-            // Check if widget has already rendered content
-            const hasContent = widgetElement.shadowRoot || widgetElement.children.length > 0;
-            
-            if (!hasContent) {
-              // Widget hasn't rendered, try to trigger it
-              // Dispatch a custom event to trigger widget initialization
-              const event = new CustomEvent('etrusted-widget-init', { bubbles: true });
-              widgetElement.dispatchEvent(event);
-              
-              // Also try global init as fallback
-              if ((window as any).eTrustedWidget.init) {
-                (window as any).eTrustedWidget.init();
-              }
-            }
-          } else if ((window as any).eTrustedWidget && (window as any).eTrustedWidget.init) {
-            // Element not found yet, try global init
-            (window as any).eTrustedWidget.init();
-          }
-        } catch (error) {
-          console.error('Error re-initializing eTrusted widget:', error);
-        }
-      };
-
-      // Wait for tab transition to complete (300ms CSS transition + buffer)
-      const timer = setTimeout(reinitializeETrusted, 500);
-      return () => clearTimeout(timer);
+    if (activeTab !== 'trustshop' || !scriptsLoaded.etrusted || typeof window === 'undefined') {
+      return;
     }
+
+    const reinitializeETrusted = () => {
+      try {
+        reinitializeETrustedWidget();
+      } catch (error) {
+        console.error('Error re-initializing eTrusted widget:', error);
+      }
+    };
+
+    const timer = setTimeout(reinitializeETrusted, 500);
+    return () => clearTimeout(timer);
   }, [activeTab, scriptsLoaded.etrusted]);
 
 

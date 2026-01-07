@@ -28,15 +28,14 @@ const BookAppointmentSection = () => {
           Step Into Luxury – Our New Jewellery Store Is Now Open
         </h2>
 
-        <p className="text-sm text-gray-700 mb-6 leading-relaxed">
+        <p className="text-[13px] sm:text-[15px] font-light text-[#111111] mb-8 tracking-[0.8px]">
           Step into luxury with our new jewellery store, now open in the heart of London.
           Experience the finest selection of fine jewellery, diamonds, and precious stones.
         </p>
 
-        <a href="https://www.test.com/book-appointment" className="cursor-pointer rounded-[24px] border border-black bg-transparent px-16 py-2 text-[14px] text-base hover:bg-black hover:text-white text-black transition-all duration-[450ms] w-full sm:w-auto"
-        >
+        <Link to="/book-appointment" className="mt-3 btn-transparent">
           Book an appointment now
-        </a>
+        </Link>
 
       </div>
     </div>

@@ -296,13 +296,13 @@ export default function ImageWithProductSlider() {
                 Engagement Rings
                 </h3>
 
-                <p className="text-[13px] sm:text-[15px] font-light sm:font-normal text-[#111111] leading-5 mb-[10px] tracking-[0.8px]">
+                <p className="text-[13px] sm:text-[15px] font-light text-[#111111] mb-8 tracking-[0.8px]">
                 Our engagement ring collection includes meticulously crafted, elegant rings that symbolize love and
                 commitment. From classic solitaires to intricate halos and vintage-inspired pieces are made using
                 high-quality materials like platinum, gold, diamonds and gemstones.
                 </p>
 
-                <Link to="engagement-rings" className="bg-transparent hover:bg-black hover:text-white text-black border border-black transition-all duration-300 text-sm leading-5 tracking-[0.8px] text-center capitalize px-8 py-[10px] font-semibold cursor-pointer inline-block lg:w-fit w-full block mt-[20px] lg:mt-[10px] rounded-full">
+                <Link to="engagement-rings" className="btn-transparent">
                   <span>
                     Engagement Rings
                   </span>
@@ -395,9 +395,9 @@ export default function ImageWithProductSlider() {
               <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:left-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md p-8 min-w-[100%] lg:min-w-[unset]">
                 <h3 className="text-[30px] font-bold text-[#111111] leading-[38px] my-4 tracking-[1px]">In Trend<br />Lab Grown Diamonds</h3>
 
-                <p className="text-[13px] text-[#111111] leading-[20px] mb-[10px] tracking-[0.8px]">Embrace Brilliant Savings with Trending Lab Grown Diamond Jewellery! Enjoy the allure of natural diamonds at a fraction of the cost. Our collection offers captivating beauty, allowing you to achieve a bigger, impressive look.</p>
+                <p className="text-[13px] sm:text-[15px] font-light text-[#111111] mb-8 tracking-[0.8px]">Embrace Brilliant Savings with Trending Lab Grown Diamond Jewellery! Enjoy the allure of natural diamonds at a fraction of the cost. Our collection offers captivating beauty, allowing you to achieve a bigger, impressive look.</p>
 
-                <Link to="lab-grown-diamonds" className="bg-transparent hover:bg-black hover:text-white text-black border border-black transition-all duration-300 text-sm leading-5 tracking-[0.8px] text-center capitalize px-8 py-[10px] font-semibold cursor-pointer inline-block lg:w-fit w-full block mt-[20px] lg:mt-[10px] rounded-full">
+                <Link to="lab-grown-diamonds" className="btn-transparent">
                   <span>
                     Lab Grown Diamonds
                   </span>
