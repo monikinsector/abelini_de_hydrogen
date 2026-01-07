@@ -64,34 +64,12 @@ export default function RichText() {
     return (
           <>
             <div className="lg:w-1/2 w-full text-center flex flex-col mx-auto bg-white lg:py-[35px] py-8 lg:px-8 px-6">
-                <h2 className="text-[18px] sm:text-[34px] lg:text-[42px] font-bold text-[#111] leading-[30px] sm:leading-[38px] lg:leading-[48px] my-4 tracking-[1px] capitalize">Why Abelini</h2>
-                <p className="text-[11px] sm:text-sm font-light sm:font-normal tracking-[0.8px] sm:tracking-[1px] mb-2 leading-[18px] sm:leading-5 lg:leading-7 text-[#111111]">It's easy to lose sight of what value really means. If your opinion of
-                    value is like ours and is about getting more and paying less, then you're in the right
-                    place. By buying directly from manufacturers online, it can save up to 70% compare to
-                    high street jewellers. We pride ourselves on offering enduring quality at fair prices;
-                    shopping is just better that way, isn't it?
+                <h2 className="flex capitalize m-0 text-[42px] leading-[48px] font-semibold text-[#111111] my-4 tracking-[1px] flex justify-center">Why Abelini</h2>
+                <p className="mt-3 text-[14px] font-light text-[#111111] mb-2 tracking-[0.8px]">It's easy to lose sight of what value really means. If your opinion of value is like ours and is about getting more and paying less, then you're in the right place. By buying directly from manufacturers online, it can save up to 70% compare to high street jewellers. We pride ourselves on offering enduring quality at fair prices; shopping is just better that way, isn't it?
                 </p>
                 <Link to="/about-us" className="flex justify-center title mt-[30px]">
                     <u>Learn more</u>
-                    <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlnsXlink="http://www.w3.org/1999/xlink"
-                    aria-hidden="true"
-                    focusable="false"
-                    width="1em"
-                    height="1em"
-                    style={{ height: '22px', width: '22px', transform: 'rotate(360deg)' }}
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24"
-                    className="iconify ml-2"
-                    data-icon="octicon:arrow-right-24"
-                    data-inline="false"
-                    >
-                    <path
-                        fill="currentColor"
-                        d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275a.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"
-                    />
-                    </svg>
+                    <Image src="/assets/images/icons/arrow-right.svg" alt="Arrow Right" width={22} height={22} className="ml-2" />
                 </Link>
             </div>
                 <SupportIcons />
