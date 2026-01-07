@@ -1,5 +1,7 @@
 import {Suspense} from 'react';
-import {Await, NavLink} from 'react-router';
+import {Await} from 'react-router';
+import { Image } from '@shopify/hydrogen';
+
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
 
 interface FooterProps {
@@ -32,6 +34,82 @@ export function Footer({
   );
 }
 
+// Footer menu data structure
+interface FooterLink {
+  label: string;
+  href: string;
+  target?: '_blank' | '_self';
+}
+
+interface FooterSection {
+  title: string;
+  links: FooterLink[];
+}
+
+const FOOTER_SECTIONS: FooterSection[] = [
+  {
+    title: 'About Abelini',
+    links: [
+      { label: 'About Us', href: '/about-us' },
+      { label: 'Customer Reviews', href: '/customer-reviews', target: '_blank' },
+      { label: 'Ethical Jewellery', href: '/ethical-jewellery' },
+      { label: 'Fair Price Guarantee', href: '/fair-price-guarantee' },
+      { label: 'Virtual Try', href: '/virtual-try' },
+      { label: 'Terms & Conditions', href: '/terms-of-use' },
+    ],
+  },
+  {
+    title: 'Customer Care',
+    links: [
+      { label: 'Free Delivery', href: '/free-delivery' },
+      { label: 'Return & Exchange', href: '/return-exchange' },
+      { label: 'Warranty & Care', href: '/warranty-care' },
+      { label: 'Jewellery Insurance', href: '/jewellery-insurance' },
+      { label: 'Bespoke', href: '/bespoke' },
+      { label: 'Sample Services', href: '/sample-services' },
+      { label: '0% Interest Finance', href: '/finance' },
+      { label: 'Free Resizing Service', href: '/free-resizing' },
+    ],
+  },
+  {
+    title: 'Explore',
+    links: [
+      { label: 'Blog', href: '/blog' },
+      { label: 'Customer Stories', href: '/customer-stories' },
+      { label: 'Birthstone By Month', href: '/birthstone-by-month' },
+      { label: 'Jewellery Gift Finder', href: '/jewellery-gift-finder' },
+      { label: 'Hallmarking', href: '/hallmarking' },
+      { label: 'Jewellery Care', href: '/jewellery-care' },
+      { label: 'Ring Size Chart', href: '/ring-size-chart' },
+      { label: 'Bracelet Size Guide', href: '/bracelet-size-guide' },
+    ],
+  },
+  {
+    title: 'Guides',
+    links: [
+      { label: 'Engagement Ring Guide', href: '/engagement-ring-guide' },
+      { label: 'Earrings Guide', href: '/earrings-guide' },
+      { label: 'Wedding Rings Guide', href: '/wedding-rings-guide' },
+      { label: 'Diamond Ring Guide', href: '/diamond-ring-guide' },
+      { label: 'Diamond Guide', href: '/diamond-guide' },
+      { label: 'Metal Guide', href: '/metal-guide' },
+      { label: 'Bracelet Guide', href: '/bracelet-guide' },
+      { label: 'Necklace Size Guide', href: '/necklace-size-guide' },
+    ],
+  },
+  {
+    title: 'Contact Us',
+    links: [
+      { label: 'Customer Service', href: '/customer-service' },
+      { label: '+44 (0) 2038051270', href: 'tel:+442038051270' },
+      { label: 'sales@abelini.com', href: 'mailto:sales@abelini.com' },
+      { label: 'Live Chat', href: '/live-chat' },
+      { label: 'Visit Our Store', href: '/visit-our-store' },
+      { label: "FAQ's", href: '/faqs' },
+    ],
+  },
+];
+
 function FooterMenu({
   menu,
   primaryDomainUrl,
@@ -42,33 +120,209 @@ function FooterMenu({
   publicStoreDomain: string;
 }) {
   return (
-    <nav className="footer-menu" role="navigation">
-      {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
-        if (!item.url) return null;
-        // if the url is internal, we strip the domain
-        const url =
-          item.url.includes('myshopify.com') ||
-          item.url.includes(publicStoreDomain) ||
-          item.url.includes(primaryDomainUrl)
-            ? new URL(item.url).pathname
-            : item.url;
-        const isExternal = !url.startsWith('/');
-        return isExternal ? (
-          <a href={url} key={item.id} rel="noopener noreferrer" target="_blank">
-            {item.title}
-          </a>
-        ) : (
-          <NavLink
-            end
-            key={item.id}
-            prefetch="intent"
-            style={activeLinkStyle}
-            to={url}
+    <nav className="footer-menu px-10 py-8 bg-[#f4f4f4]" role="navigation">
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col gap-4 w-full">
+          <div className="row m-0 flex justify-around gap-4">
+            {FOOTER_SECTIONS.map((section, index) => (
+              <div key={index} className="col-lg col-6 footerblock">
+                <h4 className="text-[14px] capitalize font-semibold text-[#111111] leading-[20px] my-4 tracking-[1px]">
+                  {section.title}
+                </h4>
+                <ul className="list-none p-0 m-0">
+                  {section.links.map((link, linkIndex) => (
+                    <li key={linkIndex}>
+                      <a
+                        href={link.href}
+                        target={link.target}
+                        rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                        className="text-[#626262] text-[13px] leading-[16px] p-0 m-0 tracking-[0.5px] py-2"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      {/* Contact Support Section */}
+      <div className="border-t border-b border-[#111111] py-6 mb-6">
+        <div className="flex justify-center items-center gap-8 md:gap-12 lg:gap-16">
+          {/* Store */}
+          <a 
+            href="/visit-our-store" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
           >
-            {item.title}
-          </NavLink>
-        );
-      })}
+            <Image 
+              src="/assets/images/icons/store.svg" 
+              alt="Store" 
+              width={28} 
+              height={28} 
+              className="w-7 h-7" 
+            />
+            <p className="text-[13px] leading-4 tracking-[0.5px] capitalize m-0 font-normal">Store</p>
+          </a>
+
+          {/* Live Chat */}
+          <a 
+            href="javascript:$zopim.livechat.window.show()" 
+            className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
+          >
+            <Image 
+              src="/assets/images/icons/chat.svg" 
+              alt="Live chat" 
+              width={28} 
+              height={28} 
+              className="w-7 h-7" 
+            />
+            <p className="text-[13px] leading-4 tracking-[0.5px] capitalize m-0 font-normal">Live Chat</p>
+          </a>
+
+          {/* Call Us */}
+          <a 
+            href="tel:+442038051270" 
+            className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
+          >
+            <Image 
+              src="/assets/images/icons/call-us.svg" 
+              alt="Call us" 
+              width={28} 
+              height={28} 
+              className="w-7 h-7" 
+            />
+            <p className="text-[13px] leading-4 tracking-[0.5px] capitalize m-0 font-normal">Call Us</p>
+          </a>
+
+          {/* Email Us */}
+          <a 
+            href="mailto:sales@abelini.com" 
+            className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
+          >
+            <Image 
+              src="/assets/images/icons/email.svg" 
+              alt="Email us" 
+              width={28} 
+              height={28} 
+              className="w-7 h-7" 
+            />
+            <p className="text-[13px] leading-4 tracking-[0.5px] capitalize m-0 font-normal">Email Us</p>
+          </a>
+        </div>
+      </div>
+      
+      {/* Footer Bottom Section - Social Media, Legal Links, Copyright */}
+      <div className="pt-4 pb-0">
+        <div className="flex flex-col items-center gap-6">
+          {/* Social Media Icons */}
+          <div className="flex justify-center items-center gap-6">
+            <a 
+              href="https://www.facebook.com/abelini" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-black hover:opacity-70 transition-opacity"
+              aria-label="Facebook"
+            >
+              <Image 
+                src="/assets/images/icons/facebook.svg" 
+                alt="Facebook" 
+                width={24} 
+                height={24} 
+                className="w-6 h-6" 
+              />
+            </a>
+            <a 
+              href="https://www.pinterest.com/abelini" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-black hover:opacity-70 transition-opacity"
+              aria-label="Pinterest"
+            >
+              <Image 
+                src="/assets/images/icons/pinterest.svg" 
+                alt="Pinterest" 
+                width={24} 
+                height={24} 
+                className="w-6 h-6" 
+              />
+            </a>
+            <a 
+              href="https://www.instagram.com/abelini" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-black hover:opacity-70 transition-opacity"
+              aria-label="Instagram"
+            >
+              <Image 
+                src="/assets/images/icons/instagram.svg" 
+                alt="Instagram" 
+                width={24} 
+                height={24} 
+                className="w-6 h-6" 
+              />
+            </a>
+            <a 
+              href="https://www.youtube.com/abelini" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-black hover:opacity-70 transition-opacity"
+              aria-label="YouTube"
+            >
+              <Image 
+                src="/assets/images/icons/youtube.svg" 
+                alt="YouTube" 
+                width={24} 
+                height={24} 
+                className="w-6 h-6" 
+              />
+            </a>
+          </div>
+
+          {/* Legal Links */}
+          <div className="flex flex-wrap justify-center items-center gap-2 text-[#626262] text-[13px] leading-4">
+            <a 
+              href="/policies/cookie-policy" 
+              className="underline text-[#111111] text-[13px] leading-4 hover:opacity-70 transition-opacity"
+            >
+              Cookie Policy
+            </a>
+            <span className="text-[#626262]">|</span>
+            <a 
+              href="/policies/privacy-policy" 
+              className="underline text-[#111111] text-[13px] leading-4 hover:opacity-70 transition-opacity"
+            >
+              Privacy Notice
+            </a>
+            <span className="text-[#626262]">|</span>
+            <a 
+              href="https://www.abelini.com/company-details" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-[#111111] text-[13px] leading-4 hover:opacity-70 transition-opacity"
+            >
+              Company details
+            </a>
+            <span className="text-[#626262]">|</span>
+            <a 
+              href="/sitemap.xml" 
+              className="underline text-[#111111] text-[13px] leading-4 hover:opacity-70 transition-opacity"
+            >
+              Sitemap
+            </a>
+          </div>
+
+          {/* Copyright */}
+          <p className="text-[#626262] text-[10px] leading-4 text-center m-0">
+            Copyright 2026, ABELINI Ltd. All rights reserved.
+            <br />
+            Reg. office: 154 Abercorn Crescent, Harrow, HA20PU. Registered in London. Company registration no.: 10863786. VAT no: GB 285 0030 28. ABELINI is a registered trademark No. UK3310101
+          </p>
+        </div>
+      </div>
     </nav>
   );
 }
