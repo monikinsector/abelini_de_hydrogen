@@ -1,5 +1,5 @@
 import {Suspense} from 'react';
-import {Await} from 'react-router';
+import {Await, Link} from 'react-router';
 import { Image } from '@shopify/hydrogen';
 
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
@@ -110,6 +110,27 @@ const FOOTER_SECTIONS: FooterSection[] = [
   },
 ];
 
+const SOCIAL_MEDIA_LINKS = [
+  { label: 'Facebook', href: 'https://www.facebook.com/abelini', icon: '/assets/images/icons/facebook.svg' },
+  { label: 'Pinterest', href: 'https://www.pinterest.com/abelini', icon: '/assets/images/icons/pinterest.svg' },
+  { label: 'Instagram', href: 'https://www.instagram.com/abelini', icon: '/assets/images/icons/instagram.svg' },
+  { label: 'YouTube', href: 'https://www.youtube.com/abelini', icon: '/assets/images/icons/youtube.svg' },
+];
+
+const CUSTOMER_SERVICE_LINKS = [
+  { label: 'Store', href: '/visit-our-store', icon: '/assets/images/icons/store.svg' },
+  { label: 'Live Chat', href: '/live-chat', icon: '/assets/images/icons/chat.svg' },
+  { label: 'Call Us', href: 'tel:+442038051270', icon: '/assets/images/icons/call-us.svg' },
+  { label: 'Email Us', href: 'mailto:sales@abelini.com', icon: '/assets/images/icons/email.svg' },
+];
+
+const FOOTER_LINKS = [
+  { label: 'Cookie Policy', href: '/policies/cookie-policy', icon: '/assets/images/icons/cookie.svg' },
+  { label: 'Privacy Policy', href: '/policies/privacy-policy', icon: '/assets/images/icons/privacy.svg' },
+  { label: 'Company Details', href: 'https://www.abelini.com/company-details', icon: '/assets/images/icons/company.svg' },
+  { label: 'Sitemap', href: '/sitemap.xml', icon: '/assets/images/icons/sitemap.svg' },
+];
+
 function FooterMenu({
   menu,
   primaryDomainUrl,
@@ -178,26 +199,24 @@ function FooterMenu({
         </div>
       </div>
 
-      <div className='px-10'>
-      <div className="flex justify-between items-center mb-6 mx-10">
-        <div className="flex flex-col gap-4 w-full">
-          <div className="row m-0 flex justify-around gap-4">
+      <div className='px-4 my-6'>
+      <div className="flex mb-6">
+        <div className="flex flex-col w-full">
+          <div className="grid grid-cols-2 lg:grid-cols-5 m-0 gap-4">
             {FOOTER_SECTIONS.map((section, index) => (
-              <div key={index} className="col-lg col-6 footerblock">
+              <div key={index} className="col-span-1 px-4">
                 <h4 className="text-[14px] capitalize font-semibold text-[#111111] leading-[20px] my-4 tracking-[1px]">
                   {section.title}
                 </h4>
                 <ul className="list-none p-0 m-0">
                   {section.links.map((link, linkIndex) => (
-                    <li key={linkIndex}>
-                      <a
-                        href={link.href}
-                        target={link.target}
-                        rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
-                        className="text-[#626262] text-[13px] leading-[16px] p-0 m-0 tracking-[0.5px] py-2"
+                    <li key={linkIndex} className='py-1'>
+                      <Link
+                        to={link.href}
+                        className="text-[#626262] text-[13px] tracking-[0.5px]"
                       >
                         {link.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -208,68 +227,17 @@ function FooterMenu({
       </div>
       {/* Contact Support Section */}
       <div className="border-t border-b border-[#111111] py-6 mb-6">
-        <div className="flex justify-center items-center gap-8 md:gap-12 lg:gap-16">
-          {/* Store */}
-          <a 
-            href="/visit-our-store" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
-          >
-            <Image 
-              src="/assets/images/icons/store.svg" 
-              alt="Store" 
-              width={28} 
-              height={28} 
-              className="w-7 h-7" 
-            />
-            <p className="text-[13px] leading-4 tracking-[0.5px] capitalize m-0 font-normal">Store</p>
-          </a>
+        <div className="flex justify-center items-center gap-24">
 
-          {/* Live Chat */}
-          <a 
-            href="javascript:$zopim.livechat.window.show()" 
-            className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
-          >
-            <Image 
-              src="/assets/images/icons/chat.svg" 
-              alt="Live chat" 
-              width={28} 
-              height={28} 
-              className="w-7 h-7" 
-            />
-            <p className="text-[13px] leading-4 tracking-[0.5px] capitalize m-0 font-normal">Live Chat</p>
-          </a>
-
-          {/* Call Us */}
-          <a 
-            href="tel:+442038051270" 
-            className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
-          >
-            <Image 
-              src="/assets/images/icons/call-us.svg" 
-              alt="Call us" 
-              width={28} 
-              height={28} 
-              className="w-7 h-7" 
-            />
-            <p className="text-[13px] leading-4 tracking-[0.5px] capitalize m-0 font-normal">Call Us</p>
-          </a>
-
-          {/* Email Us */}
-          <a 
-            href="mailto:sales@abelini.com" 
-            className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
-          >
-            <Image 
-              src="/assets/images/icons/email.svg" 
-              alt="Email us" 
-              width={28} 
-              height={28} 
-              className="w-7 h-7" 
-            />
-            <p className="text-[13px] leading-4 tracking-[0.5px] capitalize m-0 font-normal">Email Us</p>
-          </a>
+          {CUSTOMER_SERVICE_LINKS.map((link) => (
+            <Link
+              to={link.href}
+              className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
+            >
+              <Image src={link.icon} alt={link.label} width={28} height={28} className="w-7 h-7" />
+              <p className="text-[13px] leading-4 tracking-[0.5px] capitalize m-0 font-normal">{link.label}</p>
+            </Link>
+          ))}
         </div>
       </div>
       
@@ -278,106 +246,48 @@ function FooterMenu({
         <div className="flex flex-col items-center gap-6">
           {/* Social Media Icons */}
           <div className="flex justify-center items-center gap-6">
-            <a 
-              href="https://www.facebook.com/abelini" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-black hover:opacity-70 transition-opacity"
-              aria-label="Facebook"
-            >
-              <Image 
-                src="/assets/images/icons/facebook.svg" 
-                alt="Facebook" 
-                width={24} 
-                height={24} 
-                className="w-6 h-6" 
-              />
-            </a>
-            <a 
-              href="https://www.pinterest.com/abelini" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-black hover:opacity-70 transition-opacity"
-              aria-label="Pinterest"
-            >
-              <Image 
-                src="/assets/images/icons/pinterest.svg" 
-                alt="Pinterest" 
-                width={24} 
-                height={24} 
-                className="w-6 h-6" 
-              />
-            </a>
-            <a 
-              href="https://www.instagram.com/abelini" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-black hover:opacity-70 transition-opacity"
-              aria-label="Instagram"
-            >
-              <Image 
-                src="/assets/images/icons/instagram.svg" 
-                alt="Instagram" 
-                width={24} 
-                height={24} 
-                className="w-6 h-6" 
-              />
-            </a>
-            <a 
-              href="https://www.youtube.com/abelini" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-black hover:opacity-70 transition-opacity"
-              aria-label="YouTube"
-            >
-              <Image 
-                src="/assets/images/icons/youtube.svg" 
-                alt="YouTube" 
-                width={24} 
-                height={24} 
-                className="w-6 h-6" 
-              />
-            </a>
+
+            {SOCIAL_MEDIA_LINKS.map((link) => (
+              <Link
+                to={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-black hover:opacity-70 transition-opacity"
+                aria-label={link.label}
+              >
+                <Image 
+                  src={link.icon}
+                  alt={link.label}
+                  width={24}
+                  height={24}
+                  className="w-6 h-6"
+                />
+              </Link>
+            ))}
           </div>
 
           {/* Legal Links */}
-          <div className="flex flex-wrap justify-center items-center gap-2 text-[#626262] text-[13px] leading-4">
-            <a 
-              href="/policies/cookie-policy" 
-              className="underline text-[#111111] text-[13px] leading-4 hover:opacity-70 transition-opacity"
-            >
-              Cookie Policy
-            </a>
-            <span className="text-[#626262]">|</span>
-            <a 
-              href="/policies/privacy-policy" 
-              className="underline text-[#111111] text-[13px] leading-4 hover:opacity-70 transition-opacity"
-            >
-              Privacy Notice
-            </a>
-            <span className="text-[#626262]">|</span>
-            <a 
-              href="https://www.abelini.com/company-details" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline text-[#111111] text-[13px] leading-4 hover:opacity-70 transition-opacity"
-            >
-              Company details
-            </a>
-            <span className="text-[#626262]">|</span>
-            <a 
-              href="/sitemap.xml" 
-              className="underline text-[#111111] text-[13px] leading-4 hover:opacity-70 transition-opacity"
-            >
-              Sitemap
-            </a>
+          <div className="flex flex-wrap justify-center items-center text-[#626262] text-[13px] leading-4">
+            {FOOTER_LINKS.map((link, index) => (
+              <span key={index}>
+                <Link
+                  to={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-[#111111] text-[14px] leading-4 hover:opacity-70 transition-opacity"
+                >
+                  {link.label}
+                </Link>
+                {index < FOOTER_LINKS.length - 1 && (
+                  <span className="text-[#626262] mx-2">|</span>
+                )}
+              </span>
+            ))}
           </div>
 
           {/* Copyright */}
           <p className="text-[#626262] text-[10px] leading-4 text-center m-0">
-            Copyright 2026, ABELINI Ltd. All rights reserved.
-            <br />
-            Reg. office: 154 Abercorn Crescent, Harrow, HA20PU. Registered in London. Company registration no.: 10863786. VAT no: GB 285 0030 28. ABELINI is a registered trademark No. UK3310101
+            Copyright 2026, ABELINI Ltd. All rights reserved.<br />Reg. office: 154 Abercorn Crescent, Harrow, HA20PU. Registered in London. Company registration no.: 10863786. VAT no: GB 285 0030 28. ABELINI is a registered trademark No. UK3310101
           </p>
         </div>
       </div>
