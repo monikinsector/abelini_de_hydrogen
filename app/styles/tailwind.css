@@ -1,6 +1,18 @@
-/**
- * Configure Tailwind v4 in this file using CSS variables and directives:
- * https://tailwindcss.com/docs/v4-beta#css-first-configuration
- */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Dancing+Script:wght@400..700&display=swap');
 
-@import 'tailwindcss';
+@import "tailwindcss";
+
+button.btn-black {
+    @apply bg-black text-white font-bold text-[1rem] py-2 px-16 border border-white rounded-[24px] cursor-pointer hover:bg-white hover:text-black transition-all duration-450;
+}
+button.btn-white {
+    @apply bg-white text-black font-bold text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
+}
+
+a.btn-black {
+    @apply bg-black text-white font-bold text-[1rem] py-2 px-16 border border-white rounded-[24px] cursor-pointer hover:bg-white hover:text-black transition-all duration-450;
+}
+a.btn-white {
+    @apply bg-white text-black font-bold text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
+}
+
