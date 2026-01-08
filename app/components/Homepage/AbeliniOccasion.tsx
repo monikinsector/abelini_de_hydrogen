@@ -262,8 +262,8 @@ export default function ImageWithProductSlider() {
   return (
     <div className="w-full bg-white pt-[40px]">
       <div className="text-center py-8">
-        <p className="mt-3 text-[14px] leading-[20px] font-light text-[#111111] mb-2 tracking-[0.8px]">OUR JEWELLERY</p>
-        <h2 className="flex capitalize m-0 text-[42px] leading-[48px] font-semibold text-[#111111] my-4 tracking-[1px] flex justify-center">
+        <p className="mt-3 text-p-14 font-light text-primary mb-2 tracking-wider">OUR JEWELLERY</p>
+        <h2 className="flex capitalize m-0 text-h2 font-bold text-primary my-4 tracking-wider flex justify-center">
           Abelini For
           <br />
           Any Occasion
@@ -290,13 +290,13 @@ export default function ImageWithProductSlider() {
             </div>
 
             <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:right-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md p-20 min-w-[100%] lg:min-w-[unset]">
-                <h3 className="text-[30px] font-bold text-[#111111] leading-[38px] my-4 tracking-[1px]">
+                <h3 className="text-h3 font-bold text-primary my-4 tracking-wider">
                 Most Loved
                 <br />
                 Engagement Rings
                 </h3>
 
-                <p className="text-[13px] leading-[20px] font-light text-[#111111] mb-8 tracking-[0.8px]">
+                <p className="text-p-14 font-light text-primary mb-8 tracking-wider">
                 Our engagement ring collection includes meticulously crafted, elegant rings that symbolize love and
                 commitment. From classic solitaires to intricate halos and vintage-inspired pieces are made using
                 high-quality materials like platinum, gold, diamonds and gemstones.
@@ -346,12 +346,11 @@ export default function ImageWithProductSlider() {
                             src={ring.img || '/placeholder.svg'}
                             alt={ring.name}
                             width={120}
-                            height={120}
                             className="w-[160px] h-auto max-w-none max-h-none object-contain mx-auto"
                             loading="lazy"
                           />
                         </div>
-                        <p className="text-[11px] sm:text-sm font-light sm:font-normal tracking-[0.8px] sm:tracking-[1px] mb-2 leading-[18px] sm:leading-5 lg:leading-7 text-[#111]">{ring.name}</p>
+                        <p className="text-p-14 font-light tracking-wider mb-2">{ring.name}</p>
                       </Link>
                     </div>
                   ))}
@@ -374,29 +373,29 @@ export default function ImageWithProductSlider() {
           <div className="relative overflow-hidden order-[-1] lg:order-[0]">
             <Image src="https://cdn.shopify.com/s/files/1/0933/1789/0388/files/young_blonde_woman_707x551.avif?v=1750484246" loading="lazy" alt="Model wearing jewelry" className="object-cover w-[100%] h-[100%]" width={707} height={551} />
           </div>
-          <div className=" flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
+          <div className="flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
             <div className="relative lg:min-w-[560px] min-h-[700px] lg:min-h-[unset] w-[90%] lg:min-w-[unset] bg-[#f7ede3] lg:ml-[-60px]  mx-auto lg:w-[100%] z-50">
               <div className="w-full">
                 <Image
                   src="https://cdn.shopify.com/s/files/1/0933/1789/0388/files/plain_wedding_rings_1_1410x666.avif?v=1750484743"
                   alt="Engagement Rings"
                   className="w-full h-auto object-cover hidden lg:block"
-                  loading="lazy"
+                  width={1410}
                 />
                 <Image
                   src="https://cdn.shopify.com/s/files/1/0933/1789/0388/files/plain_wedding_rings_mobile_1_450x560.avif?v=1750484733"
                   alt="Engagement Rings"
                   className="w-full h-auto object-cover lg:hidden block"
-                  loading="lazy"
+                  width={450}
                 />
                 
               </div>
 
               <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:left-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md min-w-[100%] lg:min-w-[unset] lg:px-[60px]">
-                <h3 className="text-[30px] font-bold text-[#111111] leading-[38px] my-4 tracking-[1px] flex justify-left">In Trend
+                <h3 className="text-h3 font-bold text-primary my-4 tracking-wider flex justify-left">In Trend
                 <br />Lab Grown Diamonds</h3>
 
-                <p className="text-[13px] leading-[20px] font-light text-[#111111] mb-8 tracking-[0.8px]">Embrace Brilliant Savings with Trending Lab Grown Diamond Jewellery! Enjoy the allure of natural diamonds at a fraction of the cost. Our collection offers captivating beauty, allowing you to achieve a bigger, impressive look.</p>
+                <p className="text-p-14 font-light text-primary mb-8 tracking-wider">Embrace Brilliant Savings with Trending Lab Grown Diamond Jewellery! Enjoy the allure of natural diamonds at a fraction of the cost. Our collection offers captivating beauty, allowing you to achieve a bigger, impressive look.</p>
 
                 <Link to="lab-grown-diamonds" className="btn-transparent">
                   <span>
@@ -449,7 +448,7 @@ export default function ImageWithProductSlider() {
                               loading="lazy"
                             />
                           </div>
-                          <p className="text-[11px] sm:text-sm font-light sm:font-normal tracking-[0.8px] sm:tracking-[1px] mb-2 leading-[18px] sm:leading-5 lg:leading-7 text-[#111]">{ring.name}</p>
+                          <p className="text-p-14 font-light tracking-wider mb-2">{ring.name}</p>
                         </Link>
                       </div>
                     ))}
