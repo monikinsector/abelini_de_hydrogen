@@ -46,7 +46,7 @@ const CategorySection = () => {
     <section className="lg:px-10 py-8 flex flex-col text-center overflow-x-hidden home-category">
       <div>
         <div className="flex justify-between items-center border-b border-gray-200 mb-8">
-          <h2 className="flex capitalize m-0 text-h3 my-4 font-bold text-primary tracking-wider">
+          <h2 className="text-h3 my-4 font-bold text-primary tracking-wider">
             Select Category
           </h2>
           <Link to="/all-categories" className="flex items-center gap-1 text-p-14 underline font-light tracking-wider text-primary">
@@ -66,10 +66,9 @@ const CategorySection = () => {
                   alt={category.name} 
                   className="w-full h-full object-cover"
                   width={300}
-                  height={300}
                 />
               </div>
-              <p className="title mt-3 text-p-14 font-light text-primary mb-2 tracking-wider">
+              <p className="text-p-14 font-light text-primary my-2 tracking-wider">
                 {category.name}
               </p>
             </Link>
