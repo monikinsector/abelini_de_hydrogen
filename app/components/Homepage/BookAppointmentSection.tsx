@@ -10,7 +10,7 @@ const BookAppointmentSection = () => {
 
    <div className="w-full lg:w-7/12">
   <Image
-    src="https://cdn.shopify.com/s/files/1/0933/1789/0388/files/gate-view.jpg?v=1753332739"
+    src="/assets/images/gate-view.webp"
     alt="Visit Showroom"
     className="
       w-full 

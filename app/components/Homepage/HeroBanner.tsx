@@ -28,7 +28,7 @@ const HeroBanner = ({ data }: any) => {
               {/* Desktop Image */}
               <Image src="/assets/images/hero_model.webp" alt="Hero Model" className="mx-auto md:block hidden"/>
             {/* Mobile Image */}
-            <Image src="/assets/images/mobile/hero_model.webp" alt="Hero Model" className="h-[400px] mx-auto block md:hidden "/>
+            <Image src="/assets/images/mobile/home/hero_model.webp" alt="Hero Model" className="h-[400px] mx-auto block md:hidden "/>
             </div>
     
             <div className="flex justify-center items-center w-full col-span-3">
