@@ -51,7 +51,7 @@ const OurStores = () => {
                   />
 
                   {/* Address: reserved height */}
-                  <p className="text-p-14 font-light lg:min-h-[4.5rem]">
+                  <p className="text-p-14 font-light lg:min-h-[2.5rem]">
                     {store.address}
                   </p>
 
