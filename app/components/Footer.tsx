@@ -144,16 +144,16 @@ function FooterMenu({
     <nav className="footer-menu bg-[#f4f4f4]" role="navigation">
 
       {/* Footer Top Section - Newsletter */}
-      <div className="px-10 items-center grid grid-cols-3 gap-6 border-b border-t border-[#dee2e6] pb-6 pt-6">
+      <div className="px-10 items-center grid lg:grid-cols-3 grid-cols-1 gap-6 border-b border-t border-[#dee2e6] pb-6 pt-6">
         {/* Heading */}
-        <div className="col-span-1 text-center md:text-left">
-          <h2 className="text-[18px] sm:text-[34px] lg:text-[42px] font-bold text-[#111111] leading-[30px] sm:leading-[38px] lg:leading-[48px] tracking-[1px] capitalize">
+        <div className="lg:col-span-1 col-span-1 text-center md:text-left">
+          <h2 className="text-h3 font-bold text-[#111111] capitalize">
             Stay In Touch!
           </h2>
         </div>
         
         {/* Newsletter Form */}
-        <div className="col-span-2 flex flex-col gap-4">
+        <div className="lg:col-span-2 col-span-1 flex flex-col gap-4">
           <form 
             className="flex flex-col sm:flex-row gap-3"
             onSubmit={(e) => {
@@ -161,7 +161,7 @@ function FooterMenu({
               // Handle form submission here
             }}
           >
-            <div className='grid grid-cols-3 w-full gap-6'>
+            <div className='grid grid-cols-1 lg:grid-cols-3 w-full gap-6'>
             <input
               type="text"
               placeholder="Your Name *"
@@ -169,13 +169,13 @@ function FooterMenu({
               style={{
                 boxShadow: "none !important"
               }}
-              className="px-4 py-0 rounded-[24px] !border-[2px] border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-[#111111] text-[12px] font-regular flex-1"
+              className="p-3 rounded-[24px] !border-[2px] border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-[#111111] text-[12px] font-regular flex-1"
             />
             <input
               type="email"
               placeholder="Your email *"
               required
-              className="px-4 py-0 !focus:shadow-none rounded-[24px] !border-[2px]  border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-[#111111] text-[12px] flex-1"
+              className="p-3 !focus:shadow-none rounded-[24px] !border-[2px]  border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-[#111111] text-[12px] flex-1"
             />
             <button
               type="submit"
@@ -205,7 +205,7 @@ function FooterMenu({
           <div className="grid grid-cols-2 lg:grid-cols-5 m-0 gap-4">
             {FOOTER_SECTIONS.map((section, index) => (
               <div key={index} className="col-span-1 px-4">
-                <h4 className="text-[14px] capitalize font-semibold text-[#111111] leading-[20px] my-4 tracking-[1px]">
+                <h4 className="text-p-14 capitalize font-semibold text-[#111111]  my-4 tracking-wider">
                   {section.title}
                 </h4>
                 <ul className="list-none p-0 m-0">
@@ -213,7 +213,7 @@ function FooterMenu({
                     <li key={linkIndex} className='py-1'>
                       <Link
                         to={link.href}
-                        className="text-[#626262] text-[13px] tracking-[0.5px]"
+                        className="text-[#626262] text-p-13 tracking-[0.5px]"
                       >
                         {link.label}
                       </Link>
@@ -227,7 +227,7 @@ function FooterMenu({
       </div>
       {/* Contact Support Section */}
       <div className="border-t border-b border-[#111111] py-6 mb-6">
-        <div className="flex justify-center items-center gap-24">
+        <div className="flex justify-center items-center lg:gap-24 gap-8">
 
           {CUSTOMER_SERVICE_LINKS.map((link) => (
             <Link
@@ -235,7 +235,7 @@ function FooterMenu({
               className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
             >
               <Image src={link.icon} alt={link.label} width={28} height={28} className="w-7 h-7" />
-              <p className="text-[13px] leading-4 tracking-[0.5px] capitalize m-0 font-normal">{link.label}</p>
+              <p className="text-p-13 leading-4 tracking-[0.5px] capitalize m-0 font-normal">{link.label}</p>
             </Link>
           ))}
         </div>
@@ -267,14 +267,14 @@ function FooterMenu({
           </div>
 
           {/* Legal Links */}
-          <div className="flex flex-wrap justify-center items-center text-[#626262] text-[13px] leading-4">
+          <div className="flex flex-wrap justify-center items-center text-[#626262] text-p-13">
             {FOOTER_LINKS.map((link, index) => (
               <span key={index}>
                 <Link
                   to={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline text-[#111111] text-[14px] leading-4 hover:opacity-70 transition-opacity"
+                  className="underline text-[#111111] text-p-14"
                 >
                   {link.label}
                 </Link>

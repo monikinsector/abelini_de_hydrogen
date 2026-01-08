@@ -51,10 +51,10 @@ const uspItems: UspItem[] = [
 const UspIcons: React.FC = () => {
   return (
     <section className="flex py-8 lg:px-6">
-      <div className="lg:w-full mx-auto px-4 ">
-          <ul className="flex justify-center flex-wrap gap-2">
+      <div className="w-full mx-auto px-4">
+          <ul className="flex justify-center flex-wrap gap-6 grid grid-cols-2 lg:grid-cols-6">
             {uspItems.map(({ target, src, alt, label }, index) => (
-              <li key={index} className='flex justify-center text-center w-1/2 lg:w-[170px] pb-4 py-3'>
+              <li key={index} className='flex justify-center text-center col-span-1 items-center my-3'>
                 <Link
                   to={"#"}
                   className="mx-auto cursor-pointer flex flex-col items-center"
@@ -64,7 +64,7 @@ const UspIcons: React.FC = () => {
                     alt={alt}
                     width={42}
                   />
-                  <p className="mt-2 text-center text-primary text-p-14 font-light tracking-wider">{label}</p>
+                  <p className="mt-3 text-center text-primary text-p-13 font-light tracking-wider capitalize">{label}</p>
                 </Link>
               </li>
             ))}

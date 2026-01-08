@@ -20,7 +20,7 @@ const ProductHeader: React.FC<ProductHeaderProps> = ({title, sku, reviewsText, r
 
         {sku && (
           <div className="hidden md:block">
-            <p className="text-[14px] text-[#BF8F5F]">SKU: <span className="productSKU">{sku}</span></p>
+            <p className="text-p-14 text-[#BF8F5F]">SKU: <span className="productSKU">{sku}</span></p>
           </div>
         )}
       </div>
