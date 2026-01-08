@@ -6,10 +6,10 @@ const BookAppointmentSection = () => {
 
   return (
     <section>
-      <div className="container px-4 my-6">
+      <div className="container-fluid px-4 my-6">
         <div className="flex flex-col lg:flex-row w-full bg-[#f6f6f6]">
 
-          <div className="w-full lg:w-7/12">
+          <div className="w-full">
             <Image
               src="https://cdn.shopify.com/s/files/1/0933/1789/0388/files/gate-view.jpg?v=1753332739"
               alt="Visit Showroom"

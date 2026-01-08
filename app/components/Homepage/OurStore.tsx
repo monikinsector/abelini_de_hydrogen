@@ -26,7 +26,7 @@ const OurStores = () => {
     },
   ]
   return (
-    <section className="flex flex-col bg-[#FCF4EC]">
+    <section className="flex flex-col justify-center items-center bg-[#FCF4EC]">
       <div className="container px-4 my-6">
         <div className="flex justify-center flex-col items-center w-full">
           <div className="w-full text-center mb-6 lg:mb-0 lg:w-10/12">

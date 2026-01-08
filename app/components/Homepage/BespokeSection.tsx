@@ -6,7 +6,7 @@ const BespokeSection = () => {
 
   return (
     <section>
-      <div className="container px-4 my-6">
+      <div className="container-fluid px-4 my-6">
           <div className="relative lg:min-w-[560px] min-h-[600px] mx-auto lg:w-[100%] z-50">
             <div className="w-full">
               <Image

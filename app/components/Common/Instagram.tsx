@@ -36,7 +36,7 @@ const InstagramItems: InstagramItem[] = [
 const Instagram: React.FC = () => {
   return (
     <section className="overflow-x-hidden">
-      <div className="flex flex-col container px-4 my-6">
+      <div className="flex flex-col container-fluid px-4 my-6">
         <h2 className="text-h3 font-bold text-primary my-6 tracking-wider text-center flex items-center justify-center gap-3">
           <Image src="/assets/images/icons/instagram.svg" alt="Instagram" width={30} />
           @abelinijewellery
