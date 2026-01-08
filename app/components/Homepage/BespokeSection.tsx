@@ -22,16 +22,16 @@ const BespokeSection = () => {
           </div>
 
           <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:left-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md p-8 min-w-[100%] lg:min-w-[unset]">
-              <p className='mt-3 text-[14px] leading-[20px] font-light text-[#111] mb-2 tracking-[0.8px]'>CREATE YOUR OWN DESIGN</p>
-              <h2 className="select_category flex capitalize m-0 text-[28px] leading-[34px] md:text-[36px] md:leading-[42px] lg:text-[42px] lg:leading-[48px] font-semibold text-[#111111] my-4 tracking-[1px]">
+              <p className='text-[14px] leading-[20px] font-light text-[#111] tracking-[0.8px]'>CREATE YOUR OWN DESIGN</p>
+              <h3 className="text-[30px] font-bold text-[#111111] leading-[38px] mb-3 tracking-[1px] flex justify-left">
               Bespoke Design Service
-              </h2>
+              </h3>
 
-              <p className="mt-3 text-[14px] leading-[20px] font-light text-[#111] mb-2 tracking-[0.8px]">
+              <p className="text-[14px] leading-[20px] font-light text-[#111111] mb-8 tracking-[0.8px]">
               ABELINI Jewellery can transform the latest trends and preferences of style into bespoke jewellery through exquisite design. So if you are looking for a unique design that has been made for you, ABELINI will make your dream a reality.
               </p>
 
-              <Link to="/bespoke" className="cursor-pointer rounded-[24px] border border-black bg-transparent px-16 py-2 text-[14px] text-base hover:bg-black hover:text-white text-black transition-all duration-[450ms] w-full sm:w-auto">
+              <Link to="/bespoke" className="mt-3 btn-transparent">
               Request Bespoke Design
               </Link>
           </div>

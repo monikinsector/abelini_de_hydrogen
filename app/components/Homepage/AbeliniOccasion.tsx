@@ -262,8 +262,8 @@ export default function ImageWithProductSlider() {
   return (
     <div className="w-full bg-white pt-[40px]">
       <div className="text-center py-8">
-        <p className="text-[11px] sm:text-sm font-light sm:font-normal tracking-[0.8px] sm:tracking-[1px] mb-2 leading-[18px] sm:leading-5 lg:leading-7 text-[#111]">OUR JEWELLERY</p>
-        <h2 className="text-[18px] sm:text-[34px] lg:text-[42px] font-bold text-[#111] leading-[30px] sm:leading-[38px] lg:leading-[48px] my-4 tracking-[1px]">
+        <p className="mt-3 text-[14px] leading-[20px] font-light text-[#111111] mb-2 tracking-[0.8px]">OUR JEWELLERY</p>
+        <h2 className="flex capitalize m-0 text-[42px] leading-[48px] font-semibold text-[#111111] my-4 tracking-[1px] flex justify-center">
           Abelini For
           <br />
           Any Occasion
@@ -289,20 +289,20 @@ export default function ImageWithProductSlider() {
               
             </div>
 
-            <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:right-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md p-8 min-w-[100%] lg:min-w-[unset]">
-                <h3 className="text-[20px] sm:text-[28px] lg:text-[30px] font-bold text-[#111111] leading-[26px] sm:leading-[38px] my-4 tracking-[1px]">
+            <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:right-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md p-20 min-w-[100%] lg:min-w-[unset]">
+                <h3 className="text-[30px] font-bold text-[#111111] leading-[38px] my-4 tracking-[1px]">
                 Most Loved
                 <br />
                 Engagement Rings
                 </h3>
 
-                <p className="text-[13px] sm:text-[15px] font-light sm:font-normal text-[#111111] leading-5 mb-[10px] tracking-[0.8px]">
+                <p className="text-[13px] leading-[20px] font-light text-[#111111] mb-8 tracking-[0.8px]">
                 Our engagement ring collection includes meticulously crafted, elegant rings that symbolize love and
                 commitment. From classic solitaires to intricate halos and vintage-inspired pieces are made using
                 high-quality materials like platinum, gold, diamonds and gemstones.
                 </p>
 
-                <Link to="engagement-rings" className="bg-transparent hover:bg-black hover:text-white text-black border border-black transition-all duration-300 text-sm leading-5 tracking-[0.8px] text-center capitalize px-8 py-[10px] font-semibold cursor-pointer inline-block lg:w-fit w-full block mt-[20px] lg:mt-[10px] rounded-full">
+                <Link to="engagement-rings" className="btn-transparent">
                   <span>
                     Engagement Rings
                   </span>
@@ -392,12 +392,13 @@ export default function ImageWithProductSlider() {
                 
               </div>
 
-              <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:left-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md p-8 min-w-[100%] lg:min-w-[unset]">
-                <h3 className="text-[30px] font-bold text-[#111111] leading-[38px] my-4 tracking-[1px]">In Trend<br />Lab Grown Diamonds</h3>
+              <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:left-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md min-w-[100%] lg:min-w-[unset] lg:px-[60px]">
+                <h3 className="text-[30px] font-bold text-[#111111] leading-[38px] my-4 tracking-[1px] flex justify-left">In Trend
+                <br />Lab Grown Diamonds</h3>
 
-                <p className="text-[13px] text-[#111111] leading-[20px] mb-[10px] tracking-[0.8px]">Embrace Brilliant Savings with Trending Lab Grown Diamond Jewellery! Enjoy the allure of natural diamonds at a fraction of the cost. Our collection offers captivating beauty, allowing you to achieve a bigger, impressive look.</p>
+                <p className="text-[13px] leading-[20px] font-light text-[#111111] mb-8 tracking-[0.8px]">Embrace Brilliant Savings with Trending Lab Grown Diamond Jewellery! Enjoy the allure of natural diamonds at a fraction of the cost. Our collection offers captivating beauty, allowing you to achieve a bigger, impressive look.</p>
 
-                <Link to="lab-grown-diamonds" className="bg-transparent hover:bg-black hover:text-white text-black border border-black transition-all duration-300 text-sm leading-5 tracking-[0.8px] text-center capitalize px-8 py-[10px] font-semibold cursor-pointer inline-block lg:w-fit w-full block mt-[20px] lg:mt-[10px] rounded-full">
+                <Link to="lab-grown-diamonds" className="btn-transparent">
                   <span>
                     Lab Grown Diamonds
                   </span>
