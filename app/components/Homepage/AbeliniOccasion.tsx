@@ -190,7 +190,7 @@ export default function ImageWithProductSlider() {
   }
 
   return (
-    <section>
+    <section className="flex flex-col">
     <div className="flex flex-col container-fluid px-4 my-6">
         <div className="text-center my-6">
           <p className="mb-3 text-p-14 font-light text-primary tracking-wider">OUR JEWELLERY</p>

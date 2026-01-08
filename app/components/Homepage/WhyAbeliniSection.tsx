@@ -62,7 +62,7 @@ const SupportIcons = () => {
 
 export default function RichText() {
     return (
-          <section>
+          <section className="flex flex-col">
             <div className="flex flex-col container-fluid px-4 my-6">
               <div className="text-center flex flex-col items-center">
                   <h2 className="flex capitalize text-h2 font-bold text-primary my-4 tracking-wider flex justify-center lg:w-[50%] w-full">Why Abelini</h2>

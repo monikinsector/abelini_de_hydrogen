@@ -66,17 +66,16 @@ const ReviewSection = () => {
   };
 
   return (
-    <section className="bg-[#f6f6f6] py-8">
-      <div className="testimonial-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <p className="mt-3 text-p-14 font-light text-primary mb-2 tracking-wider">TESTIMONIALS</p>
-          <h2 className="flex capitalize m-0 text-h2 font-bold text-primary my-4 tracking-wider flex justify-center">Our Customers Love Us</h2>
-          <p className="mt-3 text-p-14 font-light text-primary mb-2 tracking-wider">More than 10000 happy customers all over Europe</p>
+    <section className="bg-[#f6f6f6] px-4 py-12 flex justify-center">
+      <div className="container lg:w-[60%]">
+        <div className="flex flex-col items-center justify-center mb-6">
+          <p className="text-p-14 font-light text-primary tracking-wider text-center">TESTIMONIALS</p>
+          <h2 className="text-h2 font-bold text-primary tracking-wider">Our Customers Love Us</h2>
+          <p className="text-p-14 font-light text-primary tracking-wider text-center">More than 10000 happy customers all over Europe</p>
         </div>
-
          <div className="grid grid-cols-3 gap-4 mb-8 tabs-tite-container border-b border-[#E4E4E4]">
           <div className="text-center">
-            <div className={`p-4 cursor-pointer border-b-3 transition-all duration-200 h-full ${
+            <div className={`px-4 py-2 cursor-pointer border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'trustpilot' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
                 onClick={() => setActiveTab('trustpilot')}
@@ -109,7 +108,7 @@ const ReviewSection = () => {
           
           <div className="text-center">
             <div 
-              className={`p-4 cursor-pointer border-b-3 transition-all duration-200 h-full ${
+              className={`px-4 py-2 cursor-pointer border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'trustshop' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('trustshop')}
@@ -136,7 +135,7 @@ const ReviewSection = () => {
 
           <div className="text-center">
             <div 
-              className={`p-4 cursor-pointer border-b-3 transition-all duration-200 ${
+              className={`px-4 py-2 cursor-pointer border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'google' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('google')}
@@ -157,7 +156,6 @@ const ReviewSection = () => {
             </div>
           </div>
         </div>
-
         <div className="w-full relative">
           <div className="flex overflow-hidden">
             <div 

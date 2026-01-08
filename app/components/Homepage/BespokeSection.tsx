@@ -6,7 +6,7 @@ const BespokeSection = () => {
 
   return (
 
-    <section>
+    <section className="flex flex-col">
       <div className="container-fluid px-4 my-6">
           <div className="relative">
             <div className="w-full">

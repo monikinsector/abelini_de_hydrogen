@@ -34,7 +34,7 @@ const Spotlight = () => {
 
   return (
 
-    <section className="bg-[#FCF4EC]">
+    <section className="bg-[#FCF4EC] flex flex-col">
       <div className="container-fluid px-4 lg:px-8 py-12 mb-6 block">
         <p className="mb-3 text-p-14 font-light text-primary tracking-wider text-center">WHERE DO THEY MENTION US?</p>
         <h2 className="flex justify-center capitalize m-0 text-h2 font-bold text-primary my-4 tracking-wider">Abelini In The Spotlight</h2>
