@@ -2,6 +2,30 @@
 
 @import "tailwindcss";
 
+@theme {
+  /* ===============================
+     COLORS
+  =============================== */
+  --color-primary: 17 17 17;     /* #111111 */
+  --color-secondary: 98 98 98;   /* #626262 */
+
+  /* ===============================
+     FONT SIZES
+  =============================== */
+
+  /* Desktop */
+  --text-p-14: 14px;   /* p */
+  --text-p-13: 13px;
+  --text-p-10: 10px;   /* small links */
+  --text-p-20: 20px;
+  --text-h2: 42px;
+  --text-h3: 30px;
+
+  /* Mobile */
+  --text-h2-m: 30px;
+  --text-h3-m: 26px;
+}
+
 button.btn-black, a.btn-black {
     @apply bg-black text-white font-bold text-[1rem] py-3 px-8 border border-white rounded-[24px] cursor-pointer hover:bg-white hover:border-black hover:text-black transition-all duration-450;
 }
