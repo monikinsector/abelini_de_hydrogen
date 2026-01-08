@@ -7,23 +7,23 @@ const SupportIcons = () => {
  const supportIcons = [
   {
     name: 'Assay Office London',
-    image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/assay_office_london_logo_230x90.avif?v=1750488327',
+    image: '/assets/images/why_abelini/assay_office_london_logo_230x90.webp',
   },
   {
     name: 'Assay Assured',
-    image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/assay_assured_230x90.avif?v=1750488328',
+    image: '/assets/images/why_abelini/assay_assured_230x90.webp',
   },
   {
     name: 'Stop Blood Diamonds',
-    image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/stop_blood_icon_230x90.avif?v=1750488328',
+    image: '/assets/images/why_abelini/stop_blood_icon_230x90.webp',
   },
   {
     name: 'The National Association of Jewellers',
-    image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/the_national_icon_230x90.avif?v=1750488337',
+    image: '/assets/images/why_abelini/the_national_icon_230x90.webp',
   },
   {
     name: 'GIA',
-    image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/gia_logo_230x90.avif?v=1750488328',
+    image: '/assets/images/why_abelini/gia_logo_230x90.webp',
   },
 ];
 

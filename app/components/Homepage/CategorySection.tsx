@@ -7,37 +7,37 @@ const CategorySection = () => {
     {
       id: 1,
       name: 'Engagement Rings',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/rings_300x300.avif?v=1750478975',
+      image: '/assets/images/home/rings_300x300.webp',
       link: '/engagement-rings'
     },
     {
       id: 2,
       name: 'Wedding Rings',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/wedding_300x300.avif?v=1750478985',
+      image: '/assets/images/home/wedding_300x300.webp',
       link: '/wedding-rings'
     },
     {
       id: 3,
       name: 'Eternity Rings',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/earrings.avif?v=1750478975',
+      image: '/assets/images/home/eternity-300x300.webp',
       link: '/diamond-rings/eternity-rings'
     },
     {
       id: 4,
       name: 'Necklace',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/pendants.avif?v=1750478975',
+      image: '/assets/images/home/pendants.webp',
       link: '/pendants'
     },
     {
       id: 5,
       name: 'Earrings',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/earrings.avif?v=1750478975',
+      image: '/assets/images/home/earrings.webp',
       link: '/earrings'
     },
     {
       id: 6,
       name: 'Bracelets',
-      image: 'https://cdn.shopify.com/s/files/1/0933/1789/0388/files/bracelets.avif?v=1750478975',
+      image: '/assets/images/home/bracelets.webp',
       link: '/bracelets'
     }
   ];
