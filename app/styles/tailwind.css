@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Dancing+Script:wght@400..700&display=swap');
 
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+
+
 @import "tailwindcss";
 
 @theme {
@@ -43,3 +47,15 @@ button.theme_button_navbar {
 button.theme_button_hmenu {
     @apply bg-black text-white font-bold text-[1rem] py-1 px-12 border border-black rounded-[24px] cursor-pointer hover:bg-transparent hover:text-black hover:border-black transition-all duration-450;
 }
+
+/* body {
+  display: flex;
+  flex-direction: column;
+  font-family: "Open Sans", sans-serif;
+  font-size: var(--text-p-14);
+  font-weight: 400;
+  color: var(--color-secondary);
+  background-color: var(--color-light);
+  min-height: 100vh;
+  overflow-x: hidden;
+} */
