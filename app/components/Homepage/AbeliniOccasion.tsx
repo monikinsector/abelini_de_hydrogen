@@ -191,10 +191,10 @@ export default function ImageWithProductSlider() {
 
   return (
     <section className="flex flex-col">
-    <div className="flex flex-col container-fluid px-4 my-6">
+    <div className="flex flex-col container-fluid my-6">
         <div className="text-center my-6">
           <p className="mb-3 text-p-14 font-light text-primary tracking-wider">OUR JEWELLERY</p>
-          <h2 className="text-h2 font-bold text-primary mb-3 tracking-wider">
+          <h2 className="lg:text-h2 text-h2-m lg:leading-h2 leading-h2-m font-bold text-primary mb-3 tracking-wider">
             Abelini For
             <br />
             Any Occasion
@@ -203,25 +203,23 @@ export default function ImageWithProductSlider() {
 
         <div className="grid grid-cols-1 flex flex-col lg:grid-cols-2 min-h-[600px]">
           <div className="col-span-1 flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
-            <div className="relative lg:ml-[60px]  w-[100%] z-50">
+            <div className="relative lg:ml-[60px] w-[100%] z-50 px-4">
               <div className="w-full">
                 <Image
                   src="/assets/images/home/most_loved_engagement_1_1410x666.webp"
                   alt="Engagement Rings"
                   className="w-full h-auto object-cover hidden lg:block"
-                  loading="lazy"
                 />
                 <Image
                   src="/assets/images/mobile/home/most_loved_engagement_mobile_1_450x560.webp"
                   alt="Engagement Rings"
-                  className="w-full h-auto object-cover lg:hidden block"
-                  loading="lazy"
+                  className="object-cover lg:hidden block "
                 />
                 
               </div>
 
-              <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:right-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md p-20 min-w-[100%] lg:min-w-[unset]">
-                  <h3 className="text-h3 font-bold text-primary my-4 tracking-wider">
+              <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:right-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md lg:p-20 p-4 sm:mt-[60px] lg:mt-[0px]">
+                  <h3 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary my-4 tracking-wider">
                   Most Loved
                   <br />
                   Engagement Rings
@@ -233,7 +231,7 @@ export default function ImageWithProductSlider() {
                   high-quality materials like platinum, gold, diamonds and gemstones.
                   </p>
 
-                  <Link to="engagement-rings" className="btn-transparent">
+                  <Link to="engagement-rings" className="btn-transparent lg:w-auto w-full flex justify-center">
                     <span>
                       Engagement Rings
                     </span>
@@ -305,7 +303,7 @@ export default function ImageWithProductSlider() {
             <Image src="/assets/images/home/young_blonde_woman_707x551.webp" loading="lazy" alt="Model wearing jewelry" className="object-cover w-[100%] h-[100%]" width={707} height={551} />
           </div>
           <div className="col-span-1 flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
-            <div className="relative lg:ml-[-60px] w-[100%] z-50">
+            <div className="relative lg:ml-[-60px] w-[100%] z-50 px-4">
               <div className="w-full">
                 <Image
                   src="/assets/images/home/plain_wedding_rings_1_1410x666.webp"
@@ -316,14 +314,14 @@ export default function ImageWithProductSlider() {
                 <Image
                   src="/assets/images/mobile/home/plain_wedding_rings_mobile_1_450x560.webp"
                   alt="Engagement Rings"
-                  className="w-full h-auto object-cover lg:hidden block"
+                  className="w-full sm:h-[860px] object-cover lg:hidden block "
                   width={450}
                 />
                 
               </div>
 
-              <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:left-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md min-w-[100%] lg:min-w-[unset] lg:px-[60px]">
-                <h3 className="text-h3 font-bold text-primary mb-3 tracking-wider flex justify-left">In Trend
+              <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:left-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md min-w-[100%] lg:min-w-[unset] lg:px-[60px] sm:mt-[60px] lg:mt-[0px] px-4">
+                <h3 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary mb-3 tracking-wider flex justify-left">In Trend
                 <br />Lab Grown Diamonds</h3>
 
                 <p className="text-p-14 font-light text-primary mb-8 tracking-wider">Embrace Brilliant Savings with Trending Lab Grown Diamond Jewellery! Enjoy the allure of natural diamonds at a fraction of the cost. Our collection offers captivating beauty, allowing you to achieve a bigger, impressive look.</p>
