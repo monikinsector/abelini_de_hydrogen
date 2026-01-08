@@ -37,7 +37,7 @@ jobs:
 
       # SonarCloud (MAIN ONLY)
       - name: SonarCloud Scan (main only)
-        if: github.ref_name == 'main'
+        if: github.ref_name == 'dev'
         uses: SonarSource/sonarcloud-github-action@refs/heads/master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
