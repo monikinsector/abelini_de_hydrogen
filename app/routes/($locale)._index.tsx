@@ -95,7 +95,7 @@ function RecommendedProducts({
 }) {
   return (
     <div className="recommended-products">
-      <h2>Dev Branch with CI/CD</h2>
+      <h2>I'm from feature/homePage</h2>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
           {(response) => (
