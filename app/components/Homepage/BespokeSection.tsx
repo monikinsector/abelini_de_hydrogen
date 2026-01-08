@@ -9,12 +9,12 @@ const BespokeSection = () => {
           <div className="relative lg:min-w-[560px] min-h-[700px] lg:min-h-[unset] lg:min-w-[unset] bg-[#e7d7ba]  mx-auto lg:w-[100%] z-50 !mt-[40px]">
           <div className="w-full">
             <Image
-              src="https://cdn.shopify.com/s/files/1/0933/1789/0388/files/bespoke_image_1272x350.avif?v=1750485349"
+              src="/assets/images/bespoke_image_1272x350.webp"
               alt="Engagement Rings"
               className="w-full h-auto object-cover hidden lg:block"
             />
             <Image
-              src="https://cdn.shopify.com/s/files/1/0933/1789/0388/files/bespoke_image_mobile_325x603.avif?v=1750485359"
+              src="/assets/images/mobile/bespoke_image_mobile_325x603.webp"
               alt="Engagement Rings"
               className="w-full h-auto object-cover lg:hidden block"
             />
