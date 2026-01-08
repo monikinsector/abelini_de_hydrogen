@@ -35,16 +35,18 @@ const InstagramItems: InstagramItem[] = [
 
 const Instagram: React.FC = () => {
   return (
-    <section className="lg:px-10 px-4 overflow-x-hidden">
-      <h2 className="text-h3 font-bold text-primary my-4 tracking-wider text-center my-8 flex items-center justify-center gap-3">
-        <Image src="/assets/images/icons/instagram.svg" alt="Instagram" width={30} />
-        @abelinijewellery
-      </h2>
-      <div className="flex flex-nowrap lg:gap-10 gap-2 items-center justify-around overflow-x-scroll [&::-webkit-scrollbar]:hidden">
-          {InstagramItems.map((item) => (
-            <Image src={item.src} alt={item.alt} width={250} className="rounded-lg object-cover h-[250px] w-full" />
-          ))}
-      </div>      
+    <section className="overflow-x-hidden">
+      <div className="flex flex-col container px-4 my-6">
+        <h2 className="text-h3 font-bold text-primary my-6 tracking-wider text-center flex items-center justify-center gap-3">
+          <Image src="/assets/images/icons/instagram.svg" alt="Instagram" width={30} />
+          @abelinijewellery
+        </h2>
+        <div className="flex flex-nowrap lg:gap-10 gap-2 items-center justify-around overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+            {InstagramItems.map((item) => (
+              <Image src={item.src} alt={item.alt} width={250} className="rounded-lg object-cover h-[250px] w-full" />
+            ))}
+        </div>      
+      </div>
     </section>
   );
 };
