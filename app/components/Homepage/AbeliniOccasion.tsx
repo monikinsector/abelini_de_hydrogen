@@ -190,121 +190,122 @@ export default function ImageWithProductSlider() {
   }
 
   return (
-    <div className="w-full bg-white pt-[40px]">
-      <div className="text-center py-8">
-        <p className="mt-3 text-p-14 font-light text-primary mb-2 tracking-wider">OUR JEWELLERY</p>
-        <h2 className="flex capitalize m-0 text-h2 font-bold text-primary my-4 tracking-wider flex justify-center">
-          Abelini For
-          <br />
-          Any Occasion
-        </h2>
-      </div>
+    <section>
+    <div className="flex flex-col container-fluid px-4 my-6">
+        <div className="text-center my-6">
+          <p className="mb-3 text-p-14 font-light text-primary tracking-wider">OUR JEWELLERY</p>
+          <h2 className="text-h2 font-bold text-primary mb-3 tracking-wider">
+            Abelini For
+            <br />
+            Any Occasion
+          </h2>
+        </div>
 
-      <div className="grid grid-cols-1 flex lg:grid flex-col lg:grid-cols-2 min-h-[600px]">
-        <div className=" flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
-          <div className="relative lg:min-w-[560px] min-h-[700px] lg:min-h-[unset] w-[90%] lg:min-w-[unset] bg-[#f7ede3] lg:ml-[60px]  mx-auto lg:w-[100%] z-50">
-            <div className="w-full">
-              <Image
-                src="/assets/images/home/most_loved_engagement_1_1410x666.webp"
-                alt="Engagement Rings"
-                className="w-full h-auto object-cover hidden lg:block"
-                loading="lazy"
-              />
-              <Image
-                src="/assets/images/mobile/home/most_loved_engagement_mobile_1_450x560.webp"
-                alt="Engagement Rings"
-                className="w-full h-auto object-cover lg:hidden block"
-                loading="lazy"
-              />
-              
-            </div>
+        <div className="grid grid-cols-1 flex flex-col lg:grid-cols-2 min-h-[600px]">
+          <div className="col-span-1 flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
+            <div className="relative lg:ml-[60px]  w-[100%] z-50">
+              <div className="w-full">
+                <Image
+                  src="/assets/images/home/most_loved_engagement_1_1410x666.webp"
+                  alt="Engagement Rings"
+                  className="w-full h-auto object-cover hidden lg:block"
+                  loading="lazy"
+                />
+                <Image
+                  src="/assets/images/mobile/home/most_loved_engagement_mobile_1_450x560.webp"
+                  alt="Engagement Rings"
+                  className="w-full h-auto object-cover lg:hidden block"
+                  loading="lazy"
+                />
+                
+              </div>
 
-            <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:right-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md p-20 min-w-[100%] lg:min-w-[unset]">
-                <h3 className="text-h3 font-bold text-primary my-4 tracking-wider">
-                Most Loved
-                <br />
-                Engagement Rings
-                </h3>
+              <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:right-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md p-20 min-w-[100%] lg:min-w-[unset]">
+                  <h3 className="text-h3 font-bold text-primary my-4 tracking-wider">
+                  Most Loved
+                  <br />
+                  Engagement Rings
+                  </h3>
 
-                <p className="text-p-14 font-light text-primary mb-8 tracking-wider">
-                Our engagement ring collection includes meticulously crafted, elegant rings that symbolize love and
-                commitment. From classic solitaires to intricate halos and vintage-inspired pieces are made using
-                high-quality materials like platinum, gold, diamonds and gemstones.
-                </p>
+                  <p className="text-p-14 font-light text-primary mb-8 tracking-wider">
+                  Our engagement ring collection includes meticulously crafted, elegant rings that symbolize love and
+                  commitment. From classic solitaires to intricate halos and vintage-inspired pieces are made using
+                  high-quality materials like platinum, gold, diamonds and gemstones.
+                  </p>
 
-                <Link to="engagement-rings" className="btn-transparent">
-                  <span>
-                    Engagement Rings
-                  </span>
-                </Link>
-            </div>
-          </div>
-          
-          <div className="w-[100%] lg:py-12 py-2 relative lg:ml-[60px]">
-            <button
-              onClick={scrollPrev}
-              disabled={!canScrollPrev}
-              className="absolute lg:left-[10px] left-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none lg:p-2 w-fit disabled:opacity-50 disabled:cursor-not-allowed">
-              <ChevronLeft className="stroke-[#333] w-8 h-8 lg:stroke-white" />
-            </button>
-
-            <button
-              onClick={scrollNext}
-              disabled={!canScrollNext}
-              className="absolute lg:right-[10px] right-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none lg:p-2 w-fit disabled:opacity-50 disabled:cursor-not-allowed">
-              <ChevronRight className="stroke-[#333] w-8 h-8 lg:stroke-white" />
-            </button>
-            
-            <div className="max-w-7xl mx-auto lg:px-4">
-              <div className="relative w-[90%] mx-auto overflow-hidden">
-                <div 
-                  ref={sliderRef}
-                  className="flex transition-transform duration-500 ease-in-out"
-                  style={{
-                    transform: `translateX(-${currentIndex * (100 / slidesToShow)}%)`
-                  }}
-                >
-                  {rings.map((ring, index) => (
-                    <div 
-                      key={index} 
-                      className="flex-shrink-0 px-2"
-                      style={{ width: `${100 / slidesToShow}%` }}
-                    >
-                      <Link to={ring.href} className="group text-center block">
-                        <div className="bg-white mb-3 imageWithProductSlider-slider-card">
-                          <Image
-                            src={ring.img || '/placeholder.svg'}
-                            alt={ring.name}
-                            width={120}
-                            className="w-[160px] h-auto max-w-none max-h-none object-contain mx-auto"
-                            loading="lazy"
-                          />
-                        </div>
-                        <p className="text-p-14 font-light tracking-wider mb-2">{ring.name}</p>
-                      </Link>
-                    </div>
-                  ))}
-                </div>
+                  <Link to="engagement-rings" className="btn-transparent">
+                    <span>
+                      Engagement Rings
+                    </span>
+                  </Link>
               </div>
             </div>
+            
+            <div className="w-[100%] lg:py-12 py-2 relative lg:ml-[60px]">
+              <button
+                onClick={scrollPrev}
+                disabled={!canScrollPrev}
+                className="absolute lg:left-[10px] left-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none lg:p-2 w-fit disabled:opacity-50 disabled:cursor-not-allowed">
+                <ChevronLeft className="stroke-[#333] w-8 h-8 lg:stroke-white" />
+              </button>
+
+              <button
+                onClick={scrollNext}
+                disabled={!canScrollNext}
+                className="absolute lg:right-[10px] right-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none lg:p-2 w-fit disabled:opacity-50 disabled:cursor-not-allowed">
+                <ChevronRight className="stroke-[#333] w-8 h-8 lg:stroke-white" />
+              </button>
+              
+              <div className="max-w-7xl mx-auto lg:px-4">
+                <div className="relative w-[90%] mx-auto overflow-hidden">
+                  <div 
+                    ref={sliderRef}
+                    className="flex transition-transform duration-500 ease-in-out"
+                    style={{
+                      transform: `translateX(-${currentIndex * (100 / slidesToShow)}%)`
+                    }}
+                  >
+                    {rings.map((ring, index) => (
+                      <div 
+                        key={index} 
+                        className="flex-shrink-0 px-2"
+                        style={{ width: `${100 / slidesToShow}%` }}
+                      >
+                        <Link to={ring.href} className="group text-center block">
+                          <div className="bg-white mb-3 imageWithProductSlider-slider-card">
+                            <Image
+                              src={ring.img || '/placeholder.svg'}
+                              alt={ring.name}
+                              width={120}
+                              className="w-[160px] h-auto max-w-none max-h-none object-contain mx-auto"
+                              loading="lazy"
+                            />
+                          </div>
+                          <p className="text-p-14 font-light tracking-wider mb-2">{ring.name}</p>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
 
 
+            </div>
+          </div>
+
+          <div className="col-span-1 relative overflow-hidden order-[-1] lg:order-[0]">
+            <Image src="/assets/images/home/young_woman_709x551.webp" loading="lazy" alt="Model wearing jewelry" className="object-cover w-[100%] h-[100%]" />
           </div>
         </div>
 
-        <div className="relative overflow-hidden order-[-1] lg:order-[0]">
-          <Image src="/assets/images/home/young_woman_709x551.webp" loading="lazy" alt="Model wearing jewelry" className="object-cover w-[100%] h-[100%]" />
-        </div>
-      </div>
-
-      <div className="w-full bg-white pt-[40px]"> 
-        <div className="grid grid-cols-1 flex lg:grid flex-col lg:grid-cols-2 min-h-[600px] my-3 mx-3">
-          <div className="relative overflow-hidden order-[-1] lg:order-[0]">
+        
+        <div className="grid grid-cols-1 flex flex-col lg:grid-cols-2 min-h-[600px]">
+          <div className="col-span-1 relative overflow-hidden order-[-1] lg:order-[0]">
             <Image src="/assets/images/home/young_blonde_woman_707x551.webp" loading="lazy" alt="Model wearing jewelry" className="object-cover w-[100%] h-[100%]" width={707} height={551} />
           </div>
-          <div className="flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
-            <div className="relative lg:min-w-[560px] min-h-[700px] lg:min-h-[unset] w-[90%] lg:min-w-[unset] bg-[#f7ede3] lg:ml-[-60px]  mx-auto lg:w-[100%] z-50">
+          <div className="col-span-1 flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
+            <div className="relative lg:ml-[-60px] w-[100%] z-50">
               <div className="w-full">
                 <Image
                   src="/assets/images/home/plain_wedding_rings_1_1410x666.webp"
@@ -322,7 +323,7 @@ export default function ImageWithProductSlider() {
               </div>
 
               <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:left-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md min-w-[100%] lg:min-w-[unset] lg:px-[60px]">
-                <h3 className="text-h3 font-bold text-primary my-4 tracking-wider flex justify-left">In Trend
+                <h3 className="text-h3 font-bold text-primary mb-3 tracking-wider flex justify-left">In Trend
                 <br />Lab Grown Diamonds</h3>
 
                 <p className="text-p-14 font-light text-primary mb-8 tracking-wider">Embrace Brilliant Savings with Trending Lab Grown Diamond Jewellery! Enjoy the allure of natural diamonds at a fraction of the cost. Our collection offers captivating beauty, allowing you to achieve a bigger, impressive look.</p>
@@ -388,8 +389,7 @@ export default function ImageWithProductSlider() {
             </div>
           </div>
         </div>
-      </div>
-
     </div>
+    </section>
   )
 }

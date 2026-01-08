@@ -6,10 +6,10 @@ const BookAppointmentSection = () => {
 
   return (
     <section>
-      <div className="container px-4 my-6">
-        <div className="flex flex-col lg:flex-row w-full bg-[#f6f6f6]">
+      <div className="container-fluid px-4 my-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 bg-[#f6f6f6]">
 
-          <div className="w-full lg:w-7/12">
+          <div className="lg:col-span-2 col-span-1">
             <Image
               src="/assets/images/gate-view.webp"
               alt="Visit Showroom"
@@ -21,7 +21,7 @@ const BookAppointmentSection = () => {
             />
           </div>
 
-          <div className="w-full lg:w-5/12 flex flex-col items-center px-4">
+          <div className="col-span-1 flex flex-col justify-center px-4">
 
               <h3 className="text-h3 font-bold text-primary my-4 tracking-wider flex justify-left">
                 Step Into Luxury – Our New Jewellery Store Is Now Open
@@ -32,7 +32,7 @@ const BookAppointmentSection = () => {
                 Experience the finest selection of fine jewellery, diamonds, and precious stones.
               </p>
 
-              <Link to="/book-appointment" className="mb-4 btn-transparent lg:w-auto w-full flex justify-center">
+              <Link to="/book-appointment" className="mb-4 btn-transparent lg:w-fit w-full flex justify-center">
                 Book an appointment now
               </Link>
 
