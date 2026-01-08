@@ -35,8 +35,8 @@ jobs:
       - name: Enforce Custom Critical Issues
         run: node scripts/critical-issue-check.js
 
-      # SonarCloud (MAIN ONLY)
-      - name: SonarCloud Scan (main only)
+      # SonarCloud (Dev ONLY)
+      - name: SonarCloud Scan (dev only)
         if: github.ref_name == 'dev'
         uses: SonarSource/sonarcloud-github-action@refs/heads/master
         env:
