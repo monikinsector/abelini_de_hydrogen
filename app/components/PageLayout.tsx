@@ -7,13 +7,16 @@ import type {
 } from 'storefrontapi.generated';
 import {Aside} from '~/components/Aside';
 import {Footer} from '~/components/Footer';
-import {Header, HeaderMenu} from '~/components/Header';
 import {CartMain} from '~/components/CartMain';
 import {
   SEARCH_ENDPOINT,
   SearchFormPredictive,
 } from '~/components/SearchFormPredictive';
 import {SearchResultsPredictive} from '~/components/SearchResultsPredictive';
+import SaleBar from './Layout/Sale';
+import FeatureHeader from './Layout/FeatureHeader';
+import Header from './Layout/Header';
+import MenuHeader from './Layout/MenuHeader';
 
 interface PageLayoutProps {
   cart: Promise<CartApiQueryFragment | null>;
@@ -34,17 +37,14 @@ export function PageLayout({
 }: PageLayoutProps) {
   return (
     <Aside.Provider>
-      <CartAside cart={cart} />
-      <SearchAside />
-      <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
-      {header && (
-        <Header
-          header={header}
-          cart={cart}
-          isLoggedIn={isLoggedIn}
-          publicStoreDomain={publicStoreDomain}
-        />
-      )}
+      {/* <CartAside cart={cart} /> */}
+      {/* <SearchAside /> */}
+      {/* <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} /> */}
+      <SaleBar />
+      <FeatureHeader />
+      <Header/>
+      <MenuHeader />
+
       <main>{children}</main>
       <Footer
         footer={footer}
@@ -162,12 +162,12 @@ function MobileMenuAside({
     header.menu &&
     header.shop.primaryDomain?.url && (
       <Aside type="mobile" heading="MENU">
-        <HeaderMenu
+        {/* <HeaderMenu
           menu={header.menu}
           viewport="mobile"
           primaryDomainUrl={header.shop.primaryDomain.url}
           publicStoreDomain={publicStoreDomain}
-        />
+        /> */}
       </Aside>
     )
   );
