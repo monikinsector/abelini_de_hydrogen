@@ -24,11 +24,11 @@ const BookAppointmentSection = () => {
     <div className="w-full lg:w-5/12 bg-gray-100 flex items-center">
       <div className="max-w-3xl px-4 lg:px-4 py-10">
 
-        <h2 className="text-2xl lg:text-3xl font-semibold text-black mb-4">
+        <h3 className="text-[30px] font-bold text-[#111111] leading-[38px] my-4 tracking-[1px] flex justify-left">
           Step Into Luxury – Our New Jewellery Store Is Now Open
-        </h2>
+        </h3>
 
-        <p className="text-[13px] sm:text-[15px] font-light text-[#111111] mb-8 tracking-[0.8px]">
+        <p className="text-[13px] leading-[20px] font-light text-[#111111] mb-8 tracking-[0.8px]">
           Step into luxury with our new jewellery store, now open in the heart of London.
           Experience the finest selection of fine jewellery, diamonds, and precious stones.
         </p>
