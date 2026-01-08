@@ -57,15 +57,14 @@ const UspIcons: React.FC = () => {
               <li key={index} className='flex justify-center text-center w-1/2 lg:w-[170px] pb-4 py-3'>
                 <Link
                   to={"#"}
-                  className="block flex flex-col items-center mx-auto cursor-pointer"
+                  className="mx-auto cursor-pointer flex flex-col items-center"
                 >
                   <Image
                     src={`/assets/images/icons/${src}`}
                     alt={alt}
                     width={42}
-                    height={42}
                   />
-                  <p className="mt-2 text-center text-[#626262] text-[12.8px]">{label}</p>
+                  <p className="mt-2 text-center text-primary text-p-14 font-light tracking-wider">{label}</p>
                 </Link>
               </li>
             ))}

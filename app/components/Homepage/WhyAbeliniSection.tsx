@@ -64,8 +64,8 @@ export default function RichText() {
     return (
           <>
             <div className="lg:w-1/2 w-full text-center flex flex-col mx-auto bg-white lg:py-[35px] py-8 lg:px-8 px-6">
-                <h2 className="flex capitalize m-0 text-[42px] leading-[48px] font-semibold text-[#111111] my-4 tracking-[1px] flex justify-center">Why Abelini</h2>
-                <p className="mt-3 text-[14px] font-light text-[#111111] mb-2 tracking-[0.8px]">It's easy to lose sight of what value really means. If your opinion of value is like ours and is about getting more and paying less, then you're in the right place. By buying directly from manufacturers online, it can save up to 70% compare to high street jewellers. We pride ourselves on offering enduring quality at fair prices; shopping is just better that way, isn't it?
+                <h2 className="flex capitalize m-0 text-h2 font-bold text-primary my-4 tracking-wider flex justify-center">Why Abelini</h2>
+                <p className="mt-3 text-p-14 font-light text-primary mb-2 tracking-wider">It's easy to lose sight of what value really means. If your opinion of value is like ours and is about getting more and paying less, then you're in the right place. By buying directly from manufacturers online, it can save up to 70% compare to high street jewellers. We pride ourselves on offering enduring quality at fair prices; shopping is just better that way, isn't it?
                 </p>
                 <Link to="/about-us" className="flex justify-center title mt-[30px]">
                     <u>Learn more</u>

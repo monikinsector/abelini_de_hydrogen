@@ -1,25 +1,6 @@
 import { Image } from '@shopify/hydrogen';
 import React, { useState, useEffect, useRef } from 'react';
 
-// Type definitions
-interface GoogleReview {
-  rating: string | number;
-  text: string;
-  author: string;
-}
-
-interface ReviewData {
-  google_reviews?: GoogleReview[];
-  google_total_review?: {
-    total_review: number;
-    percentage: number;
-  };
-  trust_shops_total_review?: {
-    total_review: number;
-    percentage: number;
-  };
-}
-
 // Declare custom element for TypeScript
 declare global {
   namespace JSX {
@@ -88,15 +69,15 @@ const ReviewSection = () => {
     <section className="bg-[#f6f6f6] py-8">
       <div className="testimonial-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <p className="mt-3 text-[14px] leading-[20px] font-light text-[#111111] mb-2 tracking-[0.8px]">TESTIMONIALS</p>
-          <h2 className="flex capitalize m-0 text-[42px] leading-[48px] font-semibold text-[#111111] my-4 tracking-[1px] flex justify-center">Our Customers Love Us</h2>
-          <p className="mt-3 text-[14px] leading-[20px] font-light text-[#111111] mb-2 tracking-[0.8px]">More than 10000 happy customers all over Europe</p>
+          <p className="mt-3 text-p-14 font-light text-primary mb-2 tracking-wider">TESTIMONIALS</p>
+          <h2 className="flex capitalize m-0 text-h2 font-bold text-primary my-4 tracking-wider flex justify-center">Our Customers Love Us</h2>
+          <p className="mt-3 text-p-14 font-light text-primary mb-2 tracking-wider">More than 10000 happy customers all over Europe</p>
         </div>
 
-         <div className="grid grid-cols-3 lg:gap-4 mb-8 tabs-tite-container border-b border-[#E4E4E4]">
+         <div className="grid grid-cols-3 gap-4 mb-8 tabs-tite-container border-b border-[#E4E4E4]">
           <div className="text-center">
-            <div className={`p-4 cursor-pointer border-b-4 transition-all duration-200 h-[99px] tab-title-wrapper ${
-                activeTab === 'trustpilot' ? 'border-[#EF9000]' : 'border-transparent hover:border-gray-200'
+            <div className={`p-4 cursor-pointer border-b-3 transition-all duration-200 h-full ${
+                activeTab === 'trustpilot' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
                 onClick={() => setActiveTab('trustpilot')}
             >
@@ -128,8 +109,8 @@ const ReviewSection = () => {
           
           <div className="text-center">
             <div 
-              className={`p-4 cursor-pointer border-b-4 transition-all duration-200 h-[99px] tab-title-wrapper ${
-                activeTab === 'trustshop' ? 'border-[#EF9000]' : 'border-transparent hover:border-gray-200'
+              className={`p-4 cursor-pointer border-b-3 transition-all duration-200 h-full ${
+                activeTab === 'trustshop' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('trustshop')}
             >
@@ -155,8 +136,8 @@ const ReviewSection = () => {
 
           <div className="text-center">
             <div 
-              className={`p-4 cursor-pointer border-b-4 transition-all duration-200 h-[99px] tab-title-wrapper ${
-                activeTab === 'google' ? 'border-[#EF9000]' : 'border-transparent hover:border-gray-200'
+              className={`p-4 cursor-pointer border-b-3 transition-all duration-200 ${
+                activeTab === 'google' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('google')}
             >
