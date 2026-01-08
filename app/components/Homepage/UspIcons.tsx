@@ -52,7 +52,7 @@ const UspIcons: React.FC = () => {
   return (
     <section className="flex py-8 lg:px-6">
       <div className="lg:w-full mx-auto px-4 ">
-          <ul className="flex justify-center flex-wrap gap-3">
+          <ul className="flex justify-center flex-wrap gap-2">
             {uspItems.map(({ target, src, alt, label }, index) => (
               <li key={index} className='flex justify-center text-center w-1/2 lg:w-[170px] pb-4 py-3'>
                 <Link
