@@ -32,8 +32,8 @@ export default function Homepage() {
     <BespokeSection />
     <BookAppointmentSection />
     <WhyAbeliniSection />
-    <OurStore />
     <Instagram />
+    <OurStore />
     <UspIcons />
     </>
   );

@@ -230,7 +230,7 @@ function MenuDropdown({totalCols, data, leftBorderFromIndex, lastColDoubleSpace,
       switch (type) {
           case "heading": {
             const {text} = data as {text: string};
-            return <h3 className="text-[14px] font-semibold text-[#111111]">{text}</h3>;
+            return <h3 className="text-p-14 font-semibold text-[#111111]">{text}</h3>;
           }
       
           case "links_with_image": {
@@ -238,7 +238,7 @@ function MenuDropdown({totalCols, data, leftBorderFromIndex, lastColDoubleSpace,
               return (
                 <Link to={d.link} className="flex gap-2"> 
                   <Image src={d.image} alt={d.name} className="!w-8 !h-auto"/>
-                  <h3 className="text-[14px] font-regular py-[6px] text-muted">{d.name}</h3>
+                  <h3 className="text-p-14 font-regular py-[6px] text-muted">{d.name}</h3>
                 </Link>
               )
             })
@@ -247,7 +247,7 @@ function MenuDropdown({totalCols, data, leftBorderFromIndex, lastColDoubleSpace,
             return (data?.links ?? []).map((d: HeaderLink, ixs: number) => {
               return (
                 <Link to={d.link} className="flex"> 
-                  <h3 className="text-[14px] font-regular py-[6px] text-[#626262]">{d.name}</h3>
+                  <h3 className="text-p-14 font-regular py-[6px] text-[#626262]">{d.name}</h3>
                 </Link>
               )
             })

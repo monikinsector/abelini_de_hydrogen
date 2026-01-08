@@ -126,7 +126,7 @@ const ReviewSection = () => {
                   ref={etrustedWidgetRef}
                   className="pointer-events-none"
                 >
-                  <p className="text-[14px] leading-[20px] font-light text-[#111111] mb-2 tracking-[0.8px]">
+                  <p className="text-p-14 font-light text-[#111111] mb-2 tracking-wider">
                     Trust Shop 4.9 | 3171 reviews
                   </p>
                 </div>
@@ -149,7 +149,7 @@ const ReviewSection = () => {
                 height={30} 
               />
               <div className="flex items-center justify-center">
-                <p className="text-[14px] leading-[20px] font-light text-[#111111] mb-2 tracking-[0.8px]">
+                <p className="text-p-14 font-light text-[#111111] mb-2 tracking-wider">
                   Google 4.9 | 3171 reviews
                 </p>
                 
