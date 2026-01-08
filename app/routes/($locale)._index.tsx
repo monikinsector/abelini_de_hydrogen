@@ -10,6 +10,7 @@ import UspIcons from '~/components/Homepage/UspIcons';
 import WhyAbeliniSection from '~/components/Homepage/WhyAbeliniSection';
 import OurStore from '~/components/Homepage/OurStore';
 import Review from '~/components/Common/Review';
+import Instagram from '~/components/Common/Instagram';
 
 export const meta: Route.MetaFunction = () => {
   return [{title: 'Abelini - Buy Diamond Jewellery Online | UK Jewellers - Abelini'}];
@@ -32,6 +33,7 @@ export default function Homepage() {
     <BookAppointmentSection />
     <WhyAbeliniSection />
     <OurStore />
+    <Instagram />
     <UspIcons />
     </>
   );
