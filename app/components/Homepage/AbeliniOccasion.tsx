@@ -215,23 +215,21 @@ export default function ImageWithProductSlider() {
                   alt="Engagement Rings"
                   className="object-cover lg:hidden block "
                 />
-                
               </div>
-
-              <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:right-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md lg:p-20 p-4 sm:mt-[60px] lg:mt-[0px]">
-                  <h3 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary my-4 tracking-wider">
+              <div className="absolute lg:top-1/2 lg:w-[50%] lg:-translate-y-1/2 lg:mr-[60px] lg:bottom-[unset] bottom-0 right-0 w-full lg:p-0 p-8">
+                  <h3 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary mb-3 tracking-wider">
                   Most Loved
                   <br />
                   Engagement Rings
                   </h3>
 
-                  <p className="text-p-14 font-light text-primary mb-8 tracking-wider">
+                  <p className="text-p-14 font-light text-primary mb-6 tracking-wider">
                   Our engagement ring collection includes meticulously crafted, elegant rings that symbolize love and
                   commitment. From classic solitaires to intricate halos and vintage-inspired pieces are made using
                   high-quality materials like platinum, gold, diamonds and gemstones.
                   </p>
 
-                  <Link to="engagement-rings" className="btn-transparent lg:w-auto w-full flex justify-center">
+                  <Link to="engagement-rings" className="flex btn-transparent lg:w-fit justify-center">
                     <span>
                       Engagement Rings
                     </span>
@@ -303,7 +301,7 @@ export default function ImageWithProductSlider() {
             <Image src="/assets/images/home/young_blonde_woman_707x551.webp" loading="lazy" alt="Model wearing jewelry" className="object-cover w-[100%] h-[100%]" width={707} height={551} />
           </div>
           <div className="col-span-1 flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
-            <div className="relative lg:ml-[-60px] w-[100%] z-50 px-4">
+            <div className="relative lg:ml-[-60px] w-[100%] z-50 lg:px-0 px-4">
               <div className="w-full">
                 <Image
                   src="/assets/images/home/plain_wedding_rings_1_1410x666.webp"
@@ -320,13 +318,13 @@ export default function ImageWithProductSlider() {
                 
               </div>
 
-              <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:left-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md min-w-[100%] lg:min-w-[unset] lg:px-[60px] sm:mt-[60px] lg:mt-[0px] px-4">
+              <div className="absolute lg:top-1/2 lg:w-[50%] lg:-translate-y-1/2 lg:ml-[60px] lg:bottom-[unset] bottom-0 left-0  w-full lg:p-0 p-8">
                 <h3 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary mb-3 tracking-wider flex justify-left">In Trend
                 <br />Lab Grown Diamonds</h3>
 
-                <p className="text-p-14 font-light text-primary mb-8 tracking-wider">Embrace Brilliant Savings with Trending Lab Grown Diamond Jewellery! Enjoy the allure of natural diamonds at a fraction of the cost. Our collection offers captivating beauty, allowing you to achieve a bigger, impressive look.</p>
+                <p className="text-p-14 font-light text-primary mb-6 tracking-wider">Embrace Brilliant Savings with Trending Lab Grown Diamond Jewellery! Enjoy the allure of natural diamonds at a fraction of the cost. Our collection offers captivating beauty, allowing you to achieve a bigger, impressive look.</p>
 
-                <Link to="lab-grown-diamonds" className="btn-transparent">
+                <Link to="lab-grown-diamonds" className="flex btn-transparent lg:w-fit justify-center">
                   <span>
                     Lab Grown Diamonds
                   </span>
