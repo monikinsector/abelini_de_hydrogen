@@ -73,12 +73,18 @@ const ReviewSection = () => {
           <h2 className="lg:text-h2 text-h2-m font-bold text-primary tracking-wider text-center">Our Customers Love Us</h2>
           <p className="text-p-14 font-light text-primary tracking-wider text-center">More than 10000 happy customers all over Europe</p>
         </div>
-         <div className="grid grid-cols-3 lg:gap-4 gap-2 mb-8 tabs-tite-container border-b border-[#E4E4E4]">
+         <div className="grid grid-cols-3 lg:gap-4 gap-2 mb-8 tabs-tite-container border-b border-[#E4E4E4]" role="tablist">
           <div className="text-center">
-            <div className={`lg:px-4 lg:py-2 min-h-[90px] cursor-pointer border-b-3 transition-all duration-200 h-full ${
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'trustpilot'}
+              aria-controls="trustpilot-tabpanel"
+              id="trustpilot-tab"
+              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] w-full border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'trustpilot' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
-                onClick={() => setActiveTab('trustpilot')}
+              onClick={() => setActiveTab('trustpilot')}
             >
               <Image
                 src="/assets/images/reviews/trustpilot.png" 
@@ -103,12 +109,17 @@ const ReviewSection = () => {
                   </a>
                 </div>
               </div>
-            </div>
+            </button>
           </div>
           
           <div className="text-center">
-            <div 
-              className={`lg:px-4 lg:py-2 min-h-[90px] cursor-pointer border-b-3 transition-all duration-200 h-full ${
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'trustshop'}
+              aria-controls="trustshop-tabpanel"
+              id="trustshop-tab"
+              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] w-full border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'trustshop' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('trustshop')}
@@ -130,12 +141,17 @@ const ReviewSection = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </button>
           </div>
 
           <div className="text-center">
-            <div 
-              className={`lg:px-4 lg:py-2 min-h-[90px] cursor-pointer border-b-3 transition-all duration-200 h-full ${
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'google'}
+              aria-controls="google-tabpanel"
+              id="google-tab"
+              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] w-full border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'google' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('google')}
@@ -153,7 +169,7 @@ const ReviewSection = () => {
                 </p>
                 
               </div>
-            </div>
+            </button>
           </div>
         </div>
         <div className="w-full relative">
@@ -162,13 +178,28 @@ const ReviewSection = () => {
               className="flex transition-transform duration-300 ease-in-out w-full"
               style={{ transform: `translateX(-${activeTab === 'trustpilot' ? 0 : activeTab === 'trustshop' ? 100 : 200}%)` }}
             >
-              <div className="w-full flex-shrink-0 px-1">
+              <div 
+                id="trustpilot-tabpanel"
+                role="tabpanel"
+                aria-labelledby="trustpilot-tab"
+                className="w-full flex-shrink-0 px-1"
+              >
                 {tabContent.trustpilot}
               </div>
-              <div className="w-full flex-shrink-0 px-1">
+              <div 
+                id="trustshop-tabpanel"
+                role="tabpanel"
+                aria-labelledby="trustshop-tab"
+                className="w-full flex-shrink-0 px-1"
+              >
                 {tabContent.trustshop}
               </div>
-              <div className="w-full flex-shrink-0 px-1">
+              <div 
+                id="google-tabpanel"
+                role="tabpanel"
+                aria-labelledby="google-tab"
+                className="w-full flex-shrink-0 px-1"
+              >
                 <h3>Google</h3>
               </div>
             </div>
