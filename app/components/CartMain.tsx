@@ -119,6 +119,22 @@ function CartEmpty({
       value: 'Good',
     },
   ];
+
+  const handleDeliveryDate = () => {
+    const deliveryDate = '20th Jan 2026';
+    return (
+      <div className="text-p-14 leading-p-14">
+              <p className="mb-2 flex items-center gap-x-3 text-primary font-medium">
+                <Image src="/assets/images/icons/free_delivery.svg" alt="Free Delivery" width={24} height={24} />
+                <span>Free and insured delivery – estimated by <span className="text-capitalize">{deliveryDate}</span></span>
+              </p>
+              <p className="mb-2 flex items-center gap-x-3 text-secondary font-normal">
+                <Image src="/assets/images/icons/return.svg" alt="Returns" width={24} height={24} />
+                <span>Try it risk-free at home! Not in love with your piece? Return it for free within 60 days</span>
+              </p>
+            </div>
+    );
+  };
   
   return (
     <section className="cart-block border-t border-gray-300 border-b">
@@ -146,15 +162,7 @@ function CartEmpty({
                           <li key={option.id} className="order-0">{option.name}: {option.value}</li>
                         ))}
                         <div className="mt-4 text-p-14 leading-p-14 lg:block hidden">
-                          <p className="mb-2 flex items-center gap-x-3 text-primary font-medium">
-                            <Image src="/assets/images/icons/free_delivery.svg" alt="Free Delivery" width={24} height={24} />
-                            <span>Free and insured delivery – estimated by</span>
-                            <span className="text-capitalize">20th Jan 2026</span>
-                          </p>
-                          <p className="mb-2 flex items-center gap-x-3 text-secondary font-normal">
-                            <Image src="/assets/images/icons/return.svg" alt="Returns" width={24} height={24} />
-                            <span>Try it risk-free at home! Not in love with your piece? Return it for free within 60 days</span>
-                          </p>
+                          {handleDeliveryDate()}
                         </div>
                     </ul>
                   </div>
@@ -165,16 +173,7 @@ function CartEmpty({
             {/* Cart Product End */}
           </div>
           <div className="col-span-1 lg:hidden block">
-            <div className="mt-4 text-p-14 leading-p-14">
-              <p className="mb-2 flex items-center gap-x-3 text-primary font-bold">
-                <Image src="/assets/images/icons/free_delivery.svg" alt="Free Delivery" width={24} height={24} />
-                <span>Free and insured delivery – estimated by <b>20th Jan 2026</b></span>
-              </p>
-              <p className="mb-2 flex items-center gap-x-3 text-secondary font-normal">
-                <Image src="/assets/images/icons/return.svg" alt="Returns" width={24} height={24} />
-                <span>Try it risk-free at home! Not in love with your piece? Return it for free within 60 days</span>
-              </p>
-            </div>
+            {handleDeliveryDate()}
           </div>
           <div className="col-span-1 lg:col-span-4 flex flex-col gap-y-4">
             <h3 className="text-p-16 leading-p-16 text-primary font-bold">PRICE DETAILS</h3>
