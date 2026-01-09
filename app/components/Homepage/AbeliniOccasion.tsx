@@ -211,7 +211,7 @@ export default function ImageWithProductSlider() {
                   className="w-full h-auto object-cover hidden lg:block"
                 />
                 <Image
-                  src="/assets/images/mobile/home/most_loved_engagement_mobile_1_450x560.webp"
+                  src="/assets/images/mobile/home/most_loved_engagement_mobile_1-450x660.webp"
                   alt="Engagement Rings"
                   className="object-cover lg:hidden block "
                 />
@@ -312,7 +312,7 @@ export default function ImageWithProductSlider() {
                   width={1410}
                 />
                 <Image
-                  src="/assets/images/mobile/home/plain_wedding_rings_mobile_1_450x560.webp"
+                  src="/assets/images/mobile/home/plain_wedding_rings_mobile_1-450x660.webp"
                   alt="Engagement Rings"
                   className="w-full sm:h-[860px] object-cover lg:hidden block "
                   width={450}
