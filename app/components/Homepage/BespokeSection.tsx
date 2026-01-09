@@ -6,7 +6,7 @@ const BespokeSection = () => {
 
   return (
 
-    <section>
+    <section className="flex flex-col">
       <div className="container-fluid px-4 my-6">
           <div className="relative">
             <div className="w-full">
@@ -17,16 +17,17 @@ const BespokeSection = () => {
                 width={1272}
               />
               <Image
-                src="/assets/images/mobile/bespoke_image_mobile_325x603.webp"
+                src="/assets/images/mobile/home/bespoke_image_mobile_325x603.webp"
                 alt="Engagement Rings"
                 className="w-full h-auto object-cover lg:hidden block"
                 width={325}
+                height={650}
               />
               
             </div>
             <div className="absolute lg:top-1/2 bottom-[0] lg:bottom-[unset] lg:left-0 lg:transform mt-auto lg:-translate-y-1/2 max-w-md lg:px-8 px-4 min-w-[100%] lg:min-w-[unset] my-6">
                 <p className='text-p-14 font-light text-primary tracking-wider mb-3'>CREATE YOUR OWN DESIGN</p>
-                <h3 className="text-h3 font-bold text-primary mb-3 tracking-wider flex justify-left">
+                <h3 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary mb-3 tracking-wider flex justify-left">
                 Bespoke Design Service
                 </h3>
 

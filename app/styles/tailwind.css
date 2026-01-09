@@ -7,28 +7,42 @@
 @import "tailwindcss";
 
 @theme {
-  /* ===============================
-     COLORS
-  =============================== */
-  --color-primary: 17 17 17;     /* #111111 */
-  --color-secondary: 98 98 98;   /* #626262 */
-
-  /* ===============================
-     FONT SIZES
-  =============================== */
-
-  /* Desktop */
-  --text-p-14: 14px;   /* p */
-  --text-p-13: 13px;
-  --text-p-10: 10px;   /* small links */
-  --text-p-20: 20px;
-  --text-h2: 42px;
-  --text-h3: 30px;
-
-  /* Mobile */
-  --text-h2-m: 30px;
-  --text-h3-m: 26px;
-}
+    /* ===============================
+       COLORS
+    =============================== */
+    --color-primary: 17 17 17;     /* #111111 */
+    --color-secondary: 98 98 98;   /* #626262 */
+  
+    /* ===============================
+       FONT SIZES (Desktop)
+    =============================== */
+    --text-p-14: 14px;
+    --leading-p-14: 20px;
+  
+    --text-p-13: 13px;
+    --leading-p-13: 18px;
+  
+    --text-p-10: 10px;
+    --leading-p-10: 14px;
+  
+    --text-p-20: 20px;
+    --leading-p-20: 28px;
+  
+    --text-h2: 42px;
+    --leading-h2: 50px;
+  
+    --text-h3: 30px;
+    --leading-h3: 36px;
+  
+    /* ===============================
+       MOBILE
+    =============================== */
+    --text-h2-m: 30px;
+    --leading-h2-m: 36px;
+  
+    --text-h3-m: 26px;
+    --leading-h3-m: 32px;
+  }
 
 button.btn-black, a.btn-black {
     @apply bg-black text-white font-bold text-[1rem] py-3 px-8 border border-white rounded-[24px] cursor-pointer hover:bg-white hover:border-black hover:text-black transition-all duration-450;
@@ -47,18 +61,6 @@ button.theme_button_navbar {
 button.theme_button_hmenu {
     @apply bg-black text-white font-bold text-[1rem] py-1 px-12 border border-black rounded-[24px] cursor-pointer hover:bg-transparent hover:text-black hover:border-black transition-all duration-450;
 }
-
-/* body {
-  display: flex;
-  flex-direction: column;
-  font-family: "Open Sans", sans-serif;
-  font-size: var(--text-p-14);
-  font-weight: 400;
-  color: var(--color-secondary);
-  background-color: var(--color-light);
-  min-height: 100vh;
-  overflow-x: hidden;
-} */
 
 
 
