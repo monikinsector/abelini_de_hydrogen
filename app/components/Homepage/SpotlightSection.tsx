@@ -47,7 +47,9 @@ const Spotlight = () => {
               src={logo.image}
               alt={logo.name}
               loading="lazy"
-              className="w-full h-auto object-contain"
+              width={100}
+              height={100}
+              className="w-full h-auto object-contain max-h-[100px] max-w-[150px]"
             />
           ))}
         </div>

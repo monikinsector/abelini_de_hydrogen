@@ -70,12 +70,12 @@ const ReviewSection = () => {
       <div className="container lg:w-[60%]">
         <div className="flex flex-col items-center justify-center mb-6">
           <p className="text-p-14 font-light text-primary tracking-wider text-center">TESTIMONIALS</p>
-          <h2 className="text-h2 font-bold text-primary tracking-wider">Our Customers Love Us</h2>
+          <h2 className="lg:text-h2 text-h2-m font-bold text-primary tracking-wider text-center">Our Customers Love Us</h2>
           <p className="text-p-14 font-light text-primary tracking-wider text-center">More than 10000 happy customers all over Europe</p>
         </div>
-         <div className="grid grid-cols-3 gap-4 mb-8 tabs-tite-container border-b border-[#E4E4E4]">
+         <div className="grid grid-cols-3 lg:gap-4 gap-2 mb-8 tabs-tite-container border-b border-[#E4E4E4]">
           <div className="text-center">
-            <div className={`px-4 py-2 cursor-pointer border-b-3 transition-all duration-200 h-full ${
+            <div className={`lg:px-4 lg:py-2 min-h-[90px] cursor-pointer border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'trustpilot' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
                 onClick={() => setActiveTab('trustpilot')}
@@ -108,7 +108,7 @@ const ReviewSection = () => {
           
           <div className="text-center">
             <div 
-              className={`px-4 py-2 cursor-pointer border-b-3 transition-all duration-200 h-full ${
+              className={`lg:px-4 lg:py-2 min-h-[90px] cursor-pointer border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'trustshop' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('trustshop')}
@@ -125,7 +125,7 @@ const ReviewSection = () => {
                   ref={etrustedWidgetRef}
                   className="pointer-events-none"
                 >
-                  <p className="text-p-14 font-light text-[#111111] mb-2 tracking-wider">
+                  <p className="lg:text-p-14 text-p-10 font-light text-[#111111] mb-2 tracking-wider">
                     Trust Shop 4.9 | 3171 reviews
                   </p>
                 </div>
@@ -135,7 +135,7 @@ const ReviewSection = () => {
 
           <div className="text-center">
             <div 
-              className={`px-4 py-2 cursor-pointer border-b-3 transition-all duration-200 h-full ${
+              className={`lg:px-4 lg:py-2 min-h-[90px] cursor-pointer border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'google' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('google')}
@@ -148,7 +148,7 @@ const ReviewSection = () => {
                 height={30} 
               />
               <div className="flex items-center justify-center">
-                <p className="text-p-14 font-light text-[#111111] mb-2 tracking-wider">
+                <p className="lg:text-p-14 text-p-10 font-light text-[#111111] mb-2 tracking-wider">
                   Google 4.9 | 3171 reviews
                 </p>
                 
