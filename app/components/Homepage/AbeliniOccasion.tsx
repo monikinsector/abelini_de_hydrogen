@@ -1,31 +1,87 @@
 import { useState, useEffect, useRef } from "react"
 import { Image } from '@shopify/hydrogen'
 import { Link } from 'react-router'
+import useEmblaCarousel from "embla-carousel-react"
 
-// Chevron icon components
-const ChevronLeft = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    className={className}
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-  </svg>
-)
 
-const ChevronRight = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    className={className}
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-  </svg>
-)
+export function ImageWithProductSlider({ rings }: { rings: any[] }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([])
+
+  const scrollPrev = () => emblaApi?.scrollPrev();
+  const scrollNext = () => emblaApi?.scrollNext();
+
+  useEffect(() => {
+    if (!emblaApi) return
+
+    setScrollSnaps(emblaApi.scrollSnapList())
+    setSelectedIndex(emblaApi.selectedScrollSnap())
+
+    emblaApi.on('select', () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap())
+    })
+
+    emblaApi.on('reInit', () => {
+      setScrollSnaps(emblaApi.scrollSnapList())
+      setSelectedIndex(emblaApi.selectedScrollSnap())
+    })
+  }, [emblaApi])
+
+  return (
+    <div className="w-full relative overflow-hidden flex justify-center" ref={emblaRef}>
+      <div className="flex lg:w-[calc(100%-120px)] w-full mx-auto">
+        {rings.map((ring, index) => (
+          <div className="flex-none lg:w-1/3 w-1/2 min-w-0 relative px-2">
+            <Image
+              src={ring.img}
+              alt={ring.name}
+              width={320}
+              height={300}
+              className="w-full h-auto object-cover"
+            />
+            <p className="text-p-14 font-light tracking-wider mb-2 text-center">{ring.name}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Navigation Arrows */}
+      <button onClick={scrollPrev} disabled={selectedIndex === 0} className="absolute left-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none w-fit disabled:opacity-50 disabled:cursor-not-allowed p-3">
+        <Image 
+          src="/assets/images/icons/arrow-left-white.svg" 
+          alt="Previous" 
+          className="lg:block hidden" 
+          width={24} 
+          height={24} 
+        />
+        <Image 
+          src="/assets/images/icons/arrow-left-black.svg" 
+          alt="Previous" 
+          className="lg:hidden block" 
+          width={24} 
+          height={24} 
+        />
+      </button>
+      
+      <button onClick={scrollNext} disabled={selectedIndex === scrollSnaps.length - 1} className="absolute right-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none w-fit disabled:opacity-50 disabled:cursor-not-allowed p-3">
+        <Image 
+          src="/assets/images/icons/arrow-right-white.svg"  
+          alt="Next" 
+          className="lg:block hidden" 
+          width={24} 
+          height={24} 
+        />
+        <Image 
+          src="/assets/images/icons/arrow-right-black.svg" 
+          alt="Next" 
+          className="lg:hidden block" 
+          width={24} 
+          height={24} 
+        />
+      </button>
+    </div>
+  )
+}
 
 const rings = [
   {
@@ -104,91 +160,7 @@ const labGrownDiamonds = [
   },
 ]
 
-export default function ImageWithProductSlider() {
-  // First carousel state
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [slidesToShow, setSlidesToShow] = useState(4)
-  const sliderRef = useRef<HTMLDivElement>(null)
-
-  // Second carousel state
-  const [currentIndex2, setCurrentIndex2] = useState(0)
-  const [slidesToShow2, setSlidesToShow2] = useState(4)
-  const sliderRef2 = useRef<HTMLDivElement>(null)
-
-  // Responsive slides calculation for first carousel
-  useEffect(() => {
-    const updateSlidesToShow = () => {
-      const width = window.innerWidth
-      if (width >= 1024) {
-        setSlidesToShow(4)
-        setSlidesToShow2(4)
-      } else if (width >= 768) {
-        setSlidesToShow(3)
-        setSlidesToShow2(3)
-      } else if (width >= 480) {
-        setSlidesToShow(2)
-        setSlidesToShow2(2)
-      } else {
-        setSlidesToShow(2)
-        setSlidesToShow2(2)
-      }
-    }
-
-    updateSlidesToShow()
-    window.addEventListener('resize', updateSlidesToShow)
-    return () => window.removeEventListener('resize', updateSlidesToShow)
-  }, [])
-
-  // Adjust currentIndex when slidesToShow changes for first carousel
-  useEffect(() => {
-    const maxIndex = Math.max(0, rings.length - slidesToShow)
-    if (currentIndex > maxIndex) {
-      setCurrentIndex(maxIndex)
-    }
-  }, [slidesToShow, currentIndex])
-
-  // Adjust currentIndex2 when slidesToShow2 changes for second carousel
-  useEffect(() => {
-    const maxIndex = Math.max(0, rings.length - slidesToShow2)
-    if (currentIndex2 > maxIndex) {
-      setCurrentIndex2(maxIndex)
-    }
-  }, [slidesToShow2, currentIndex2])
-
-  // First carousel calculations
-  const maxIndex = Math.max(0, rings.length - slidesToShow)
-  const canScrollPrev = currentIndex > 0
-  const canScrollNext = currentIndex < maxIndex
-
-  const scrollPrev = () => {
-    if (canScrollPrev) {
-      setCurrentIndex(prev => Math.max(0, prev - 1))
-    }
-  }
-
-  const scrollNext = () => {
-    if (canScrollNext) {
-      setCurrentIndex(prev => Math.min(maxIndex, prev + 1))
-    }
-  }
-
-  // Second carousel calculations
-  const maxIndex2 = Math.max(0, rings.length - slidesToShow2)
-  const canScrollPrev2 = currentIndex2 > 0
-  const canScrollNext2 = currentIndex2 < maxIndex2
-
-  const scrollPrev2 = () => {
-    if (canScrollPrev2) {
-      setCurrentIndex2(prev => Math.max(0, prev - 1))
-    }
-  }
-
-  const scrollNext2 = () => {
-    if (canScrollNext2) {
-      setCurrentIndex2(prev => Math.min(maxIndex2, prev + 1))
-    }
-  }
-
+export default function AbeliniOccasion() {
   return (
     <section className="flex flex-col">
     <div className="flex flex-col container-fluid my-6">
@@ -202,8 +174,8 @@ export default function ImageWithProductSlider() {
         </div>
 
         <div className="grid grid-cols-1 flex flex-col lg:grid-cols-2 min-h-[600px]">
-          <div className="col-span-1 flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
-            <div className="relative lg:ml-[60px] w-[100%] z-50 px-4">
+          <div className="col-span-1 flex flex-col items-start mt-[-48px] justify-between lg:mt-[48px]">
+            <div className="relative lg:ml-[60px] w-[100%] z-50 lg:p-0 px-4">
               <div className="w-full">
                 <Image
                   src="/assets/images/home/most_loved_engagement_1_1410x666.webp"
@@ -237,56 +209,8 @@ export default function ImageWithProductSlider() {
               </div>
             </div>
             
-            <div className="w-[100%] lg:py-12 py-2 relative lg:ml-[60px]">
-              <button
-                onClick={scrollPrev}
-                disabled={!canScrollPrev}
-                className="absolute lg:left-[10px] left-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none lg:p-2 w-fit disabled:opacity-50 disabled:cursor-not-allowed">
-                <ChevronLeft className="stroke-[#333] w-8 h-8 lg:stroke-white" />
-              </button>
-
-              <button
-                onClick={scrollNext}
-                disabled={!canScrollNext}
-                className="absolute lg:right-[10px] right-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none lg:p-2 w-fit disabled:opacity-50 disabled:cursor-not-allowed">
-                <ChevronRight className="stroke-[#333] w-8 h-8 lg:stroke-white" />
-              </button>
-              
-              <div className="max-w-7xl mx-auto lg:px-4">
-                <div className="relative w-[90%] mx-auto overflow-hidden">
-                  <div 
-                    ref={sliderRef}
-                    className="flex transition-transform duration-500 ease-in-out"
-                    style={{
-                      transform: `translateX(-${currentIndex * (100 / slidesToShow)}%)`
-                    }}
-                  >
-                    {rings.map((ring, index) => (
-                      <div 
-                        key={index} 
-                        className="flex-shrink-0 px-2"
-                        style={{ width: `${100 / slidesToShow}%` }}
-                      >
-                        <Link to={ring.href} className="group text-center block">
-                          <div className="bg-white mb-3 imageWithProductSlider-slider-card">
-                            <Image
-                              src={ring.img || '/placeholder.svg'}
-                              alt={ring.name}
-                              width={120}
-                              className="w-[160px] h-auto max-w-none max-h-none object-contain mx-auto"
-                              loading="lazy"
-                            />
-                          </div>
-                          <p className="text-p-14 font-light tracking-wider mb-2">{ring.name}</p>
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-
-
+            <div className="w-[100%] lg:py-12 py-2 relative lg:ml-[48px]">
+              <ImageWithProductSlider rings={rings} />
             </div>
           </div>
 
@@ -300,8 +224,8 @@ export default function ImageWithProductSlider() {
           <div className="col-span-1 relative overflow-hidden order-[-1] lg:order-[0]">
             <Image src="/assets/images/home/young_blonde_woman_707x551.webp" loading="lazy" alt="Model wearing jewelry" className="object-cover w-[100%] h-[100%]" width={707} height={551} />
           </div>
-          <div className="col-span-1 flex flex-col items-start mt-[-40px] justify-between lg:mt-[80px]">
-            <div className="relative lg:ml-[-60px] w-[100%] z-50 lg:px-0 px-4">
+          <div className="col-span-1 flex flex-col items-start mt-[-48px] justify-between lg:mt-[48px]">
+            <div className="relative lg:ml-[-48px] w-[100%] z-50 lg:px-0 px-4">
               <div className="w-full">
                 <Image
                   src="/assets/images/home/plain_wedding_rings_1_1410x666.webp"
@@ -332,56 +256,8 @@ export default function ImageWithProductSlider() {
               </div>
             </div>
             
-            <div className="w-[100%] lg:py-12 py-2 relative lg:ml-[-60px]">
-              <button
-                onClick={scrollPrev2}
-                disabled={!canScrollPrev2}
-                className="absolute lg:left-[10px] left-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none lg:p-2 w-fit disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <ChevronLeft className="stroke-[#333] w-8 h-8 lg:stroke-white" />
-              </button>
-
-              <button
-                onClick={scrollNext2}
-                disabled={!canScrollNext2}
-                className="absolute lg:right-[10px] right-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none lg:p-2 w-fit disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <ChevronRight className="stroke-[#333] w-8 h-8 lg:stroke-white" />
-              </button>
-              
-              <div className="max-w-7xl mx-auto lg:px-4">
-                <div className="relative w-[90%] mx-auto overflow-hidden">
-                  <div 
-                    ref={sliderRef2}
-                    className="flex transition-transform duration-500 ease-in-out"
-                    style={{
-                      transform: `translateX(-${currentIndex2 * (100 / slidesToShow2)}%)`
-                    }}
-                  >
-                    {labGrownDiamonds.map((ring, index) => (
-                      <div 
-                        key={index} 
-                        className="flex-shrink-0 px-2"
-                        style={{ width: `${100 / slidesToShow2}%` }}
-                      >
-                        <Link to={ring.href} className="group text-center block">
-                          <div className="bg-white mb-3 imageWithProductSlider-slider-card">
-                            <Image
-                              src={ring.img || '/placeholder.svg'}
-                              alt={ring.name}
-                              width={120}
-                              height={120}
-                              className="w-[160px] h-auto max-w-none max-h-none object-contain mx-auto"
-                              loading="lazy"
-                            />
-                          </div>
-                          <p className="text-p-14 font-light tracking-wider mb-2">{ring.name}</p>
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            <div className="w-[100%] lg:py-12 py-2 relative lg:ml-[-48px]">
+              <ImageWithProductSlider rings={labGrownDiamonds} />
             </div>
           </div>
         </div>
