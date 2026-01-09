@@ -7,7 +7,8 @@ import { Link } from "react-router";
 import SortDropdown from "./SortDropdown";
 import FilterStyleListAccordion from "./FilterStyleListAccordion";
 import type { StyleTypes } from "./filteroption.types";
-import MobileFilterModal from "./MobileFilterModal";
+import { lazy } from 'react'
+const MobileFilterModal = lazy(() => import('./MobileFilterModal'))
 
 
 interface FilterProps {
@@ -75,15 +76,13 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
           </div>
         </div>
         <div>
-          {mobileModalOpen &&
-            <MobileFilterModal
-              isOpen={mobileModalOpen}
-              onClose={() => setMobileModalOpen(false)}
-              selections={{}}
-              onOptionToggle={() => { }}
-              onApply={() => { }}
-            />
-          }
+          <MobileFilterModal
+            isOpen={mobileModalOpen}
+            onClose={() => setMobileModalOpen(false)}
+            selections={{}}
+            onOptionToggle={() => { }}
+            onApply={() => { }}
+          />
         </div>
       </>
 
