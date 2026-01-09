@@ -67,7 +67,7 @@ const ReviewSection = () => {
 
   return (
     <section className="bg-[#f6f6f6] px-4 py-12 flex justify-center">
-      <div className="container lg:w-[60%]">
+      <div className="container">
         <div className="flex flex-col items-center justify-center mb-6">
           <p className="text-p-14 font-light text-primary tracking-wider text-center">TESTIMONIALS</p>
           <h2 className="lg:text-h2 text-h2-m font-bold text-primary tracking-wider text-center">Our Customers Love Us</h2>
