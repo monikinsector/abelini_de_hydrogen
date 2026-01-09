@@ -7,11 +7,13 @@ import { Link } from "react-router";
 import SortDropdown from "./SortDropdown";
 import FilterStyleListAccordion from "./FilterStyleListAccordion";
 import type { StyleTypes } from "./filteroption.types";
+import MobileFilterModal from "./MobileFilterModal";
 
 
 interface FilterProps {
   viewMode: "list" | "grid",
   setViewMode: (type: "list" | "grid") => void;
+  isMobile: boolean
 }
 
 const filterOptions: StyleTypes[] = [
@@ -29,10 +31,10 @@ const filterToggleOptions = [
   "Diamond"
 ]
 
-const viewTypes: Array<{type: "list" | "grid", isVertical: boolean}> = [
+const viewTypes: Array<{ type: "list" | "grid", isVertical: boolean }> = [
   {
     type: "grid",
-    isVertical: false 
+    isVertical: false
   },
   {
     type: "list",
@@ -40,10 +42,12 @@ const viewTypes: Array<{type: "list" | "grid", isVertical: boolean}> = [
   },
 ]
 
-const FilterBar = ({viewMode, setViewMode}: FilterProps) => {
+const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
   const [diamondType, setDiamondType] = useState(["Diamond"]);
   const [activeFilter, setActiveFilter] = useState<StyleTypes | null>(null);
   const [selectedStyles, setSelectedStyles] = useState<string[]>(["Classic Solitaire"]);
+  const [mobileModalOpen, setMobileModalOpen] = useState(false);
+
 
   const handleFilterClick = (filter: StyleTypes) => {
     setActiveFilter(activeFilter === filter ? null : filter);
@@ -56,18 +60,47 @@ const FilterBar = ({viewMode, setViewMode}: FilterProps) => {
         : [...prev, style]
     );
   };
-  if(viewMode == "list"){
+
+  if (isMobile) {
+    return (
+      <>
+        <div className="flex justify-between w-full">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setMobileModalOpen(true)}>
+            <Image src="/assets/images/icons/filter_icon.svg" alt="Filter Icon" width={16}/>
+            <p className="text-[#111111] text-[14px]">Filters (1)</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <p className="text-[#111111] text-[14px]">304 Results</p>
+            <Image src="/assets/images/icons/sorting.svg" alt="Sorting Icon" width={16}/>
+          </div>
+        </div>
+        <div>
+          {mobileModalOpen &&
+            <MobileFilterModal
+              isOpen={mobileModalOpen}
+              onClose={() => setMobileModalOpen(false)}
+              selections={{}}
+              onOptionToggle={() => { }}
+              onApply={() => { }}
+            />
+          }
+        </div>
+      </>
+
+    )
+  }
+  if (viewMode == "list") {
     return (
       <div className="px-2 overflow-auto max-h-[90vh] py-10" style={{
         position: "sticky",
-        top:"92px"
+        top: "92px"
       }}>
         <div className="flex justify-between">
           <div className="flex gap-2 items-center">
             <h2 className="text-[20px] font-semibold tracking-[1px]">Filters</h2>
             <div>
-            {viewTypes.map((vType, index) => {
-                return(
+              {viewTypes.map((vType, index) => {
+                return (
                   <button
                     key={index}
                     onClick={() => setViewMode(vType.type)}
@@ -78,12 +111,12 @@ const FilterBar = ({viewMode, setViewMode}: FilterProps) => {
                       viewMode === vType.type ? "border-1 border-black" : ""
                     )}
                   >
-                    <Image src="/assets/images/icons/menu.svg" alt={vType.type} width={12}/>
+                    <Image src="/assets/images/icons/menu.svg" alt={vType.type} width={12} />
                   </button>
                 )
               })}
-              
-              </div>
+
+            </div>
           </div>
           <button className="uppercase text-[13px] underline">Clear All</button>
         </div>
@@ -93,9 +126,9 @@ const FilterBar = ({viewMode, setViewMode}: FilterProps) => {
             <button
               key={index}
               onClick={() => setDiamondType((prev) => {
-                if(prev.includes(toggleOption)){
+                if (prev.includes(toggleOption)) {
                   return prev.filter((item) => item != toggleOption)
-                }else{
+                } else {
                   return [...prev, toggleOption]
                 }
               })}
@@ -116,55 +149,57 @@ const FilterBar = ({viewMode, setViewMode}: FilterProps) => {
     )
   }
   return (
-    <div className="w-full">
-      <div className="flex justify-center py-4 flex-wrap bg-[#F8F4EF]">
-        <div className="flex items-center gap-2 flex-wrap">
-          {filterToggleOptions.map((toggleOption, index) => (
-            <button
-              key={index}
-              onClick={() => setDiamondType((prev) => {
-                if(prev.includes(toggleOption)){
-                  return prev.filter((item) => item != toggleOption)
-                }else{
-                  return [...prev, toggleOption]
-                }
-              })}
-              className={cn(
-                "px-6 py-1 rounded-full text-sm font-thin cursor-pointer transition-all duration-200",
-                diamondType.includes(toggleOption)
-                  ? "text-[12px] border-black border-1 "
-                  : "text-[12px] bg-black text-white border-black border-1"
-              )}
-            >
-              {toggleOption}
-            </button>
-          ))}
+    <>
+      <div className="w-full">
+        <div className="flex justify-center py-4 flex-wrap bg-[#F8F4EF]">
+          <div className="flex items-center gap-2 flex-wrap">
+            {filterToggleOptions.map((toggleOption, index) => (
+              <button
+                key={index}
+                onClick={() => setDiamondType((prev) => {
+                  if (prev.includes(toggleOption)) {
+                    return prev.filter((item) => item != toggleOption)
+                  } else {
+                    return [...prev, toggleOption]
+                  }
+                })}
+                className={cn(
+                  "px-6 py-1 rounded-full text-sm font-thin cursor-pointer transition-all duration-200",
+                  diamondType.includes(toggleOption)
+                    ? "text-[12px] border-black border-1 "
+                    : "text-[12px] bg-black text-white border-black border-1"
+                )}
+              >
+                {toggleOption}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Filter Bar */}
-      <div className="bg-[#F8F4EF] flex items-center flex-wrap justify-between px-6 pb-4 sticky top-64">
+        {/* Filter Bar */}
+      </div>
+      <div className="bg-[#F8F4EF] py-4 flex items-center flex-wrap justify-between px-6 sticky top-[110px] z-40">
         <div className="flex items-center flex-wrap gap-4 ">
           <span className="text-[13px] font-regular text-[#878787]">Filters:</span>
-            <div className="flex items-center flex-wrap overflow-hidden gap-2">
-              {viewTypes.map((vType, index) => {
-                return(
-                  <button
-                    key={index}
-                    onClick={() => setViewMode(vType.type)}
-                    className={cn(
-                      "p-1 transition-colors duration-200 cursor-pointer rounded-lg",
-                      vType.isVertical ? "rotate-90" : "",
-                      "",
-                      viewMode === vType.type ? "border-1 border-black" : ""
-                    )}
-                  >
-                    <Image src="/assets/images/icons/menu.svg" alt={vType.type} width={16}/>
-                  </button>
-                )
-              })}
-            </div>
-          
+          <div className="flex items-center flex-wrap overflow-hidden gap-2">
+            {viewTypes.map((vType, index) => {
+              return (
+                <button
+                  key={index}
+                  onClick={() => setViewMode(vType.type)}
+                  className={cn(
+                    "p-1 transition-colors duration-200 cursor-pointer rounded-lg",
+                    vType.isVertical ? "rotate-90" : "",
+                    "",
+                    viewMode === vType.type ? "border-1 border-black" : ""
+                  )}
+                >
+                  <Image src="/assets/images/icons/menu.svg" alt={vType.type} width={16} />
+                </button>
+              )
+            })}
+          </div>
+
           <div className="flex items-center flex-wrap gap-2">
             {filterOptions.map((filter) => (
               <FilterDropdown
@@ -178,17 +213,17 @@ const FilterBar = ({viewMode, setViewMode}: FilterProps) => {
         </div>
 
         <div className="flex items-center gap-3">
-          <Link to={"/"} className="flex items-center gap-2 text-[14px] bg-white rounded-2xl px-2 py-0 border-1 border-[#ef9000]">Quickship <Image src="/assets/images/icons/quickship_icon.svg" alt="Quickship" width={20}/></Link>
-          <SortDropdown 
-          options={[
-            { label: 'Price (Low > High)', value: 'low_high' },
-            { label: 'Best Seller', value: 'best_seller' },
-            { label: 'Most Recommended', value: 'most_recommended' },
-            { label: 'Most Viewed', value: 'most_viewed' },
-            { label: 'New Arrivals', value: 'new_arrivals' },
-            { label: 'Price (High > Low)', value: 'high_low' },
-          ]}
-          onChange={(value) => console.log(value)}
+          <Link to={"/"} className="flex items-center gap-2 text-[14px] bg-white rounded-2xl px-2 py-0 border-1 border-[#ef9000]">Quickship <Image src="/assets/images/icons/quickship_icon.svg" alt="Quickship" width={20} /></Link>
+          <SortDropdown
+            options={[
+              { label: 'Price (Low > High)', value: 'low_high' },
+              { label: 'Best Seller', value: 'best_seller' },
+              { label: 'Most Recommended', value: 'most_recommended' },
+              { label: 'Most Viewed', value: 'most_viewed' },
+              { label: 'New Arrivals', value: 'new_arrivals' },
+              { label: 'Price (High > Low)', value: 'high_low' },
+            ]}
+            onChange={(value) => console.log(value)}
           />
         </div>
       </div>
@@ -197,12 +232,12 @@ const FilterBar = ({viewMode, setViewMode}: FilterProps) => {
       {activeFilter && (
         <div className="absolute bg-white z-99 w-full border-1 border-[#dee2e6]">
           {/* {activeFilter === "Style" && ( */}
-            <StylePanel
-              activeFilter={activeFilter}
-              selectedStyles={selectedStyles}
-              onStyleToggle={handleStyleToggle}
-              onClose={() => setActiveFilter(null)}
-            />
+          <StylePanel
+            activeFilter={activeFilter}
+            selectedStyles={selectedStyles}
+            onStyleToggle={handleStyleToggle}
+            onClose={() => setActiveFilter(null)}
+          />
           {/* )} */}
           {/* {activeFilter !== "Style" && (
             <div className="bg-filter-panel p-6">
@@ -223,7 +258,8 @@ const FilterBar = ({viewMode, setViewMode}: FilterProps) => {
           )} */}
         </div>
       )}
-    </div>
+
+    </>
   );
 };
 
