@@ -1,19 +1,16 @@
-import {Image} from '@shopify/hydrogen';
-import React from 'react';
+import { Image } from '@shopify/hydrogen';
 import ProductDetails from '~/components/Product/ProductDetails';
 import Breadcrumb from '~/components/Common/Breadcrumb';
 import UspIcons from '~/components/Homepage/UspIcons';
 import ProductGallery from '~/components/Product/ProductGallery';
-import ProductHeader from '~/components/Product/ProductHeader';
 import ProductSpecs from '~/components/Product/ProductSpecs';
-import ProductReviewPanel from '~/components/Product/ProductReviewPanel';
 
 type Props = {};
 
 const ProductDetail = (props: Props) => {
   const breadcrumbs = [
-    {label: 'Home', href: '/'},
-    {label: 'Engagement Rings', href: '/engagement-rings'},
+    { label: 'Home', href: '/' },
+    { label: 'Engagement Rings', href: '/engagement-rings' },
     {
       label:
         'Low Set Round 9k White Gold Lab Grown Diamond Classic Solitaire Engagement Rings',
@@ -22,19 +19,19 @@ const ProductDetail = (props: Props) => {
 
   return (
     <>
-      <Breadcrumb items={breadcrumbs} />
 
       <section id="product-detail">
         <div className="max-w-285 mx-auto">
-          <div className="flex flex-col md:flex-row gap-6">
+          <Breadcrumb items={breadcrumbs} />
+          <div className="flex flex-col md:flex-row gap-4">
             <div>
               <ProductGallery
                 imageSrc="/assets/images/ring.webp"
                 imageAlt="Low set ring"
                 mobileTabs={[
-                  {key: 'images', label: 'Images', iconSrc: '/assets/images/icons/image.svg'},
-                  {key: 'videos', label: 'Videos', iconSrc: '/assets/images/icons/image.svg'},
-                  {key: '360', label: '360', iconSrc: '/assets/images/icons/image.svg'},
+                  { key: 'images', label: 'Images', iconSrc: '/assets/images/icons/image.svg' },
+                  { key: 'videos', label: 'Videos', iconSrc: '/assets/images/icons/image.svg' },
+                  { key: '360', label: '360', iconSrc: '/assets/images/icons/image.svg' },
                 ]}
               />
             </div>
@@ -45,7 +42,7 @@ const ProductDetail = (props: Props) => {
                   'Low Set Round 9k White Gold Lab Grown Diamond Classic Solitaire Engagement Rings'
                 }
                 sku="RINE3170-BD-RND"
-                reviewsText="(12000+ Customer Reviews)"
+                reviewsText="12000+ Customer Reviews"
                 rating={5}
               />
             </div>
@@ -97,9 +94,9 @@ const ProductDetail = (props: Props) => {
               <div className="w-full md:w-1/2">
                 <ProductSpecs
                   specs={[
-                    {key: 'style', label: 'Style', value: 'Classic Solitaire'},
-                    {key: 'setting', label: 'Setting Type', value: 'Low Set'},
-                    {key: 'stone', label: 'Stone Type', value: 'Lab Grown Diamond'},
+                    { key: 'style', label: 'Style', value: 'Classic Solitaire' },
+                    { key: 'setting', label: 'Setting Type', value: 'Low Set' },
+                    { key: 'stone', label: 'Stone Type', value: 'Lab Grown Diamond' },
                   ]}
                 />
               </div>
@@ -107,10 +104,10 @@ const ProductDetail = (props: Props) => {
               <div className="w-full md:w-1/2">
                 <ProductSpecs
                   specs={[
-                    {key: 'band', label: 'Band Thickness', value: '1.5mm'},
-                    {key: 'height', label: 'Setting Height', value: '4.8mm'},
-                    {key: 'shoulder', label: 'Shoulder Width', value: '0.9mm'},
-                    {key: 'shank', label: 'Shank Width', value: '2.1mm'},
+                    { key: 'band', label: 'Band Thickness', value: '1.5mm' },
+                    { key: 'height', label: 'Setting Height', value: '4.8mm' },
+                    { key: 'shoulder', label: 'Shoulder Width', value: '0.9mm' },
+                    { key: 'shank', label: 'Shank Width', value: '2.1mm' },
                   ]}
                 />
               </div>

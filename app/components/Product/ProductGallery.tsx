@@ -22,10 +22,10 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
       ? baseImages
       : [
           ...baseImages,
-          '/assets/images/ring_2.webp',
-          '/assets/images/ring_3.webp',
-          '/assets/images/ring_4.webp',
-          '/assets/images/ring_5.webp',
+          '/assets/images/ring.webp',
+          '/assets/images/ring.webp',
+          '/assets/images/ring.webp',
+          '/assets/images/ring.webp',
         ].slice(0, 6)
 
   const [active, setActive] = useState(0)
@@ -61,7 +61,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
             className="object-contain w-full h-[520px] bg-[#faf8f6]"
           />
 
-          <button className="absolute left-4 bottom-4 bg-black text-white px-3 py-2 rounded-full text-sm flex items-center gap-2">
+          <button className="absolute left-4 bottom-4 bg-black text-white px-3 py-2 rounded-full text-sm flex items-center gap-2 hidden ">
             <span className="w-5 h-5 bg-white rounded-full flex items-center justify-center text-black">🔍</span>
             Try On
           </button>
@@ -78,7 +78,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
           </button>
         </div>
 
-        <div className="mt-3">
+        <div className="mt-3 md:block hidden">
           <div ref={thumbRef} className="flex items-center gap-3 overflow-x-auto pb-2">
             {galleryImages.map((img, idx) => (
               <button

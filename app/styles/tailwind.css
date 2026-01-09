@@ -2,10 +2,17 @@
 
 @import "tailwindcss";
 
-button.btn-black, a.btn-black {
-    @apply bg-black text-white font-bold text-[1rem] py-3 px-8 border border-white rounded-[24px] cursor-pointer hover:bg-white hover:border-black hover:text-black transition-all duration-450;
+/* Hide scrollbar while maintaining scroll functionality */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
-button.btn-white, a.btn-white {
+
     @apply bg-white text-black font-bold text-[1rem] py-2 px-16 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
 }
 button.btn-transparent, a.btn-transparent {
