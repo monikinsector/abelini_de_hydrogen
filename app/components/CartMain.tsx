@@ -1,5 +1,6 @@
 import {Image, useOptimisticCart} from '@shopify/hydrogen';
 import {Link} from 'react-router';
+import {useState} from 'react';
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
 import {CartLineItem} from '~/components/CartLineItem';
@@ -52,6 +53,7 @@ function CartEmpty({
   layout?: CartMainProps['layout'];
 }) {
   const {close} = useAside();
+  const [showPromoInput, setShowPromoInput] = useState(false);
   
   if (hidden) return null;
   
@@ -141,7 +143,33 @@ function CartEmpty({
               <li className="flex items-center justify-between"><span>Delivery Charges</span> <span>FREE</span></li>
               <li className="flex items-center justify-between"><span>VAT (20%)</span> <span>£67</span></li>
               <li className="flex items-center justify-between"><span className="font-bold text-primary">Total</span> <span className="font-bold text-tertiary">£352</span></li>
-              <li className="text-p-14 leading-p-14 text-primary mt-3 underline">Discount Applied - (<b>ABELINI15</b>) Do you have a promo code?</li>
+              <button 
+                className="text-p-14 leading-p-14 text-primary mt-3 underline flex items-center justify-between lg:text-left text-center"
+                onClick={() => setShowPromoInput(!showPromoInput)}
+              >
+                <span>Discount Applied - (<b>ABELINI15</b>) Do you have a promo code?</span>
+                <svg 
+                  className={`w-4 h-4 transition-transform duration-200 ${showPromoInput ? 'rotate-180' : ''}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {showPromoInput && (
+                <li className="mt-3 flex items-center">
+                  <input 
+                    type="text" 
+                    defaultValue="ABELINI15"
+                    className="flex-1 border border-gray-300 rounded-l-[24px] rounded-r-none px-4 py-2 focus:outline-none focus:ring-1"
+                    placeholder="Enter promo code"
+                  />
+                  <button className="bg-black text-white rounded-[24px] rounded-l-none px-4 py-2 border border-black">
+                    APPLY DISCOUNT
+                  </button>
+                </li>
+              )}
             </ul>
             <button className="w-full btn-yellow">Proceed to Checkout</button>
             <button className="w-full btn-transparent">Save Shopping Bag</button>
