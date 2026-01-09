@@ -21,6 +21,7 @@
   =============================== */
   --color-primary: 17 17 17;     /* #111111 */
   --color-secondary: 98 98 98;   /* #626262 */
+  --color-tertiary: #f60;
 
   /* ===============================
      FONT SIZES
@@ -39,6 +40,48 @@
   --text-h3-m: 26px;
 }
 
+@theme {
+    /* ===============================
+       COLORS
+    =============================== */
+    --color-primary: var(--color-primary);
+    --color-secondary: var(--color-secondary);
+    --color-tertiary: var(--color-tertiary);
+  
+    /* ===============================
+       FONT SIZES (Desktop)
+    =============================== */
+    --text-p-16: 16px;
+    --leading-p-16: 24px;
+
+    --text-p-14: 14px;
+    --leading-p-14: 20px;
+  
+    --text-p-13: 13px;
+    --leading-p-13: 18px;
+  
+    --text-p-10: 10px;
+    --leading-p-10: 14px;
+  
+    --text-p-20: 20px;
+    --leading-p-20: 28px;
+  
+    --text-h2: 42px;
+    --leading-h2: 50px;
+  
+    --text-h3: 30px;
+    --leading-h3: 36px;
+  
+    /* ===============================
+       MOBILE
+    =============================== */
+    --text-h2-m: 30px;
+    --leading-h2-m: 36px;
+  
+    --text-h3-m: 26px;
+    --leading-h3-m: 32px;
+  }
+
 button.btn-black, a.btn-black {
     @apply bg-black text-white font-bold text-[1rem] py-3 px-8 border border-white rounded-[24px] cursor-pointer hover:bg-white hover:border-black hover:text-black transition-all duration-450;
 }
@@ -49,6 +92,10 @@ button.btn-transparent, a.btn-transparent {
     @apply bg-transparent text-black font-normal text-[14px] leading-[20px] py-3 px-8 border border-black rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
 }
 
+button.btn-yellow, a.btn-yellow {
+    @apply bg-[#f59f1d] text-primary font-bold text-p-16 leading-p-16 py-3 px-8 border border-transparent rounded-[24px] cursor-pointer hover:bg-[#c68517] hover:border-[#f59f1d] hover:text-primary transition-all duration-450;
+}
+
 button.theme_button_navbar {
     @apply bg-white text-[#111111] text-[14px] py-1 px-4 border border-[#111111] rounded-[24px] cursor-pointer hover:bg-black hover:text-white transition-all duration-450;
 }
@@ -56,18 +103,6 @@ button.theme_button_navbar {
 button.theme_button_hmenu {
     @apply bg-black text-white font-bold text-[1rem] py-1 px-12 border border-black rounded-[24px] cursor-pointer hover:bg-transparent hover:text-black hover:border-black transition-all duration-450;
 }
-
-/* body {
-  display: flex;
-  flex-direction: column;
-  font-family: "Open Sans", sans-serif;
-  font-size: var(--text-p-14);
-  font-weight: 400;
-  color: var(--color-secondary);
-  background-color: var(--color-light);
-  min-height: 100vh;
-  overflow-x: hidden;
-} */
 
 
 

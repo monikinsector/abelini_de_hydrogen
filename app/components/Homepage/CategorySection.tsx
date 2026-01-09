@@ -43,10 +43,10 @@ const CategorySection = () => {
   ];
 
   return (
-    <section className="lg:px-10 py-8 flex flex-col text-center overflow-x-hidden home-category">
-      <div>
+    <section className="flex flex-col">
+      <div className="container-fluid px-4 my-6">
         <div className="flex justify-between items-center border-b border-gray-200 mb-8">
-          <h2 className="text-h3 my-4 font-bold text-primary tracking-wider">
+          <h2 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary my-4 tracking-wider">
             Select Category
           </h2>
           <Link to="/all-categories" className="flex items-center gap-1 text-p-14 underline font-light tracking-wider text-primary">

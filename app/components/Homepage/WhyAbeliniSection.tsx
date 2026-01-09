@@ -62,10 +62,10 @@ const SupportIcons = () => {
 
 export default function RichText() {
     return (
-          <section>
+          <section className="flex flex-col">
             <div className="flex flex-col container-fluid px-4 my-6">
               <div className="text-center flex flex-col items-center">
-                  <h2 className="flex capitalize text-h2 font-bold text-primary my-4 tracking-wider flex justify-center lg:w-[50%] w-full">Why Abelini</h2>
+                  <h2 className="flex capitalize lg:text-h2 text-h2-m lg:leading-h2 leading-h2-m font-bold text-primary my-4 tracking-wider flex justify-center lg:w-[50%] w-full">Why Abelini</h2>
                   <p className="mb-4 text-p-14 font-light text-primary tracking-wider lg:w-[50%] w-full">It's easy to lose sight of what value really means. If your opinion of value is like ours and is about getting more and paying less, then you're in the right place. By buying directly from manufacturers online, it can save up to 70% compare to high street jewellers. We pride ourselves on offering enduring quality at fair prices; shopping is just better that way, isn't it?
                   </p>
                   <Link to="/about-us" className="flex items-center">

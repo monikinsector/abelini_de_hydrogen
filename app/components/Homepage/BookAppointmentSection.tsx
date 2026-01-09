@@ -23,7 +23,7 @@ const BookAppointmentSection = () => {
 
           <div className="col-span-1 flex flex-col justify-center px-4">
 
-              <h3 className="text-h3 font-bold text-primary my-4 tracking-wider flex justify-left">
+              <h3 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary my-4 tracking-wider flex justify-left">
                 Step Into Luxury – Our New Jewellery Store Is Now Open
               </h3>
 
