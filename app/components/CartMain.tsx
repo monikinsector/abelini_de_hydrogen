@@ -56,6 +56,69 @@ function CartEmpty({
   const [showPromoInput, setShowPromoInput] = useState(false);
   
   if (hidden) return null;
+
+  const options = [
+    {
+      id: 1,
+      name: 'SKU',
+      value: 'RINE3170',
+    },
+    {
+      id: 2,
+      name: 'Metal',
+      value: '9K White Gold',
+    },
+    {
+      id: 3,
+      name: 'Ring Size',
+      value: 'M',
+    },
+    {
+      id: 4,
+      name: 'Setting Style',
+      value: 'Plain',
+    },
+    {
+      id: 5,
+      name: 'Band Style',
+      value: 'Plain',
+    },
+    {
+      id: 6,
+      name: 'Shank Width',
+      value: 'Standard',
+    },
+    {
+      id: 7,
+      name: 'Stone Type',
+      value: 'Lab Grown Diamond',
+    },
+    {
+      id: 8,
+      name: 'Shape',
+      value: 'Round',
+    },
+    {
+      id: 9,
+      name: 'Carat',
+      value: '0.20',
+    },
+    {
+      id: 10,
+      name: 'Clarity',
+      value: 'SI2',
+    },
+    {
+      id: 11,
+      name: 'Colour',
+      value: 'I',
+    },
+    {
+      id: 12,
+      name: 'Cut',
+      value: 'Good',
+    },
+  ];
   
   return (
     <section className="cart-block border-t border-gray-300 border-b">
@@ -79,33 +142,9 @@ function CartEmpty({
                         <span className="text-p-14 leading-p-14 text-secondary line-through">£552</span>
                         <span className="text-p-16 leading-p-16 text-tertiary font-bold">£352</span>
                       </div>
-                      <li className="order-0">SKU:
-                        RINE3170</li>
-                      <li className="order-0">Metal:
-                        9K White Gold</li>
-                      <li className="order-0">Ring Size:
-                        M</li>
-                      <li className="order-0">Setting Style:
-                        Plain</li>
-                      <li className="order-0">Band Style:
-                        Plain</li>
-                      <li className="order-0">Shank Width:
-                        Standard</li>
-                      <li className="order-0">Stone Type:
-                        Lab Grown Diamond</li>
-                      <li className="order-0">Shape:
-                        Round</li>
-                      <li className="order-0">Carat:
-                        0.20</li>
-                      <li className="order-0">Clarity:
-                        SI2</li>
-                      <li className="order-0">Colour:
-                        I</li>
-                      <li className="order-0">Cut:
-                        Good</li>
-                      <li className="order-0">Certificate:
-                        ABELINI</li>
-
+                        {options.map((option) => (
+                          <li key={option.id} className="order-0">{option.name}: {option.value}</li>
+                        ))}
                         <div className="mt-4 text-p-14 leading-p-14 lg:block hidden">
                           <p className="mb-2 flex items-center gap-x-3 text-primary font-medium">
                             <Image src="/assets/images/icons/free_delivery.svg" alt="Free Delivery" width={24} height={24} />
@@ -144,7 +183,7 @@ function CartEmpty({
               <li className="flex items-center justify-between"><span>VAT (20%)</span> <span>£67</span></li>
               <li className="flex items-center justify-between"><span className="font-bold text-primary">Total</span> <span className="font-bold text-tertiary">£352</span></li>
               <button 
-                className="text-p-14 leading-p-14 text-primary mt-3 underline flex items-center justify-between lg:text-left text-center"
+                className="text-p-14 leading-p-14 text-primary mt-3 underline flex items-center gap-x-2 text-left"
                 onClick={() => setShowPromoInput(!showPromoInput)}
               >
                 <span>Discount Applied - (<b>ABELINI15</b>) Do you have a promo code?</span>
