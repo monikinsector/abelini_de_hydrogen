@@ -32,7 +32,7 @@ const Button: React.FC<ButtonProps> = ({
       break;
     case "black":
       variantStyles =
-        "bg-black text-white border border-black hover:white hover:text-black";
+        "bg-black text-white border border-black hover:bg-white hover:text-black";
       break;
     case "outline":
       variantStyles =

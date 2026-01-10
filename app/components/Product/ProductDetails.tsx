@@ -146,16 +146,16 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
         <div className="md:flex md:justify-between md:items-start gap-2">
           <div className="md:flex md:flex-col">
             <h1 className="text-[22px] md:text-[18px] md:text-left font-bold leading-7.5 md:leading-6.5">
-              {title}
+              {title} 
             </h1>
             {sku && (
-              <p className="text-sm md:text-xs text-[#bf8f5f] md:text-black mt-2 mb-4 hidden md:block">
+              <p className="text-sm md:text-xs text-[#bf8f5f] md:text-black mt-2  mb-4 md:mt-0 md:mb-0 hidden md:block">
                 SKU: <span className="text-[#bf8f5f] md:text-black">{sku}</span>
               </p>
             )}
           </div>
-          <div className="flex flex-row md:flex-col justify-between md:justify-start mt-2 mb-4 md:mb-0">
-            <div className="flex items-center gap-4 mt-2">
+          <div className="flex flex-row md:flex-col justify-between md:justify-start mt-2 mb-4 md:mt-0 md:mb-0">
+            <div className="flex items-center gap-4 mt-2 md:mt-0 md:flex-1">
               <Ratings value={rating} text={reviewsText} />
             </div>
             {sku && (
@@ -182,7 +182,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
       </div>
 
       {/* Delivery / info box */}
-      <div className="mt-4 p-2 bg-[#eaf2f1] rounded-xl flex items-center gap-3 text-xs! md:mb-4">
+      <div className="mt-4 lg:mt-6 p-2 bg-[#eaf2f1] rounded-xl flex items-center gap-3 text-xs! md:mb-4">
         <Image
           height={22}
           width={22}
@@ -285,7 +285,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
           </Button>
           <button
             type="button"
-            className="flex items-center justify-center border-0 p-0 hover:text-red-500 focus:outline-none"
+            className="flex items-center justify-center border-0 p-0  focus:outline-none"
             aria-label="Add to Wishlist"
           >
             <svg

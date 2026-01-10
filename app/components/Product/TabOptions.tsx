@@ -9,12 +9,14 @@ export const TabOptions: React.FC<{
   onChange?: (option: TabOption) => void;
   columns?: number;
   className?: string;
+  labelClassName?: string;
 }> = ({
   options,
   initialSelected = 0,
   onChange,
   columns = 4,
   className = '',
+  labelClassName = '',
 }) => {
   const [selected, setSelected] = useState<number>(initialSelected);
 
@@ -57,7 +59,7 @@ bg-white${
               className=""
             />
           )}
-          <div>{opt.label}</div>
+          <div className={labelClassName}>{opt.label}</div>
         </button>
       ))}
       <style>{`

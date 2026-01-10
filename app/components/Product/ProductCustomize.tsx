@@ -1,11 +1,11 @@
-import {useState} from 'react';
-import {TabOptions} from './TabOptions';
+import { useState } from 'react';
+import { TabOptions } from './TabOptions';
 import RangeSlider from '../Common/RangeSlider';
 import InfoText from '../Common/InfoText';
 
 export const CustomizationPanel: React.FC<{
   initialTab?: 'custom' | 'specific';
-}> = ({initialTab = 'custom'}) => {
+}> = ({ initialTab = 'custom' }) => {
   const [tab, setTab] = useState<'custom' | 'specific'>(initialTab);
   // --- TabOptions component -------------------------------------------------------
 
@@ -14,7 +14,7 @@ export const CustomizationPanel: React.FC<{
       <div className="flex">
         <button
           onClick={() => setTab('custom')}
-          className={`flex-1 py-1.5 px-3 cursor-pointer ${tab === 'custom' ? 'bg-[#ef90001a] border-b-4 border-b-[#ef9000]' : 'bg-[#f4f4f4] border-b-2 border-b-[#cfcfcf]'}`}
+          className={`flex-1 py-1.5 px-3 cursor-pointer rounded-tl-[14px] ${tab === 'custom' ? 'bg-[#ef90001a] border-b-4 border-b-[#ef9000]' : 'bg-[#f4f4f4] border-b-2 border-b-[#cfcfcf]'}`}
         >
           Diamond Customisation
         </button>
@@ -29,9 +29,11 @@ export const CustomizationPanel: React.FC<{
       <div className="p-4 bg-[#f4f4f4] flex flex-col gap-8 rounded-b-xl">
         {/* Stone type (replaced with TabOptions) */}
         <div className="mt-4">
-          <div className="text-sm font-medium">
-            Stone Type{' '}
-            <span className="text-xs text-gray-500">How to Choose?</span>
+          <div className="flex items-center justify-between">
+            <div className="text-sm leading-4 flex gap-2 items-center">
+              <span>Stone Type</span>
+              <InfoText text="How to Choose?" href="/ring-size-guide" />
+            </div>
           </div>
           <TabOptions
             className="mt-3"
@@ -57,7 +59,7 @@ export const CustomizationPanel: React.FC<{
                 label: 'Black Diamond',
                 icon: '/assets/images/icons/di.svg',
               },
-              {id: 'ruby', label: 'Ruby', icon: '/assets/images/icons/di.svg'},
+              { id: 'ruby', label: 'Ruby', icon: '/assets/images/icons/di.svg' },
               {
                 id: 'emerald',
                 label: 'Emerald',
@@ -70,7 +72,11 @@ export const CustomizationPanel: React.FC<{
 
         {/* Shape */}
         <div className="">
-          <div className="text-sm font-medium">Shape</div>
+          <div className="flex items-center justify-between">
+            <div className="text-sm leading-4 flex gap-2 items-center">
+              <span>Shape</span>
+            </div>
+          </div>
           <TabOptions
             className="mt-3"
             columns={5}
@@ -95,8 +101,8 @@ export const CustomizationPanel: React.FC<{
                 label: 'Asscher',
                 icon: '/assets/images/icons/rnd.svg',
               },
-              {id: 'oval', label: 'Oval', icon: '/assets/images/icons/rnd.svg'},
-              {id: 'pear', label: 'Pear', icon: '/assets/images/icons/rnd.svg'},
+              { id: 'oval', label: 'Oval', icon: '/assets/images/icons/rnd.svg' },
+              { id: 'pear', label: 'Pear', icon: '/assets/images/icons/rnd.svg' },
               {
                 id: 'heart',
                 label: 'Heart',
@@ -134,79 +140,116 @@ export const CustomizationPanel: React.FC<{
         </div>
 
         {/* Clarity / Colour / Cut etc. (use TabOptions) */}
-        <div className=" flex flex-col gap-4">
-          <div>
-            <div className="flex items-center justify-between">
-              <div className="text-sm leading-4 flex gap-2 items-center">
-                <span>Clarity</span>
-                <InfoText text="How to Choose?" href="/ring-size-guide" />
-              </div>
+        <div>
+          <div className="flex items-center justify-between">
+            <div className="text-sm leading-4 flex gap-2 items-center">
+              <span>Clarity</span>
+              <InfoText text="How to Choose?" href="/ring-size-guide" />
             </div>
-            <TabOptions
-              className="mt-2"
-              options={[
-                {id: 'if', label: 'IF'},
-                {id: 'vvs1', label: 'VVS1'},
-                {id: 'vvs2', label: 'VVS2'},
-                {id: 'vs1', label: 'VS1'},
-                {id: 'vs2', label: 'VS2'},
-                {id: 'si1', label: 'SI1'},
-                {id: 'si2', label: 'SI2'},
-                {id: 'i1', label: 'I1'},
-              ]}
-              initialSelected={1}
-            />
           </div>
-
-          <div>
-            <div className="flex items-center justify-between">
-              <div className="text-sm leading-4 flex gap-2 items-center">
-                <span>Colour</span>
-              </div>
-            </div>
-            <TabOptions
-              className="mt-2"
-              options={[
-                {id: 'D', label: 'D'},
-                {id: 'E', label: 'E'},
-                {id: 'F', label: 'F'},
-                {id: 'I', label: 'I'},
-              ]}
-              initialSelected={3}
-            />
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between">
-              <div className="text-sm leading-4 flex gap-2 items-center">
-                <span>Cut</span>
-              </div>
-            </div>
-            <TabOptions
-              className="mt-2"
-              options={[
-                {id: 'excellent', label: 'Excellent'},
-                {id: 'verygood', label: 'Very Good'},
-                {id: 'good', label: 'Good'},
-              ]}
-              initialSelected={2}
-            />
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between">
-              <div className="text-sm leading-4 flex gap-2 items-center">
-                <span>Certificate</span>
-                <InfoText text="How to Choose?" href="/ring-size-guide" />
-              </div>
-            </div>
-            <TabOptions
-              className="mt-2"
-              options={[{id: 'abelini', label: 'ABELINI'}]}
-              initialSelected={0}
-            />
-          </div>
+          <TabOptions
+            className="mt-2"
+            labelClassName="text-sm!"
+            options={[
+              { id: 'if', label: 'IF' },
+              { id: 'vvs1', label: 'VVS1' },
+              { id: 'vvs2', label: 'VVS2' },
+              { id: 'vs1', label: 'VS1' },
+              { id: 'vs2', label: 'VS2' },
+              { id: 'si1', label: 'SI1' },
+              { id: 'si2', label: 'SI2' },
+              { id: 'i1', label: 'I1' },
+            ]}
+            initialSelected={1}
+          />
         </div>
+
+        <div>
+          <div className="flex items-center justify-between">
+            <div className="text-sm leading-4 flex gap-2 items-center">
+              <span>Colour</span>
+            </div>
+          </div>
+          <TabOptions
+            className="mt-2"
+            labelClassName="text-sm!"
+            options={[
+              { id: 'D', label: 'D' },
+              { id: 'E', label: 'E' },
+              { id: 'F', label: 'F' },
+              { id: 'G', label: 'G' },
+              { id: 'H', label: 'H' },
+              { id: 'I', label: 'I' },
+            ]}
+            initialSelected={3}
+          />
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between">
+            <div className="text-sm leading-4 flex gap-2 items-center">
+              <span>Cut</span>
+            </div>
+          </div>
+          <TabOptions
+            className="mt-2"
+            labelClassName="text-sm!"
+            options={[
+              { id: 'excellent', label: 'Excellent' },
+              { id: 'verygood', label: 'Very Good' },
+              { id: 'good', label: 'Good' },
+            ]}
+            initialSelected={2}
+          />
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between">
+            <div className="text-sm leading-4 flex gap-2 items-center">
+              <span>Certificate</span>
+              <InfoText text="How to Choose?" href="/ring-size-guide" />
+            </div>
+          </div>
+          <TabOptions
+            className="mt-2"
+            labelClassName="text-sm!"
+            options={[{ id: 'abelini', label: 'ABELINI' }]}
+            initialSelected={0}
+          />
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between">
+            <div className="text-sm leading-4 flex gap-2 items-center">
+              <span>Engraving</span>
+              <InfoText text="How to Choose?" href="/ring-size-guide" />
+            </div>
+          </div>
+          <TabOptions
+            className="mt-2"
+            labelClassName="text-sm!"
+            options={[{ id: 'addengraving', label: 'Add Engraving' }]}
+            initialSelected={0}
+          />
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between">
+            <div className="text-sm leading-4 flex gap-2 items-center">
+              <span>Certificate</span>
+              <InfoText text="How to Choose?" href="/ring-size-guide" />
+            </div>
+          </div>
+          <TabOptions
+            className="mt-2"
+            labelClassName="text-sm!"
+            options={[{ id: 'abelini', label: 'ABELINI' }]}
+            initialSelected={0}
+          />
+        </div>
+
+
+
       </div>
     </div>
   );

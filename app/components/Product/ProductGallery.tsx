@@ -18,7 +18,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
 }) => {
   const baseImages = images.length > 0 ? images : [imageSrc]
   const galleryImages =
-    baseImages.length >= 5
+    baseImages.length >= 1
       ? baseImages
       : [
           ...baseImages,
@@ -35,31 +35,39 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
   const next = () => setActive((s) => Math.min(galleryImages.length - 1, s + 1))
 
   return (
-    <div className="flex items-start gap-4">
-      <div className="hidden md:flex flex-col gap-3 w-[72px]">
+    <div className="hidden lg:flex flex-col md:flex-row items-start gap-4 mt-4">
+      <div className="hidden md:flex flex-col gap-3  flex-shrink-0 order-1">
         {galleryImages.map((img, idx) => (
           <button
             key={img + idx}
             onClick={() => setActive(idx)}
-            className={`relative rounded-md overflow-hidden border ${
-              idx === active ? 'ring-2 ring-[#bf8f5f]' : 'border-gray-200'
+            className={`rounded-md overflow-hidden border w-full ${
+              idx === active ? 'rounded-xl border-[#cfcfcf]' : 'border-[#cfcfcf]'
             }`}
-            style={{width: 72, height: 72}}
+            style={{width: 98, height: 98}}
             aria-label={`Thumbnail ${idx + 1}`}>
-            <Image src={img} alt={imageAlt} width={72} height={72} className="object-cover w-full h-full" />
+            <Image src={img} alt={imageAlt} width={98} height={98} className="object-cover w-full h-full" />
           </button>
         ))}
       </div>
 
-      <div className="relative flex-1 max-w-[520px]">
-        <div className="relative bg-white rounded-md overflow-hidden">
+      <div className="w-[444px] flex-shrink-0 relative order-2">
+        <div className="relative bg-white rounded-md overflow-hidden w-full">
+          
           <Image
             src={galleryImages[active]}
             alt={imageAlt}
-            width={350}
-            height={350}
-            className="object-cover w-full h-[520px] bg-[#faf8f6]"
+            width={444}
+            height={444}
+            className="object-cover w-full h-[444px] bg-[#faf8f6]"
           />
+
+          <button
+            type="button"
+            className="absolute top-2 right-2 flex items-center justify-center p-0 border-0 bg-transparent w-6 h-6 z-10"
+            aria-label="Close or zoom image">
+           <Image src='/assets/images/icons/arrows-maximize-light.svg' height={24} width={24} alt='resize-icon'/>
+          </button>
 
           <button className="absolute left-4 bottom-4 bg-black text-white px-3 py-2 rounded-full text-sm flex items-center gap-2 hidden ">
             <span className="w-5 h-5 bg-white rounded-full flex items-center justify-center text-black">🔍</span>
@@ -68,17 +76,17 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
 
           <button
             onClick={prev}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 w-9 h-9 rounded-full bg-white shadow flex items-center justify-center">
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 w-9 h-9 rounded-full bg-white shadow flex items-center justify-center z-10">
             ‹
           </button>
           <button
             onClick={next}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 w-9 h-9 rounded-full bg-white shadow flex items-center justify-center">
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 w-9 h-9 rounded-full bg-white shadow flex items-center justify-center z-10">
             ›
           </button>
         </div>
 
-        <div className="mt-3 md:block hidden">
+        {/* <div className="mt-3 md:block hidden">
           <div ref={thumbRef} className="flex items-center gap-3 overflow-x-auto pb-2">
             {galleryImages.map((img, idx) => (
               <button
@@ -91,7 +99,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
               </button>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
      
