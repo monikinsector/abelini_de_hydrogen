@@ -66,10 +66,10 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
     return (
       <>
         <div className="flex justify-between w-full">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setMobileModalOpen(true)}>
+          <button className="flex items-center gap-2 cursor-pointer" onClick={() => setMobileModalOpen(true)}>
             <Image src="/assets/images/icons/filter_icon.svg" alt="Filter Icon" width={16}/>
             <p className="text-[#111111] text-[14px]">Filters (1)</p>
-          </div>
+          </button>
           <div className="flex items-center gap-2">
             <p className="text-[#111111] text-[14px]">304 Results</p>
             <Image src="/assets/images/icons/sorting.svg" alt="Sorting Icon" width={16}/>

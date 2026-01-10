@@ -131,9 +131,9 @@ const MobileFilterModal = ({
   return (
     <>
       {/* Backdrop */}
-      <div
+      <button
         className={cn(
-          "fixed inset-0 bg-black/50 z-40 transition-opacity duration-300",
+          "fixed inset-0 bg-black/50 z-100 transition-opacity duration-300",
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         onClick={onClose}
@@ -142,7 +142,7 @@ const MobileFilterModal = ({
       {/* Modal */}
       <div
         className={cn(
-          "fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-3xl transition-transform duration-300 ease-out flex flex-col",
+          "fixed inset-x-0 bottom-0 z-110 bg-white rounded-t-3xl transition-transform duration-300 ease-out flex flex-col",
           "max-h-[85vh]",
           isOpen ? "translate-y-0" : "translate-y-full"
         )}
