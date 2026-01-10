@@ -56,9 +56,9 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
           <Image
             src={galleryImages[active]}
             alt={imageAlt}
-            width={520}
-            height={520}
-            className="object-contain w-full h-[520px] bg-[#faf8f6]"
+            width={350}
+            height={350}
+            className="object-cover w-full h-[520px] bg-[#faf8f6]"
           />
 
           <button className="absolute left-4 bottom-4 bg-black text-white px-3 py-2 rounded-full text-sm flex items-center gap-2 hidden ">

@@ -2,6 +2,11 @@ import {Image} from '@shopify/hydrogen';
 import React, {useState} from 'react';
 import Ratings from '~/components/Common/Ratings';
 import Alert from '../Common/Alert';
+import RingSizeSelector from './RingSizeSelector';
+import ProductOptions from './ProductOptions';
+import {CustomizationPanel} from './ProductCustomize';
+import {MetalOptions} from './MetalOptions';
+import Button from '../Common/Button';
 
 export type ProductDetailsProps = {
   title: string;
@@ -9,38 +14,6 @@ export type ProductDetailsProps = {
   reviewsText?: string;
   rating?: number;
 };
-
-const Badge: React.FC<{
-  children: React.ReactNode;
-  active?: boolean;
-  gradientColor?: string;
-}> = ({
-  children,
-  active,
-  gradientColor = 'linear-gradient(to bottom, #f4f4f4 0, #ccc 99%, #ccc 100%)',
-}) => (
-  <button
-    type="button"
-    className={`
-      h-[35px] w-[35px]
-      text-[12px]
-      flex items-center justify-center
-      rounded-full
-      text-sm font-normal cursor-pointer
-      transition-all leai
-      ${
-        active
-          ? ' border-4 border-[#ef900080]'
-          : 'text-black hover:bg-[#dcdcdc]'
-      }
-    `}
-    style={{
-      background: gradientColor,
-    }}
-  >
-    {children}
-  </button>
-);
 
 const IconBox: React.FC<{label: string; active?: boolean}> = ({
   label,
@@ -160,349 +133,6 @@ export const CTAButtons: React.FC<{
     </button>
   </div>
 );
-
-export type MetalOption = {
-  label: string;
-  gradientColor?: string;
-};
-
-export const MetalOptions: React.FC<{
-  metals?: MetalOption[];
-  activeIndex?: number;
-  label?: string;
-  onMetalChange?: (index: number, metal: MetalOption) => void;
-}> = ({
-  metals = [
-    {
-      label: '9k',
-      gradientColor:
-        'linear-gradient(to bottom, #f4f4f4 0, #ccc 99%, #ccc 100%)',
-    },
-    {
-      label: '18k',
-      gradientColor:
-        'linear-gradient(to bottom, #f4f4f4 0, #ccc 99%, #ccc 100%)',
-    },
-    {
-      label: '9k',
-      gradientColor:
-        'linear-gradient(to bottom, #e6c17e 0, #c7a369 99%, #c7a369 100%)',
-    },
-    {
-      label: '18k',
-      gradientColor:
-        'linear-gradient(to bottom, #e6c17e 0, #c7a369 99%, #c7a369 100%)',
-    },
-    {
-      label: '9k',
-      gradientColor: 'linear-gradient(to bottom, #e3b591 0, #c99d81 100%)',
-    },
-    {
-      label: '18k',
-      gradientColor: 'linear-gradient(to bottom, #e3b591 0, #c99d81 100%)',
-    },
-    {
-      label: 'plt',
-      gradientColor:
-        'linear-gradient(to bottom, #c7c7c7 0, #9e9e9e 99%, #9e9e9e 100%)',
-    },
-  ],
-  activeIndex: initialActiveIndex = 0,
-  label = '9K White Gold',
-  onMetalChange,
-}) => {
-  const [activeIndex, setActiveIndex] = useState(initialActiveIndex);
-
-  const handleMetalClick = (index: number) => {
-    setActiveIndex(index);
-    onMetalChange?.(index, metals[index]);
-  };
-
-  return (
-    <div>
-      <div className="text-sm text-black mb-2">
-        Metal: <span className="">{label}</span>
-      </div>
-
-      <div className="flex items-center gap-[10px]">
-        {metals.map((m, i) => (
-          <button
-            key={`${m.label}-${i}`}
-            onClick={() => handleMetalClick(i)}
-            className="cursor-pointer"
-          >
-            <Badge active={i === activeIndex} gradientColor={m.gradientColor}>
-              {m.label}
-            </Badge>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export const CustomizationPanel: React.FC<{
-  initialTab?: 'custom' | 'specific';
-}> = ({initialTab = 'custom'}) => {
-  const [tab, setTab] = useState<'custom' | 'specific'>(initialTab);
-  // --- TabOptions component -------------------------------------------------------
-
-  return (
-    <div className="mt-6 rounded-md overflow-hidden ">
-      <div className="flex">
-        <button
-          onClick={() => setTab('custom')}
-          className={`flex-1 py-1.5 px-3 cursor-pointer ${tab === 'custom' ? 'bg-[#ef90001a] border-b-4 border-b-[#ef9000]' : 'bg-[#f4f4f4] border-b-2 border-b-[#cfcfcf]'}`}
-        >
-          Diamond Customisation
-        </button>
-        <button
-          onClick={() => setTab('specific')}
-          className={`flex-1 py-3 cursor-pointer ${tab === 'specific' ? 'bg-[#ef90001a] border-b-4 border-b-[#ef9000]' : 'bg-[#f4f4f4] border-b-2 border-b-[#cfcfcf]'}`}
-        >
-          Choose Specific Diamond
-        </button>
-      </div>
-
-      <div className="p-4 bg-[#f4f4f4] flex flex-col gap-6">
-        {/* Stone type (replaced with TabOptions) */}
-        <div className="mt-4">
-          <div className="text-sm font-medium">
-            Stone Type{' '}
-            <span className="text-xs text-gray-500">How to Choose?</span>
-          </div>
-          <TabOptions
-            className="mt-3"
-            columns={4}
-            options={[
-              {
-                id: 'lab',
-                label: 'Lab Grown Diamond',
-                icon: '/assets/images/icons/di.svg',
-              },
-              {
-                id: 'natural',
-                label: 'Natural Diamond',
-                icon: '/assets/images/icons/di.svg',
-              },
-              {
-                id: 'moissanite',
-                label: 'Moissanite',
-                icon: '/assets/images/icons/di.svg',
-              },
-              {
-                id: 'black',
-                label: 'Black Diamond',
-                icon: '/assets/images/icons/di.svg',
-              },
-              {id: 'ruby', label: 'Ruby', icon: '/assets/images/icons/di.svg'},
-              {
-                id: 'emerald',
-                label: 'Emerald',
-                icon: '/assets/images/icons/di.svg',
-              },
-            ]}
-            initialSelected={0}
-          />
-        </div>
-
-        {/* Shape */}
-        <div className="mt-6">
-          <div className="text-sm font-medium">Shape</div>
-          <TabOptions
-            className="mt-3"
-            columns={5}
-            options={[
-              {
-                id: 'round',
-                label: 'Round',
-                icon: '/assets/images/icons/rnd.svg',
-              },
-              {
-                id: 'princess',
-                label: 'Princess',
-                icon: '/assets/images/icons/rnd.svg',
-              },
-              {
-                id: 'emerald',
-                label: 'Emerald',
-                icon: '/assets/images/icons/rnd.svg',
-              },
-              {
-                id: 'asscher',
-                label: 'Asscher',
-                icon: '/assets/images/icons/rnd.svg',
-              },
-              {id: 'oval', label: 'Oval', icon: '/assets/images/icons/rnd.svg'},
-              {id: 'pear', label: 'Pear', icon: '/assets/images/icons/rnd.svg'},
-              {
-                id: 'heart',
-                label: 'Heart',
-                icon: '/assets/images/icons/rnd.svg',
-              },
-              {
-                id: 'marquise',
-                label: 'Marquise',
-                icon: '/assets/images/icons/rnd.svg',
-              },
-              {
-                id: 'cushion',
-                label: 'Cushion',
-                icon: '/assets/images/icons/rnd.svg',
-              },
-              {
-                id: 'radiant',
-                label: 'Radiant',
-                icon: '/assets/images/icons/rnd.svg',
-              },
-            ]}
-            initialSelected={0}
-          />
-        </div>
-
-        {/* Carat slider (visual) */}
-        <div className="mt-6">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-medium">
-              Carat{' '}
-              <span className="text-xs text-gray-500">How to Choose?</span>
-            </div>
-            <div className="text-xs text-gray-500">0.20 ct - 10.00 ct</div>
-          </div>
-          <div className="mt-2 h-2 bg-gray-200 rounded" />
-        </div>
-
-        {/* Clarity / Colour / Cut etc. (use TabOptions) */}
-        <div className="mt-6 flex flex-col gap-4">
-          <div>
-            <div className="text-sm font-medium">Clarity</div>
-            <TabOptions
-              className="mt-2"
-              options={[
-                {id: 'if', label: 'IF'},
-                {id: 'vvs1', label: 'VVS1'},
-                {id: 'vvs2', label: 'VVS2'},
-                {id: 'vs1', label: 'VS1'},
-                {id: 'vs2', label: 'VS2'},
-                {id: 'si1', label: 'SI1'},
-                {id: 'si2', label: 'SI2'},
-                {id: 'i1', label: 'I1'},
-              ]}
-              initialSelected={1}
-            />
-          </div>
-
-          <div>
-            <div className="text-sm font-medium">Colour</div>
-            <TabOptions
-              className="mt-2"
-              options={[
-                {id: 'D', label: 'D'},
-                {id: 'E', label: 'E'},
-                {id: 'F', label: 'F'},
-                {id: 'I', label: 'I'},
-              ]}
-              initialSelected={3}
-            />
-          </div>
-
-          <div>
-            <div className="text-sm font-medium">Cut</div>
-            <TabOptions
-              className="mt-2"
-              options={[
-                {id: 'excellent', label: 'Excellent'},
-                {id: 'verygood', label: 'Very Good'},
-                {id: 'good', label: 'Good'},
-              ]}
-              initialSelected={2}
-            />
-          </div>
-
-          <div>
-            <div className="text-sm font-medium">Certificate</div>
-            <TabOptions
-              className="mt-2"
-              options={[{id: 'abelini', label: 'ABELINI'}]}
-              initialSelected={0}
-            />
-          </div>
-        </div>
-
-        <div className="mt-6 flex gap-3">
-          <button className="flex-1 bg-[#f5a623] text-black py-3 rounded-full">
-            Add to Cart
-          </button>
-          <button className="flex-1 border py-3 rounded-full">
-            Book Store Appointment
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export type TabOption = {id: string; label: string; icon?: string};
-
-export const TabOptions: React.FC<{
-  options: TabOption[];
-  initialSelected?: number;
-  onChange?: (option: TabOption) => void;
-  columns?: number;
-  className?: string;
-}> = ({
-  options,
-  initialSelected = 0,
-  onChange,
-  columns = 4,
-  className = '',
-}) => {
-  const [selected, setSelected] = useState<number>(initialSelected);
-
-  const handle = (idx: number) => {
-    setSelected(idx);
-    onChange?.(options[idx]);
-  };
-
-  // use flex-wrap on desktop, overflow-x-auto on mobile for horizontal scroll
-  return (
-    <div 
-      className={`flex gap-1 overflow-x-auto md:flex-wrap md:overflow-visible ${className}`}
-      style={{
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none',
-      }}
-    >
-      {options.map((opt, idx) => (
-        <button
-          key={opt.id}
-          onClick={() => handle(idx)}
-          className={`flex-shrink-0 max-w-[100px] text-xs rounded-xl py-[8px] px-[15px] inline-flex flex-col items-center justify-center h-fit ${
-            idx === selected
-              ? 'ring-1 ring-[#ef9000] bg-[#f8f4ef] cursor-pointer'
-              : 'border bg-white border-[#b7b7b7] hover:bg-[#f8f4ef] cursor-pointer hover:ring-[#ef9000]'
-          }`}
-        >
-          {opt.icon && (
-            <Image
-              src={opt.icon}
-              alt={opt.label}
-              height={30}
-              width={30}
-              className=""
-            />
-          )}
-          <div>{opt.label}</div>
-        </button>
-      ))}
-      <style>{`
-        div::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
-    </div>
-  );
-};
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({
   title,
@@ -630,53 +260,63 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
 
       <CTAButtons />
 
-      <div className="mt-6 flex md:items-center justify-between md:flex-row flex-col">
+      <div className="mt-6 flex md:items-center justify-between md:flex-row flex-col gap-4">
         <MetalOptions />
-
-        <div className="w-[160px]">
-          <label htmlFor="ring-size" className="text-xs text-gray-500">
-            Ring size
-          </label>
-          <div
-            id="ring-size"
-            className="mt-2 border rounded-md p-3 text-center"
-          >
-            M
-          </div>
-          <div className="text-xs text-gray-500 mt-1">
-            <u>Ring Size Guide</u>
-          </div>
-        </div>
+        <RingSizeSelector />
       </div>
 
       {/* Setting / Band / Shank choices */}
-      <div className="mt-6 grid grid-cols-3 gap-6">
-        <div>
-          <div className="text-sm font-medium">Setting Style</div>
-          <div className="flex gap-3 mt-3">
-            <IconBox label="Plain" active />
-            <IconBox label="Hidden Halo" />
-          </div>
-        </div>
 
-        <div>
-          <div className="text-sm font-medium">Band Style</div>
-          <div className="flex gap-3 mt-3">
-            <IconBox label="Plain" active />
-            <IconBox label="Pave" />
-          </div>
-        </div>
-
-        <div>
-          <div className="text-sm font-medium">Shank Width</div>
-          <div className="flex gap-3 mt-3 items-center">
-            <IconBox label="Standard" active />
-            <IconBox label="Large" />
-          </div>
-        </div>
-      </div>
+      <ProductOptions />
 
       <CustomizationPanel />
+
+      <div className='flex flex-col gap-2 justify-center items-center m-2'>
+        <Button variant="orange" className="w-full mx-3.75">
+          Add to Cart
+        </Button>
+        <Button variant="black" className="w-full mx-3.75">
+          Book Store Appointment
+        </Button>
+
+        <div className='flex items-center gap-2 w-full'>
+          <Button variant="outline" className="w-full mx-3.75">
+            Order Sample
+          </Button>
+          <button
+            type="button"
+            className="flex items-center justify-center border-0 p-0 hover:text-red-500 focus:outline-none"
+            aria-label="Add to Wishlist"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              focusable="false"
+              viewBox="0 0 20 20"
+              className="w-6 h-6 text-current mx-1"
+              style={{
+                fontSize: '28px',
+                lineHeight: '30px',
+                transform: 'rotate(360deg)',
+              }}
+            >
+              <path
+                fill="currentColor"
+                d="M17.19 4.156c-1.672-1.535-4.383-1.535-6.055 0L10 5.197L8.864 4.156c-1.672-1.535-4.382-1.535-6.054 0c-1.881 1.726-1.881 4.519 0 6.245L10 17l7.19-6.599c1.88-1.726 1.88-4.52 0-6.245m-1.066 5.219L10 15.09L3.875 9.375c-.617-.567-.856-1.307-.856-2.094s.138-1.433.756-1.999c.545-.501 1.278-.777 2.063-.777c.784 0 1.517.476 2.062.978L10 7.308l2.099-1.826c.546-.502 1.278-.978 2.063-.978s1.518.276 2.063.777c.618.566.755 1.212.755 1.999s-.238 1.528-.856 2.095"
+              />
+            </svg>
+          </button>
+          
+          <span
+            className="inline-flex items-center justify-center w-8 h-8 bg-no-repeat bg-auto"
+            aria-hidden="true"
+            style={{
+              backgroundImage: "url('/img/sprite_icon.png')",
+              backgroundPosition: '-69px -109px',
+            }}
+          ></span>
+        </div>
+      </div>
     </div>
   );
 };

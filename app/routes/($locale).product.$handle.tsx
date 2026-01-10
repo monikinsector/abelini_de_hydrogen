@@ -1,16 +1,20 @@
-import { Image } from '@shopify/hydrogen';
+import {Image} from '@shopify/hydrogen';
 import ProductDetails from '~/components/Product/ProductDetails';
 import Breadcrumb from '~/components/Common/Breadcrumb';
 import UspIcons from '~/components/Homepage/UspIcons';
 import ProductGallery from '~/components/Product/ProductGallery';
 import ProductSpecs from '~/components/Product/ProductSpecs';
+import TopStickBar from '~/components/Common/TopStickBar';
+import ImageTab from '~/components/Product/ImageTab';
+import ProductOptionsAccordion from '~/components/Product/ProductOptionsAccordion';
 
 type Props = {};
 
 const ProductDetail = (props: Props) => {
   const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Engagement Rings', href: '/engagement-rings' },
+    {label: 'Home', href: '/'},
+    {label: 'Engagement Rings', href: '/engagement-rings'},
+    {label: 'Classic Solitaire', href: '/solitaire-engagement-rings'},
     {
       label:
         'Low Set Round 9k White Gold Lab Grown Diamond Classic Solitaire Engagement Rings',
@@ -19,7 +23,7 @@ const ProductDetail = (props: Props) => {
 
   return (
     <>
-
+      <TopStickBar />
       <section id="product-detail">
         <div className="max-w-285 mx-auto">
           <Breadcrumb items={breadcrumbs} />
@@ -29,12 +33,28 @@ const ProductDetail = (props: Props) => {
                 imageSrc="/assets/images/ring.webp"
                 imageAlt="Low set ring"
                 mobileTabs={[
-                  { key: 'images', label: 'Images', iconSrc: '/assets/images/icons/image.svg' },
-                  { key: 'videos', label: 'Videos', iconSrc: '/assets/images/icons/image.svg' },
-                  { key: '360', label: '360', iconSrc: '/assets/images/icons/image.svg' },
+                  {
+                    key: 'images',
+                    label: 'Images',
+                    iconSrc: '/assets/images/icons/image.svg',
+                  },
+                  {
+                    key: 'videos',
+                    label: 'Videos',
+                    iconSrc: '/assets/images/icons/image.svg',
+                  },
+                  {
+                    key: '360',
+                    label: '360',
+                    iconSrc: '/assets/images/icons/image.svg',
+                  },
                 ]}
               />
             </div>
+            {/* Image Tabs  */}
+            <ImageTab />
+
+            {/* <ProductOptionsAccordion/> */}
 
             <div className="flex-1">
               <ProductDetails
@@ -94,9 +114,13 @@ const ProductDetail = (props: Props) => {
               <div className="w-full md:w-1/2">
                 <ProductSpecs
                   specs={[
-                    { key: 'style', label: 'Style', value: 'Classic Solitaire' },
-                    { key: 'setting', label: 'Setting Type', value: 'Low Set' },
-                    { key: 'stone', label: 'Stone Type', value: 'Lab Grown Diamond' },
+                    {key: 'style', label: 'Style', value: 'Classic Solitaire'},
+                    {key: 'setting', label: 'Setting Type', value: 'Low Set'},
+                    {
+                      key: 'stone',
+                      label: 'Stone Type',
+                      value: 'Lab Grown Diamond',
+                    },
                   ]}
                 />
               </div>
@@ -104,24 +128,46 @@ const ProductDetail = (props: Props) => {
               <div className="w-full md:w-1/2">
                 <ProductSpecs
                   specs={[
-                    { key: 'band', label: 'Band Thickness', value: '1.5mm' },
-                    { key: 'height', label: 'Setting Height', value: '4.8mm' },
-                    { key: 'shoulder', label: 'Shoulder Width', value: '0.9mm' },
-                    { key: 'shank', label: 'Shank Width', value: '2.1mm' },
+                    {key: 'band', label: 'Band Thickness', value: '1.5mm'},
+                    {key: 'height', label: 'Setting Height', value: '4.8mm'},
+                    {key: 'shoulder', label: 'Shoulder Width', value: '0.9mm'},
+                    {key: 'shank', label: 'Shank Width', value: '2.1mm'},
                   ]}
                 />
               </div>
 
               <div className="w-full">
-                <p className="text-[#BF8F5F] capitalize text-14px my-2">Similar Items</p>
+                <p className="text-[#BF8F5F] capitalize text-14px my-2">
+                  Similar Items
+                </p>
                 <div className="text-[12.8px]">
-                  <a className="hover:text-[#bf8f5f] underline mr-2" href="/classic-solitaire-engagement-rings">Classic Solitaire Engagement Rings</a>
+                  <a
+                    className="hover:text-[#bf8f5f] underline mr-2"
+                    href="/classic-solitaire-engagement-rings"
+                  >
+                    Classic Solitaire Engagement Rings
+                  </a>
                   <span className="mx-2">|</span>
-                  <a className="hover:text-[#bf8f5f] underline mr-2" href="/white-gold-engagement-rings">White Gold Engagement Rings</a>
+                  <a
+                    className="hover:text-[#bf8f5f] underline mr-2"
+                    href="/white-gold-engagement-rings"
+                  >
+                    White Gold Engagement Rings
+                  </a>
                   <span className="mx-2">|</span>
-                  <a className="hover:text-[#bf8f5f] underline mr-2" href="/lab-grown-diamond-engagement-rings">Lab Grown Diamond Engagement Rings</a>
+                  <a
+                    className="hover:text-[#bf8f5f] underline mr-2"
+                    href="/lab-grown-diamond-engagement-rings"
+                  >
+                    Lab Grown Diamond Engagement Rings
+                  </a>
                   <span className="mx-2">|</span>
-                  <a className="hover:text-[#bf8f5f] underline" href="/round-engagement-rings">Round Engagement Rings</a>
+                  <a
+                    className="hover:text-[#bf8f5f] underline"
+                    href="/round-engagement-rings"
+                  >
+                    Round Engagement Rings
+                  </a>
                 </div>
               </div>
             </div>
