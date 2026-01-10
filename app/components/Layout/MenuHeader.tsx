@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import type {
   HeaderData,
   HeaderTypes,
@@ -9,11 +9,11 @@ import type {
 import { dataForNavigation } from "./header.data";
 import { Link } from "react-router";
 import { Image } from "@shopify/hydrogen";
-import SaleBar from "./Sale";
-import FeatureHeader from "./FeatureHeader";
 
 
 function MenuHeader() {
+    const ref = useRef<HTMLDivElement>(null);
+
     const [hoverEntered, setHoverEntered] = useState("");
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -26,12 +26,37 @@ function MenuHeader() {
         "Bracelets",
         "QuickShip",
         "Inspiration"
-      ]
+    ]
+
+    useLayoutEffect(() => {
+      if (!ref.current) return;
+
+      // Height of the sale header - top-2 = 2 rem = 32px
+      const TOP_OFFSET_PX = 32;
+      
+      const update = (height: number) => {
+      console.log("height + TOP_OFFSET_PX", height + TOP_OFFSET_PX)
+        document.documentElement.style.setProperty(
+          "--app-header-height",
+          `${height + TOP_OFFSET_PX}px`
+        );
+      };
+  
+      update(ref.current.offsetHeight);
+  
+      const ro = new ResizeObserver(([entry]) => {
+        update(entry.contentRect.height);
+      });
+  
+      ro.observe(ref.current);
+      return () => ro.disconnect();
+    }, []);
+  
     
   return (
     <>
       {/* Desktop navigation */}
-      <nav className='sticky top-8 z-99 md:block hidden relative bg-white border-t-1 border-t-gray-300'>
+      <nav ref={ref} className='sticky top-8 z-99 md:block hidden relative bg-white border-t-1 border-t-gray-300'>
         <ul className='flex items-center justify-between relative bg-white md:px-10 lg:px-12'>
         
         {headerLinks.map((item, index) => {
