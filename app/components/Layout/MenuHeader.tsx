@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import type {
   HeaderData,
   HeaderTypes,
@@ -11,9 +11,178 @@ import { Link } from "react-router";
 import { Image } from "@shopify/hydrogen";
 import SaleBar from "./Sale";
 import FeatureHeader from "./FeatureHeader";
+import { SubMenuPanel } from "./SubMenuPanel";
+
+const menuItems = [
+  { 
+    label: "ENGAGEMENT RINGS", 
+    hasSubmenu: true,
+    submenu: {
+      title: "ENGAGEMENT RINGS",
+      items: [
+        { label: "SHOP ALL ENGAGEMENT RINGS", type: "link" },
+        { label: "VIEW ALL ENGAGEMENT RINGS", type: "link" },
+        { 
+          label: "SHOP BY ENGAGEMENT RINGS", 
+          type: "dropdown",
+          children: [
+            { label: "Classic Solitaire", icon: "💍" },
+            { label: "Halo Rings", icon: "💍" },
+            { label: "Side Stone Rings", icon: "💍" },
+            { label: "Trilogy Rings", icon: "💍" },
+            { label: "Illusion Set Rings", icon: "💍" },
+            { label: "Cluster Rings", icon: "💍" },
+            { label: "Vintage Engagement Rings", icon: "💍" },
+            { label: "Twisted Engagement Rings", icon: "💍" },
+            { label: "Unique Engagement Rings", icon: "💍" },
+            { label: "Antique Engagement Rings", icon: "💍" },
+            { label: "Gemstone Rings", icon: "💍" },
+            { label: "Couples Rings", icon: "💍" },
+            { label: "Minimalist Engagement Rings", icon: "💍" },
+            { label: "Aquamarine Rings", icon: "💍" },
+          ]
+        },
+        { 
+          label: "BUILD YOUR PERFECT RING", 
+          type: "dropdown",
+          children: [
+            { label: "Start with a Setting", icon: "⚙️" },
+            { label: "Start with a Diamond", icon: "💎" },
+          ]
+        },
+        { 
+          label: "SHOP BY SHAPES", 
+          type: "dropdown",
+          children: [
+            { label: "Round", icon: "⭕" },
+            { label: "Princess", icon: "◽" },
+            { label: "Oval", icon: "⬭" },
+            { label: "Cushion", icon: "🔷" },
+            { label: "Emerald", icon: "▬" },
+            { label: "Pear", icon: "💧" },
+          ]
+        },
+        { 
+          label: "SHOP BY METALS", 
+          type: "dropdown",
+          children: [
+            { label: "White Gold", icon: "⚪" },
+            { label: "Yellow Gold", icon: "🟡" },
+            { label: "Rose Gold", icon: "🌸" },
+            { label: "Platinum", icon: "⬜" },
+          ]
+        },
+        { 
+          label: "SHOP BY GEMSTONES", 
+          type: "dropdown",
+          children: [
+            { label: "Diamond", icon: "💎" },
+            { label: "Sapphire", icon: "🔵" },
+            { label: "Ruby", icon: "🔴" },
+            { label: "Emerald", icon: "🟢" },
+          ]
+        },
+        { label: "ENGAGEMENT RINGS SALE", type: "link" },
+        { 
+          label: "MORE LINKS", 
+          type: "dropdown",
+          children: [
+            { label: "Ring Size Guide", icon: "📏" },
+            { label: "Care Instructions", icon: "📋" },
+          ]
+        },
+      ]
+    }
+  },
+  { 
+    label: "WEDDING & ETERNITY RINGS", 
+    hasSubmenu: true,
+    submenu: {
+      title: "WEDDING & ETERNITY RINGS",
+      items: [
+        { label: "SHOP ALL WEDDING RINGS", type: "link" },
+        { label: "VIEW ALL ETERNITY RINGS", type: "link" },
+      ]
+    }
+  },
+  { 
+    label: "DIAMOND RINGS", 
+    hasSubmenu: true,
+    submenu: {
+      title: "DIAMOND RINGS",
+      items: [
+        { label: "SHOP ALL DIAMOND RINGS", type: "link" },
+      ]
+    }
+  },
+  { 
+    label: "EARRINGS", 
+    hasSubmenu: true,
+    submenu: {
+      title: "EARRINGS",
+      items: [
+        { label: "SHOP ALL EARRINGS", type: "link" },
+      ]
+    }
+  },
+  { 
+    label: "NECKLACES", 
+    hasSubmenu: true,
+    submenu: {
+      title: "NECKLACES",
+      items: [
+        { label: "SHOP ALL NECKLACES", type: "link" },
+      ]
+    }
+  },
+  { 
+    label: "BRACELETS", 
+    hasSubmenu: true,
+    submenu: {
+      title: "BRACELETS",
+      items: [
+        { label: "SHOP ALL BRACELETS", type: "link" },
+      ]
+    }
+  },
+  { 
+    label: "QUICKSHIP", 
+    hasSubmenu: true,
+    submenu: {
+      title: "QUICKSHIP",
+      items: [
+        { label: "SHOP QUICKSHIP ITEMS", type: "link" },
+      ]
+    }
+  },
+  { 
+    label: "INSPIRATION", 
+    hasSubmenu: true,
+    submenu: {
+      title: "INSPIRATION",
+      items: [
+        { label: "BROWSE INSPIRATION", type: "link" },
+      ]
+    }
+  },
+  { 
+    label: "INFORMATION", 
+    hasSubmenu: true,
+    submenu: {
+      title: "INFORMATION",
+      items: [
+        { label: "ABOUT US", type: "link" },
+        { label: "CONTACT", type: "link" },
+      ]
+    }
+  },
+  { label: "BLOG", hasSubmenu: false },
+];
 
 
 function MenuHeader() {
+    const ref = useRef<HTMLDivElement>(null);
+
     const [hoverEntered, setHoverEntered] = useState("");
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -26,12 +195,37 @@ function MenuHeader() {
         "Bracelets",
         "QuickShip",
         "Inspiration"
-      ]
+    ]
+
+    useLayoutEffect(() => {
+      if (!ref.current) return;
+
+      // Height of the sale header - top-2 = 2 rem = 32px
+      const TOP_OFFSET_PX = 32;
+      
+      const update = (height: number) => {
+      console.log("height + TOP_OFFSET_PX", height + TOP_OFFSET_PX)
+        document.documentElement.style.setProperty(
+          "--app-header-height",
+          `${height + TOP_OFFSET_PX}px`
+        );
+      };
+  
+      update(ref.current.offsetHeight);
+  
+      const ro = new ResizeObserver(([entry]) => {
+        update(entry.contentRect.height);
+      });
+  
+      ro.observe(ref.current);
+      return () => ro.disconnect();
+    }, []);
+  
     
   return (
     <>
       {/* Desktop navigation */}
-      <nav className='sticky top-8 z-99 md:block hidden relative bg-white border-t-1 border-t-gray-300'>
+      <nav ref={ref} className='sticky top-8 z-99 md:block hidden relative bg-white border-t-1 border-t-gray-300'>
         <ul className='flex items-center justify-between relative bg-white md:px-10 lg:px-12'>
         
         {headerLinks.map((item, index) => {
@@ -100,12 +294,27 @@ type MobileHeaderNavProps = {
   onClose: () => void;
 };
 
+const iconBar = [
+  { icon: "/assets/images/icons/user.svg", label: "Account" },
+  { icon: "/assets/images/icons/heart.svg", label: "Wish List" },
+  { icon: "/assets/images/icons/cart.svg", label: "My Cart" },
+  { icon: "/assets/images/icons/search.svg", label: "Search" },
+];
+
 function MobileHeaderNav({
   headerLinks,
   isOpen,
   onToggle,
   onClose,
 }: MobileHeaderNavProps) {
+  const [activeSubmenu, setActiveSubmenu] = useState<typeof menuItems[0] | null>(null);
+
+  const handleClose = () => {
+    setActiveSubmenu(null);
+    onClose();
+  };
+
+
   return (
     <nav className="md:hidden block bg-white border-t-2 border-t-gray-300 relative">
       <div className="flex items-center px-4 py-3">
@@ -173,45 +382,54 @@ function MobileHeaderNav({
           type="button"
           aria-label="Close navigation menu overlay"
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-black/40"
+          className="fixed inset-0 z-100 bg-black/40"
         />
       )}
 
       {/* Sidebar */}
       <div
         className={`
-          fixed inset-y-0 left-0 z-50 w-64 max-w-[75vw]
+          fixed inset-y-0 left-0 z-110 w-80 max-w-[75vw] px-2
           bg-white shadow-xl border-r border-gray-200
           transform transition-transform duration-200 ease-out
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-          <span className="text-base font-semibold tracking-wide">
-            Browse
-          </span>
-          <button
-            type="button"
-            aria-label="Close navigation menu"
-            onClick={onClose}
-            className="text-sm text-gray-500"
-          >
-            Close
-          </button>
-        </div>
-        <ul className="flex flex-col px-4 py-3 space-y-2">
-          {headerLinks.map((item) => (
-            <li key={item}>
-              <button
-                type="button"
-                className="w-full text-left py-2 text-[15px] tracking-wide text-[#111111]"
-                // Later this can drive a mobile version of the mega menu
-              >
-                {item}
-              </button>
-            </li>
+        <div className="flex justify-between py-2 px-3 border-b border-gray-200">
+          {/* Action Buttons */}
+          {iconBar.map((item, index) => (
+            <button
+              key={index}
+              className="flex flex-col items-center gap-1 p-2 hover:bg-gray-50 rounded-lg transition-colors"
+            >
+              <Image src={item.icon} alt={item.label} width={24}/>
+              <span className="text-xs text-gray-600">{item.label}</span>
+            </button>
           ))}
-        </ul>
+        </div>
+        <div className="overflow-y-auto h-[calc(100%-100px)]">
+          {menuItems.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => item.hasSubmenu && setActiveSubmenu(item)}
+              className="w-full flex items-center justify-between px-6 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
+            >
+              <span className="text-sm font-medium tracking-wide text-gray-800">
+                {item.label}
+              </span>
+              {item.hasSubmenu && (
+                <Image src="/assets/images/icons/c_right.svg" alt="Right" width={20}/>
+              )}
+            </button>
+          ))}
+        </div>
+
+        <SubMenuPanel
+          isOpen={!!activeSubmenu}
+          submenu={activeSubmenu?.submenu}
+          onBack={() => setActiveSubmenu(null)}
+          onClose={handleClose}
+        />
       </div>
     </nav>
   );
