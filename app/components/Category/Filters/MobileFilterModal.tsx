@@ -120,7 +120,7 @@ const MobileFilterModal = ({
 
     return (
         <div>
-            <div className="h-14 w-14 rounded-full border-1 border-[#ef9000] flex justify-center items-center p-2">
+            <div className="h-14 w-14 rounded-full border-1 border-gray-200 flex justify-center items-center p-2">
                 <Image src={option.image} alt={option.label}/>
             </div>
                 <p className="text-center text-[12px] text-[#111111]">{option.label}</p>
