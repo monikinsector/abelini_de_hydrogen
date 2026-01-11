@@ -6,7 +6,7 @@ type Props = {};
 const Alert = (props: Props) => {
   return (
     <div className="flex justify-start md:justify-center items-center bg-[#e4644533] rounded-[14px] p-3.5">
-      <div className="flex justify-between md:justify-center gap-2 items-center">
+      <div className="flex justify-between md:justify-center gap-2 items-center w-full md:w-auto ">
         <div className='flex md:justify-between justify-center items-center'>
           <Image
             src="/assets/images/icons/clock-light.svg"
@@ -21,7 +21,7 @@ const Alert = (props: Props) => {
             10<span className='text-[18px]'>s</span>
           </span>
         </div>
-        <span className="ml-2 text-[#E46445] text-[22px] uppercase md:text-[10px] font-bold! md:font-normal leading-1.5">Sale</span>
+        <span className="ml-2 text-[#E46445] uppercase md:text-[10px] font-bold! md:font-normal leading-1.5">Sale</span>
       </div>
     </div>
   );

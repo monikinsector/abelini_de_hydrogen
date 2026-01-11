@@ -168,6 +168,7 @@ export const CustomizationPanel: React.FC<{
           <div className="flex items-center justify-between">
             <div className="text-sm leading-4 flex gap-2 items-center">
               <span>Colour</span>
+              <InfoText text="How to Choose?" href="/ring-size-guide" />
             </div>
           </div>
           <TabOptions
@@ -189,6 +190,7 @@ export const CustomizationPanel: React.FC<{
           <div className="flex items-center justify-between">
             <div className="text-sm leading-4 flex gap-2 items-center">
               <span>Cut</span>
+              <InfoText text="How to Choose?" href="/ring-size-guide" />
             </div>
           </div>
           <TabOptions
@@ -222,7 +224,6 @@ export const CustomizationPanel: React.FC<{
           <div className="flex items-center justify-between">
             <div className="text-sm leading-4 flex gap-2 items-center">
               <span>Engraving</span>
-              <InfoText text="How to Choose?" href="/ring-size-guide" />
             </div>
           </div>
           <TabOptions

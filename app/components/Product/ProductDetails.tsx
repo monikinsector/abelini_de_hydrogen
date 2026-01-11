@@ -85,15 +85,15 @@ export const PriceArea: React.FC<{
             High Street{' '}
             <span className=" text-[#111111] px-1">{highStreet}</span>
           </div>
-          <div className="text-sm text-gray-600 bg-[#f8g4ef]">
+          <div className="text-lg md:text-sm text-gray-600 bg-[#f8g4ef]">
             {' '}
             Our Price
-            <span className="text-sm  line-through text-black px-1">
+            <span className="text-lg  md:text-sm line-through text-black px-1">
               {ourPrice}
             </span>
           </div>
         </div>
-        <div className="bg-[#f2e9df] flex-1 p-3 rounded-tr-xl rounded-br-xl">
+        <div className="bg-[#f2e9df] flex-1 p-3 rounded-tr-xl rounded-br-xl leading-4">
           Discounted price
           <div className="font-bold text-black text-3xl">{salePrice}</div>
         </div>
@@ -120,9 +120,9 @@ export const PriceArea: React.FC<{
             <div className="text-3xl font-bold text-black">£380</div>
           </div>
 
-          <div className="hidden md:flex items-center text-xs text-[#0a5050] pt-1">
+          <div className="block md:flex items-center text-xs text-[#0a5050] pt-1">
             <button className="underline text-[#0a5050] bg-none border-none cursor-pointer">
-              Or £31.67 / Month - Finance Calculator
+              Or £31.67 / Month - Finance Calculator 
             </button>
             <button className="">
               <svg
@@ -161,7 +161,7 @@ export const CTAButtons: React.FC<{
   primaryLabel = 'Customise & Buy',
   secondaryLabel = 'Book Store Appointment',
 }) => (
-  <div className="mt-12 flex items-center gap-4">
+  <div className="mt:mt-12 mt-6 flex items-center gap-4">
     <button className="bg-black text-white text-[18px] md:text-sm p-2.5 cursor-pointer rounded-full flex-1 hover:bg-white hover:text-black hover:border-black hover:border">
       {primaryLabel}
     </button>
@@ -235,14 +235,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
       {/* Flash Sale and Price */}
       <div className="mt-2 mb-4 md:m-0 flex flex-col gap-4 md:hidden">
         <Alert />
-        <PriceArea
-        // saleBadge={
-        //   <div className="ml-4 px-3 py-2 rounded-xl bg-[#feecea] text-sm text-[#b35d4f]">
-        //     Up To 20% Off Sale Ends In{' '}
-        //     <div className="text-xs">0-1 d : 0-4 h : 0-57 m : 0-44 s</div>
-        //   </div>
-        // }
-        />
+        <PriceArea/>
       </div>
 
       {/* Delivery / info box */}

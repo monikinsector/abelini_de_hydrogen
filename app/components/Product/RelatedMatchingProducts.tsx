@@ -62,7 +62,7 @@ export default function RelatedMatchingProducts({
       {/* Tabs */}
 <div className="grid grid-cols-12 mb-6">
   {/* Tabs container: centered (col 5 → col 8) */}
-  <div className="col-span-6 col-start-4 flex justify-center">
+  <div className="md:col-span-6 md:col-start-4 flex justify-center col-span-12 ">
     <div className="flex w-full max-w-md">
       {tabs.map((tab, i) => {
         const isActive = activeTab === i;

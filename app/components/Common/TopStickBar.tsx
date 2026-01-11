@@ -69,22 +69,22 @@ const TopStickBar = (props: Props) => {
               </div>
  
               <div className="stone_carat_div">
-                <span>Carat:</span>
+                <span className="mr-1!">Carat:</span>
                 <span className="stone_carat">0.20</span>
               </div>
  
               <div className="product_option_phone_view stone_clarity_div block">
-                <span>Clarity:</span>
+                <span className="mr-1!">Clarity:</span>
                 <span className="stone_clarity">SI2</span>
               </div>
  
               <div>
-                <span>Certificate:</span>
+                <span className="mr-1!">Certificate:</span>
                 <span className="stone_certificate">ABELINI</span>
               </div>
  
               <div className="product_option_phone_view stone_color_div block">
-                <span>Color:</span>
+                <span className="mr-1!">Color:</span>
                 <span className="stone_color">I</span>
               </div>
             </div>

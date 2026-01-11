@@ -120,7 +120,7 @@ const ProductOptions = ({onChange}: Props) => {
             // className={`${group.key === 'setting' ? 'pr-2 lg:pr-3' : group.key === 'band' ? 'px-2 lg:px-3' : 'pl-2 lg:pl-3'} customize-detail-block product-option-block flex-1`}
           >
             <span className="text-black option_text text-sm leading-4">
-              {group.label}
+              <span>{group.label}</span>
               {group.info && (
                 <InfoText text="How to Choose?" href="/ring-size-guide" />
               )}

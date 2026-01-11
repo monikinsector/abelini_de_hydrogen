@@ -6,12 +6,12 @@ import ProductGallery from '~/components/Product/ProductGallery';
 import ProductSpecs from '~/components/Product/ProductSpecs';
 import TopStickBar from '~/components/Common/TopStickBar';
 import ImageTab from '~/components/Product/ImageTab';
-import ProductOptionsAccordion from '~/components/Product/ProductOptionsAccordion';
 import Button from '~/components/Common/Button';
 import ProductImagesMobile from '~/components/Product/ProductImageMobile';
 import ReviewBox from '~/components/Product/ReviewBox';
 import RelatedMatchingProducts from '~/components/Product/RelatedMatchingProducts';
 import SeenOn from '~/components/Product/SeenOnSection';
+import MobileOptionAccordion from '~/components/Product/MobileOptionsAccordion';
 
 type Props = {};
 
@@ -58,6 +58,9 @@ const ProductDetail = (props: Props) => {
             {/* Image Tabs  */}
             <ImageTab />
 
+            {/* Mobile Options Accordion */}
+            {/* <MobileOptionAccordion/> */}
+
             {/* <ProductOptionsAccordion/> */}
 
             <div className="flex-1">
@@ -74,19 +77,12 @@ const ProductDetail = (props: Props) => {
         </div>
       </section>
 
-      {/* As Seen On Section  */}
-      {/* <section>
-            <div>
-                <h2>As Seen On</h2>
-            </div>
-        </section> */}
-
       <div className="!max-w-285 mx-auto">
         <UspIcons />
       </div>
 
       {/* Product Description And Review */}
-      <section className="!max-w-285 mx-auto py-6 border-t border-t-[#dee2e6]">
+      <section className="!max-w-285 mx-auto py-6 md:mb-6! border-t border-t-[#dee2e6]">
         <div className="flex justify-center flex-col md:flex-row gap-6">
           {/* Product description  */}
           <div className="flex-1 px-[15px]">
