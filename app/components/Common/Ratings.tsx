@@ -77,7 +77,7 @@ const Ratings: React.FC<RatingsProps> = ({
   }
 
   return (
-    <div className={`flex flex-col items-start md:items-center gap-0 md:gap-2 ${className}`} aria-label={`Rating: ${value} out of ${max}`}>
+    <div className={`flex flex-col items-start md:items-end gap-0 md:gap-2 ${className}`} aria-label={`Rating: ${value} out of ${max}`}>
       {text && <div className="text-[13px] md:text-sm text-black">{text}</div>}
       <div className="flex items-center gap-1">{stars}</div>
       {/* {text && <div className="text-[13px] md:text-sm text-black md:text-gray-600 hidden md:block">{text}</div>} */}
