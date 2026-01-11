@@ -15,6 +15,43 @@ export type ProductDetailsProps = {
   rating?: number;
 };
 
+const IconButtons = () => { 
+  return <div className='flex items-center gap-2'>
+          <button
+            type="button"
+            className="flex items-center justify-center border-0 p-0  focus:outline-none"
+            aria-label="Add to Wishlist"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              focusable="false"
+              viewBox="0 0 20 20"
+              className="w-6 h-6 text-current mx-1"
+              style={{
+                fontSize: '28px',
+                lineHeight: '30px',
+                transform: 'rotate(360deg)',
+              }}
+            >
+              <path
+                fill="currentColor"
+                d="M17.19 4.156c-1.672-1.535-4.383-1.535-6.055 0L10 5.197L8.864 4.156c-1.672-1.535-4.382-1.535-6.054 0c-1.881 1.726-1.881 4.519 0 6.245L10 17l7.19-6.599c1.88-1.726 1.88-4.52 0-6.245m-1.066 5.219L10 15.09L3.875 9.375c-.617-.567-.856-1.307-.856-2.094s.138-1.433.756-1.999c.545-.501 1.278-.777 2.063-.777c.784 0 1.517.476 2.062.978L10 7.308l2.099-1.826c.546-.502 1.278-.978 2.063-.978s1.518.276 2.063.777c.618.566.755 1.212.755 1.999s-.238 1.528-.856 2.095"
+              />
+            </svg>
+          </button>
+          
+          <span
+            className="inline-flex items-center justify-center w-8 h-8 bg-no-repeat bg-auto"
+            aria-hidden="true"
+            style={{
+              backgroundImage: "url('/assets/images/icons/sprite_icon.png')",
+              backgroundPosition: '-69px -109px',
+            }}
+          ></span>
+          </div>
+}
+
 const IconBox: React.FC<{label: string; active?: boolean}> = ({
   label,
   active,
@@ -63,7 +100,7 @@ export const PriceArea: React.FC<{
         {saleBadge}
       </div>
 
-      <div className="hidden md:flex mt-2 mb-4 md:justify-between">
+      <div className="hidden md:flex mt-2 mb-4 md:justify-start gap-4">
         <div>
           <div className="md:flex items-center gap-2 hidden mt-2 mb-4 md:mb-0">
             <div className="text-xs text-[#575757]">
@@ -111,7 +148,7 @@ export const PriceArea: React.FC<{
           </div>
         </div>
 
-        {saleBadge && <div className="ml-4 mt-2">{saleBadge}</div>}
+        {saleBadge && <div className="ml-4 mt-2 md:flex-1">{saleBadge}</div>}
       </div>
     </div>
   );
@@ -134,6 +171,33 @@ export const CTAButtons: React.FC<{
   </div>
 );
 
+export const InfoBox = () => { 
+  return <div className="mt-4 lg:mt-6 p-2 bg-[#eaf2f1] rounded-xl leading-4 flex items-center gap-3 text-xs! md:mb-4">
+        <Image
+          height={22}
+          width={22}
+          src="/assets/images/icons/delivery_alert.svg"
+          alt="delivery icon"
+        />
+        <div>
+          <p className="font-medium">
+            for <b>Free delivery</b> by 20 Jan 2026.
+          </p>
+          <p className="text-xs mt-1">
+            Shop our{' '}
+            <a href="/" className="underline font-bold">
+              In-Stock Products
+            </a>{' '}
+            or call us on{' '}
+            <a className="text-[#0A5050] underline " href="/">
+              02038051270
+            </a>
+            .
+          </p>
+        </div>
+      </div>
+}
+
 const ProductDetails: React.FC<ProductDetailsProps> = ({
   title,
   sku,
@@ -144,7 +208,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
     <div className="px-2">
       <div className="flex items-start justify-between">
         <div className="md:flex md:justify-between md:items-start gap-2">
-          <div className="md:flex md:flex-col">
+          <div className="md:flex md:flex-col md:gap-2">
             <h1 className="text-[22px] md:text-[18px] md:text-left font-bold leading-7.5 md:leading-6.5">
               {title} 
             </h1>
@@ -182,35 +246,12 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
       </div>
 
       {/* Delivery / info box */}
-      <div className="mt-4 lg:mt-6 p-2 bg-[#eaf2f1] rounded-xl flex items-center gap-3 text-xs! md:mb-4">
-        <Image
-          height={22}
-          width={22}
-          src="/assets/images/icons/delivery_alert.svg"
-          alt="delivery icon"
-        />
-        <div>
-          <p className="font-medium">
-            for <b>Free delivery</b> by 2026-01-20.
-          </p>
-          <p className="text-xs mt-1">
-            Shop our{' '}
-            <a href="/" className="underline font-bold">
-              In-Stock Products
-            </a>{' '}
-            or call us on{' '}
-            <a className="text-[#0A5050] underline " href="/">
-              02038051270
-            </a>
-            .
-          </p>
-        </div>
-      </div>
+      <InfoBox/>
 
       <div className="hidden md:block">
         <PriceArea
           saleBadge={
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center md:flex-1">
               <div className="ml-4 bg-[#e4644533] rounded-lg p-1 flex items-center gap-2 w-full">
                 <Image
                   src="/assets/images/icons/clock-light.svg"
@@ -272,50 +313,44 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
       <CustomizationPanel />
 
       <div className='flex flex-col gap-2 justify-center items-center m-2'>
-        <Button variant="orange" className="w-full mx-3.75">
+        {/* Desktop Add to cart and Wishlist */}
+        <div className="md:flex md:justify-between md:items-center gap-4 w-full hidden">
+        <Button variant="orange" className="w-full text-sm!">
           Add to Cart
         </Button>
-        <Button variant="black" className="w-full mx-3.75">
+        <div className='hidden md:block'>
+        <IconButtons/> 
+        </div>
+        </div>
+        <Button className='w-full mx-3.75 block md:hidden' variant="orange">Add to Cart</Button>
+        <Button variant="black" className="w-full mx-3.75 block md:hidden">
           Book Store Appointment
         </Button>
 
-        <div className='flex items-center gap-2 w-full'>
-          <Button variant="outline" className="w-full mx-3.75">
+        <div className='hidden md:flex md:justify-center md:items-center w-full gap-4'>
+        <Button variant="black" className="w-full block flex-2 text-sm!">
+          Book Store Appointment
+        </Button>
+        <Button variant="outline" className="w-full flex-1 text-sm!">
             Order Sample
           </Button>
-          <button
-            type="button"
-            className="flex items-center justify-center border-0 p-0  focus:outline-none"
-            aria-label="Add to Wishlist"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-              focusable="false"
-              viewBox="0 0 20 20"
-              className="w-6 h-6 text-current mx-1"
-              style={{
-                fontSize: '28px',
-                lineHeight: '30px',
-                transform: 'rotate(360deg)',
-              }}
-            >
-              <path
-                fill="currentColor"
-                d="M17.19 4.156c-1.672-1.535-4.383-1.535-6.055 0L10 5.197L8.864 4.156c-1.672-1.535-4.382-1.535-6.054 0c-1.881 1.726-1.881 4.519 0 6.245L10 17l7.19-6.599c1.88-1.726 1.88-4.52 0-6.245m-1.066 5.219L10 15.09L3.875 9.375c-.617-.567-.856-1.307-.856-2.094s.138-1.433.756-1.999c.545-.501 1.278-.777 2.063-.777c.784 0 1.517.476 2.062.978L10 7.308l2.099-1.826c.546-.502 1.278-.978 2.063-.978s1.518.276 2.063.777c.618.566.755 1.212.755 1.999s-.238 1.528-.856 2.095"
-              />
-            </svg>
-          </button>
-          
-          <span
-            className="inline-flex items-center justify-center w-8 h-8 bg-no-repeat bg-auto"
-            aria-hidden="true"
-            style={{
-              backgroundImage: "url('/img/sprite_icon.png')",
-              backgroundPosition: '-69px -109px',
-            }}
-          ></span>
+
         </div>
+
+          {/* mobile  */}
+        <div className='flex items-center gap-2 w-full block md:hidden'>
+          <Button variant="outline" className="w-full md:mx-3.75">
+            Order Sample
+          </Button>
+
+          {/* Wishlist and Hint button  */}
+          <div className="block md:hidden">
+          <IconButtons/>
+          </div>
+        </div>
+      </div>
+      <div className='mt-4'>
+      <InfoBox/>
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
   const next = () => setActive((s) => Math.min(galleryImages.length - 1, s + 1))
 
   return (
-    <div className="hidden lg:flex flex-col md:flex-row items-start gap-4 mt-4">
+    <div className="hidden lg:flex flex-col md:flex-row items-start gap-4 mt-4 sticky top-32 self-start">
       <div className="hidden md:flex flex-col gap-3  flex-shrink-0 order-1">
         {galleryImages.map((img, idx) => (
           <button

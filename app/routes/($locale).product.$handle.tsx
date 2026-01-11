@@ -9,6 +9,9 @@ import ImageTab from '~/components/Product/ImageTab';
 import ProductOptionsAccordion from '~/components/Product/ProductOptionsAccordion';
 import Button from '~/components/Common/Button';
 import ProductImagesMobile from '~/components/Product/ProductImageMobile';
+import ReviewBox from '~/components/Product/ReviewBox';
+import RelatedMatchingProducts from '~/components/Product/RelatedMatchingProducts';
+import SeenOn from '~/components/Product/SeenOnSection';
 
 type Props = {};
 
@@ -213,40 +216,25 @@ const ProductDetail = (props: Props) => {
       </section>
 
       {/* Review Box  */}
-      <section className="p-6 bg-[#f8f4ef] ">
-        <div className="flex justify-center items-center my-4">
-          <div>
-            <div className="text-center">
-              <h3 className="text-[20px] font-bold">Our Customers Love Us</h3>
-              <p className="text-[#626262] text-[12.8px] mb-4">
-                More than 10000 happy customers all over the Europe
-              </p>
-            </div>
+      <ReviewBox />
 
-            <a
-              href="/customer-reviews"
-              target="_blank"
-              className="relative block"
-            >
-              <div className="absolute top-[34%] left-[7px] z-20 transform -translate-y-1/2">
-                <p className="font-semibold text-[14px] uppercase">
-                  12000+ Customer Reviews
-                </p>
-              </div>
-              <Image
-                src="/assets/images/customer_review_section_new.svg"
-                height={300}
-                width={300}
-              />
-            </a>
-          </div>
-        </div>
-        <div className='grid grid-cols-12'>
-          <div className='col-span-12 md:col-start-5 md:col-span-3 flex justify-center'>
-            <Button variant="outline" className="!p-[10px] md:text-[14px]! font-normal w-full text-[18px] leading-3 mt-4 md:mt-0">View All Reviews</Button>
-          </div>
-        </div>
-      </section>
+      <RelatedMatchingProducts
+      relatedProducts={[
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+
+      ]}
+      matchingProducts={[
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""}
+        
+      ]}
+      />
+      <SeenOn />
     </>
   );
 };

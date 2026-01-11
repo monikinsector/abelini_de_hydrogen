@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Button from "./Button";
 
 type Props = {};
 
@@ -29,7 +30,7 @@ const TopStickBar = (props: Props) => {
 
   return (
     <div
-      className={`topstickbar block md:hidden fixed top-0 left-0 right-0 z-[9999] transition-opacity duration-300 ease-in-out shadow-[0_0.5rem_1rem_rgba(0,0,0,0.15)] bg-white w-full ${
+      className={`topstickbar md:py-[10px] fixed top-0 left-0 right-0 z-[9999] transition-opacity duration-300 ease-in-out shadow-[0_0.5rem_1rem_rgba(0,0,0,0.15)] bg-white w-full ${
         visible
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none"
@@ -40,7 +41,7 @@ const TopStickBar = (props: Props) => {
         <div className="flex justify-center">
           {/* <!-- LEFT INFO COLUMN --> */}
           <div className="flex lg:w-4/12 w-6/12 p-0 justify-between">
-            <div className="hidden lg:block text-sm p-0 color-BF8F5F">
+            <div className="hidden lg:block text-sm p-0 color-BF8F5F text-[#BF8F5F] lg:text-[12.8px] ">
               Product
               <br />
               Information
@@ -48,16 +49,16 @@ const TopStickBar = (props: Props) => {
  
             <div className="hidden lg:flex flex-col p-0">
               <div className="max-h-[20px] overflow-hidden">
-                <span className="metal_purity_label">Metal:</span>
+                <span className="metal_purity_label mr-1!">Metal:</span>
                 <span className="metal_purity">v9K White Gold</span>
               </div>
               <div className="stone_clarity_div">
-                <span className="stone_clarity_label">Clarity: </span>
-                <span className="stone_clarity">SI2</span>
+                <span className="stone_clarity_label mr-1!">Clarity: </span>
+                <span className="stone_clarity mr-1!">SI2</span>
               </div>
               <div className="stone_color_div">
-                <span className="stone_color_label">Color: </span>
-                <span className="stone_color">I</span>
+                <span className="stone_color_label mr-1!">Color: </span>
+                <span className="stone_color mr-1!">I</span>
               </div>
             </div>
  
@@ -113,11 +114,11 @@ const TopStickBar = (props: Props) => {
                   </div>
                   <div className="p-0">
                     <i className="bi bi-code-slash"></i>
-                    <span className="final_prod_price sticky-price-font text-[22px] text-[#c21807] font-semibold leading-9 md:text-[16px]">
+                    <span className="final_prod_price sticky-price-font text-[22px] text-[#c21807] lg:text-[#111] lg:font-semibold px-[15px] lg:text-[24px] font-semibold leading-9 md:text-[16px]">
                       £346
                     </span>
                   </div>
-                  <div className="hidden lg:block text-green-700 px-1 w-full">
+                  <div className="hidden lg:block text-[#0a5050] text-xs px-1 w-full">
                     <a
                       href="/"
                       className="pt-1 info-education showfinance_sticky"
@@ -143,21 +144,11 @@ const TopStickBar = (props: Props) => {
               <div className="flex lg:w-8/12 w-full p-0 justify-center flex-col mt-2">
                 <div className="flex flex-wrap m-0">
                   <div className="lg:w-6/12 w-full px-[15px]">
-                    <a
-                      className="w-full text-center bg-[#f59f1d] text-sm leading-[19px] btn3 radius-24 font-normal btnAddToCart highlight-button-dark-orange prod_btn_size inline-block py-[10px] cursor-pointer rounded-3xl"
-                      href="/"
-                    >
-                      Add to Cart
-                    </a>
+                    <Button variant="orange" className="w-full md:text-sm!" >Add to Cart</Button>
                   </div>
  
-                  <div className="hidden lg:block lg:w-6/12 w-full">
-                    <a
-                      href="/"
-                      className="w-full text-center text-xs btn btn-white radius-24 prod_btn_size inline-block py-2 openPopup"
-                    >
-                      Book Showroom Appointment
-                    </a>
+                  <div className="hidden lg:block lg:w-6/12 w-full px-[15px]">
+                    <Button variant="outline" className="w-full md:text-xs!" >Book Showroom Appointment</Button>
                   </div>
                 </div>
               </div>
