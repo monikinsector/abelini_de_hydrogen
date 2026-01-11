@@ -1,12 +1,17 @@
 import {Image} from '@shopify/hydrogen';
-import React from 'react';
 import ProductDetails from '~/components/Product/ProductDetails';
 import Breadcrumb from '~/components/Common/Breadcrumb';
 import UspIcons from '~/components/Homepage/UspIcons';
 import ProductGallery from '~/components/Product/ProductGallery';
-import ProductHeader from '~/components/Product/ProductHeader';
 import ProductSpecs from '~/components/Product/ProductSpecs';
-import ProductReviewPanel from '~/components/Product/ProductReviewPanel';
+import TopStickBar from '~/components/Common/TopStickBar';
+import ImageTab from '~/components/Product/ImageTab';
+import Button from '~/components/Common/Button';
+import ProductImagesMobile from '~/components/Product/ProductImageMobile';
+import ReviewBox from '~/components/Product/ReviewBox';
+import RelatedMatchingProducts from '~/components/Product/RelatedMatchingProducts';
+import SeenOn from '~/components/Product/SeenOnSection';
+import MobileOptionAccordion from '~/components/Product/MobileOptionsAccordion';
 
 type Props = {};
 
@@ -14,6 +19,7 @@ const ProductDetail = (props: Props) => {
   const breadcrumbs = [
     {label: 'Home', href: '/'},
     {label: 'Engagement Rings', href: '/engagement-rings'},
+    {label: 'Classic Solitaire', href: '/solitaire-engagement-rings'},
     {
       label:
         'Low Set Round 9k White Gold Lab Grown Diamond Classic Solitaire Engagement Rings',
@@ -22,22 +28,40 @@ const ProductDetail = (props: Props) => {
 
   return (
     <>
-      <Breadcrumb items={breadcrumbs} />
-
+      <TopStickBar />
       <section id="product-detail">
         <div className="max-w-285 mx-auto">
-          <div className="flex flex-col md:flex-row gap-6">
-            <div>
-              <ProductGallery
-                imageSrc="/assets/images/ring.webp"
-                imageAlt="Low set ring"
-                mobileTabs={[
-                  {key: 'images', label: 'Images', iconSrc: '/assets/images/icons/image.svg'},
-                  {key: 'videos', label: 'Videos', iconSrc: '/assets/images/icons/image.svg'},
-                  {key: '360', label: '360', iconSrc: '/assets/images/icons/image.svg'},
-                ]}
-              />
-            </div>
+          <Breadcrumb items={breadcrumbs} />
+          <div className="flex flex-col lg:flex-row gap-4 md:mt-2">
+            <ProductGallery
+              imageSrc="/assets/images/ring.webp"
+              imageAlt="Low set ring"
+              mobileTabs={[
+                {
+                  key: 'images',
+                  label: 'Images',
+                  iconSrc: '/assets/images/icons/image.svg',
+                },
+                {
+                  key: 'videos',
+                  label: 'Videos',
+                  iconSrc: '/assets/images/icons/image.svg',
+                },
+                {
+                  key: '360',
+                  label: '360',
+                  iconSrc: '/assets/images/icons/image.svg',
+                },
+              ]}
+            />
+            <ProductImagesMobile/>
+            {/* Image Tabs  */}
+            <ImageTab />
+
+            {/* Mobile Options Accordion */}
+            {/* <MobileOptionAccordion/> */}
+
+            {/* <ProductOptionsAccordion/> */}
 
             <div className="flex-1">
               <ProductDetails
@@ -45,7 +69,7 @@ const ProductDetail = (props: Props) => {
                   'Low Set Round 9k White Gold Lab Grown Diamond Classic Solitaire Engagement Rings'
                 }
                 sku="RINE3170-BD-RND"
-                reviewsText="(12000+ Customer Reviews)"
+                reviewsText="12000+ Customer Reviews"
                 rating={5}
               />
             </div>
@@ -53,32 +77,25 @@ const ProductDetail = (props: Props) => {
         </div>
       </section>
 
-      {/* As Seen On Section  */}
-      {/* <section>
-            <div>
-                <h2>As Seen On</h2>
-            </div>
-        </section> */}
-
       <div className="!max-w-285 mx-auto">
         <UspIcons />
       </div>
 
       {/* Product Description And Review */}
-      <section className="!max-w-285 mx-auto py-6 border-t border-t-[#dee2e6]">
+      <section className="!max-w-285 mx-auto py-6 md:mb-6! border-t border-t-[#dee2e6]">
         <div className="flex justify-center flex-col md:flex-row gap-6">
           {/* Product description  */}
           <div className="flex-1 px-[15px]">
             {/* heading  */}
-            <div className="flex justify-between items-center flex-col md:flex-row md:items-start!">
-              <h2 className="text-2xl mb-4">Product Description</h2>
-              <p className="text-[14px]">
-                <span className="text-[#BF8F5]! mr-1">Reference Code:</span>
+            <div className="flex justify-between flex-col md:flex-row  md:items-center gap-2">
+              <h2 className="text-2xl capitalize font-medium leading-1.2 text-[#111]">Product Description</h2>
+              <p className="text-sm leading-6">
+                <span className="text-[#BF8F5F]! mr-1">Reference Code:</span>
                 RINE3170-LBG
               </p>
             </div>
 
-            <p className="text-[#626262] text-[12.8px] pb-4]">
+            <p className="text-[#626262] text-[12.8px] pt-2 leading-[1.5] pb-4">
               Introducing our Classic Solitaire Engagement Rings, available in
               9K or 18K white, yellow, rose gold or platinum. Choose from a
               range of stone types including Natural Diamond, Lab Grown Diamond,
@@ -94,37 +111,75 @@ const ProductDetail = (props: Props) => {
 
             {/* Product information and product dimensions */}
             <div className="flex flex-wrap justify-between gap-4">
+              <div className="w-full flex flex-col md:flex-row md:justify-between gap-2 md:gap-0">
               <div className="w-full md:w-1/2">
                 <ProductSpecs
+                heading="Products Information"
                   specs={[
                     {key: 'style', label: 'Style', value: 'Classic Solitaire'},
                     {key: 'setting', label: 'Setting Type', value: 'Low Set'},
-                    {key: 'stone', label: 'Stone Type', value: 'Lab Grown Diamond'},
+                    {key: 'metal', label: 'Metal', value: '9K White Gold'},
+                    {key: 'ring-size', label: 'Ring Size', value: 'M'},
+                    {key: 'setting-style', label: 'Setting Style', value: 'Plain'},
+                    {key: 'band-style', label: 'Band Style', value: 'Plain'},
+                    {key: 'shank-width', label: 'Shank Width', value: 'Standard'},
+                    {key: 'stone-type', label: 'Stone Type', value: 'Lab Grown Diamond'},
+                    {key:'shape', label: 'Shape', value: 'Round'},
+                    {key:'carat', label: 'Carat', value: '0.20'},
+                    {key:'clarity', label: 'Clarity', value: 'SI2'},
+                    {key:'colour', label: 'Colour', value: 'I'},
+                    {key:'cut', label: 'Cut', value: 'Good'},
+                    {key:'certificate', label: 'Certificate', value: 'ABELINI'},
                   ]}
                 />
               </div>
 
               <div className="w-full md:w-1/2">
                 <ProductSpecs
+                  heading="Product Dimension"
                   specs={[
-                    {key: 'band', label: 'Band Thickness', value: '1.5mm'},
-                    {key: 'height', label: 'Setting Height', value: '4.8mm'},
-                    {key: 'shoulder', label: 'Shoulder Width', value: '0.9mm'},
-                    {key: 'shank', label: 'Shank Width', value: '2.1mm'},
+                    {key: 'band', label: 'Band Thickness', value: '1.5mm', showInfoIcon: true},
+                    {key: 'height', label: 'Setting Height', value: '4.8mm', showInfoIcon: true},
+                    {key: 'shoulder', label: 'Shoulder Width', value: '0.9mm', showInfoIcon: true},
+                    {key: 'shank', label: 'Shank Width', value: '2.1mm', showInfoIcon: true},
                   ]}
                 />
               </div>
+              </div>
+
+
 
               <div className="w-full">
-                <p className="text-[#BF8F5F] capitalize text-14px my-2">Similar Items</p>
+              <p className='text-[#BF8F5F] capitalize text-[14px] my-2'>Similar Items</p>
+
                 <div className="text-[12.8px]">
-                  <a className="hover:text-[#bf8f5f] underline mr-2" href="/classic-solitaire-engagement-rings">Classic Solitaire Engagement Rings</a>
-                  <span className="mx-2">|</span>
-                  <a className="hover:text-[#bf8f5f] underline mr-2" href="/white-gold-engagement-rings">White Gold Engagement Rings</a>
-                  <span className="mx-2">|</span>
-                  <a className="hover:text-[#bf8f5f] underline mr-2" href="/lab-grown-diamond-engagement-rings">Lab Grown Diamond Engagement Rings</a>
-                  <span className="mx-2">|</span>
-                  <a className="hover:text-[#bf8f5f] underline" href="/round-engagement-rings">Round Engagement Rings</a>
+                  <a
+                    className="hover:text-[#bf8f5f] underline"
+                    href="/classic-solitaire-engagement-rings"
+                  >
+                    Classic Solitaire Engagement Rings
+                  </a>
+                  <span className="mx-1">|</span>
+                  <a
+                    className="hover:text-[#bf8f5f] underline"
+                    href="/white-gold-engagement-rings"
+                  >
+                    White Gold Engagement Rings
+                  </a>
+                  <span className="mx-1">|</span>
+                  <a
+                    className="hover:text-[#bf8f5f] underline"
+                    href="/lab-grown-diamond-engagement-rings"
+                  >
+                    Lab Grown Diamond Engagement Rings
+                  </a>
+                  <span className="mx-1">|</span>
+                  <a
+                    className="hover:text-[#bf8f5f] underline"
+                    href="/round-engagement-rings"
+                  >
+                    Round Engagement Rings
+                  </a>
                 </div>
               </div>
             </div>
@@ -157,42 +212,25 @@ const ProductDetail = (props: Props) => {
       </section>
 
       {/* Review Box  */}
-      <section className="p-6 bg-[#f8f4ef]">
-        {/* heading  */}
-        <div className="flex justify-center items-center">
-          <div>
-            <div className="text-center">
-              <h3 className="text-[20px] font-bold">Our Customers Love Us</h3>
-              <p className="text-[#626262] text-[12.8px] mb-4">
-                More than 10000 happy customers all over the Europe
-              </p>
-            </div>
+      <ReviewBox />
 
-            <a
-              href="/customer-reviews"
-              target="_blank"
-              className="relative block"
-            >
-              <div className="absolute top-[34%] left-[7px] z-20 transform -translate-y-1/2">
-                <p className="font-semibold text-[14px] uppercase">
-                  12000+ Customer Reviews
-                </p>
-              </div>
-              <Image
-                src="/assets/images/customer_review_section_new.svg"
-                height={300}
-                width={300}
-              />
-            </a>
-          </div>
-        </div>
-        {/* <a
-          className="cursor-pointer rounded-3xl border p-2.5  hover:bg-black mx-auto"
-          href="/"
-        >
-          View All Reviews
-        </a> */}
-      </section>
+      <RelatedMatchingProducts
+      relatedProducts={[
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+
+      ]}
+      matchingProducts={[
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""}
+        
+      ]}
+      />
+      <SeenOn />
     </>
   );
 };
