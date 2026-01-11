@@ -12,7 +12,7 @@ const SeenOn = () => {
 
   return (
     <section className="bg-[#FCF4EC]">
-      <div className="container-fluid px-4 lg:px-8 py-10">
+      <div className="container-fluid px-4 lg:px-8 py-10 lg:mb-[24px]">
         <h2 className="capitalize text-center font-bold text-primary tracking-wider text-[20px] lg:text-[20px] ">
           As Seen On
         </h2>

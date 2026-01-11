@@ -208,7 +208,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
     <div className="px-2">
       <div className="flex items-start justify-between">
         <div className="md:flex md:justify-between md:items-start gap-2">
-          <div className="md:flex md:flex-col md:gap-2">
+          <div className="md:flex md:flex-col md:gap-2 flex-2 md:flex-1">
             <h1 className="text-[22px] md:text-[18px] md:text-left font-bold leading-7.5 md:leading-6.5">
               {title} 
             </h1>
@@ -219,7 +219,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
             )}
           </div>
           <div className="flex flex-row md:flex-col justify-between md:justify-start mt-2 mb-4 md:mt-0 md:mb-0">
-            <div className="flex items-center gap-4 mt-2 md:mt-0 md:flex-1">
+            <div className="flex items-center gap-4 mt-2 md:mt-0 md:flex-2">
               <Ratings value={rating} text={reviewsText} />
             </div>
             {sku && (

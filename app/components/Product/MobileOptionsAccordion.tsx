@@ -1,5 +1,6 @@
 import { Image } from '@shopify/hydrogen';
 import { useEffect, useRef, useState } from 'react';
+import RangeSlider from '../Common/RangeSlider';
 
 type TabKey = 'metal' | 'stone' | 'shape' | 'carat' | null;
 
@@ -16,7 +17,6 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'carat', label: 'Carat' },
 ];
 
-/* ---------------- OPTIONS ---------------- */
 
 const METAL_OPTIONS: OptionItem[] = [
   { label: 'White Gold', value: 'white', image: '/assets/images/icons/white-gold.svg' },
@@ -37,7 +37,6 @@ const SHAPE_OPTIONS: OptionItem[] = [
   { label: 'Heart', value: 'heart', image: '/assets/images/icons/rnd.svg' },
 ];
 
-/* ---------------- COMPONENT ---------------- */
 
 export default function SideAccordionSelector() {
   const [activeTab, setActiveTab] = useState<TabKey>(null);
@@ -49,24 +48,21 @@ export default function SideAccordionSelector() {
   const [carat, setCarat] = useState(1);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [lockedWidth, setLockedWidth] = useState<number>();
 
-  /* Lock width so it never shrinks */
-  useEffect(() => {
-    if (wrapperRef.current) {
-      setLockedWidth(wrapperRef.current.offsetWidth);
-    }
-  }, []);
-
-  /* ---------------- Animation Direction ---------------- */
-
-  function getPanelAnimation() {
-    if (activeIndex === 0) return 'translate-x-full';
-    if (activeIndex === 3) return '-translate-x-full';
-    return 'scale-95 opacity-0';
+  
+  function getPanelInitialState() {
+    if (activeIndex === 0) return '-translate-x-full opacity-0'; 
+    if (activeIndex === 3) return 'translate-x-full opacity-0'; 
+    return 'scale-95 opacity-0'; // Center Zoom
   }
 
-  /* ---------------- TAB HEADER ---------------- */
+  function getHeaderExitState() {
+    if (activeIndex === 0) return 'translate-x-full opacity-0'; 
+    if (activeIndex === 3) return '-translate-x-full opacity-0'; 
+    return 'scale-110 opacity-0'; // Center Fade
+  }
+
+  
 
   function TabItem({
     item,
@@ -80,7 +76,7 @@ export default function SideAccordionSelector() {
     return (
       <button
         onClick={onClick}
-        className={`flex flex-col items-center justify-center px-6 py-1 gap-1
+        className={`flex flex-col items-center justify-center flex-1 px-1 py-1 gap-1
         ${!isLast ? 'border-r border-gray-300' : ''}`}
       >
         {item.image && (
@@ -91,7 +87,6 @@ export default function SideAccordionSelector() {
     );
   }
 
-  /* ---------------- OPTION GRID ---------------- */
 
   function OptionGrid({
     options,
@@ -103,14 +98,17 @@ export default function SideAccordionSelector() {
     onSelect: (o: OptionItem) => void;
   }) {
     return (
-      <div className="flex gap-4 justify-center overflow-x-auto scrollbar-hide px-3">
+      <div 
+        className="flex gap-4 justify-center overflow-x-auto scrollbar-hide px-3 w-full p-0.5"
+        onClick={(e) => e.stopPropagation()}
+      >
         {options.map((o) => (
           <button
             key={o.value}
             onClick={() => {
               onSelect(o);
               setActiveTab(null);
-              setActiveIndex(null);
+              // setActiveIndex(null); // Keep index for exit animation
             }}
             className="flex flex-col items-center gap-1 shrink-0"
           >
@@ -127,7 +125,6 @@ export default function SideAccordionSelector() {
     );
   }
 
-  /* ---------------- CARAT ---------------- */
 
   function CaratOption() {
     return (
@@ -135,33 +132,28 @@ export default function SideAccordionSelector() {
         className="flex flex-col items-center gap-2 w-full px-4"
         onClick={(e) => e.stopPropagation()}
       >
-        <input
-          type="range"
+        <RangeSlider
           min={0.2}
           max={10}
           step={0.1}
           value={carat}
-          onChange={(e) => setCarat(Number(e.target.value))}
-          className="w-full"
+          onChange={(newVal) => setCarat(newVal)}
         />
-        <span className="text-xs">{carat.toFixed(2)} ct</span>
       </div>
     );
   }
 
-  /* ---------------- RENDER ---------------- */
 
   return (
-    <div className="lg:hidden flex justify-center px-[15px]">
+    <div className="lg:hidden flex justify-center px-[15px] w-full">
       <div
         ref={wrapperRef}
-        style={{ width: lockedWidth }}
-        className="relative rounded-3xl border border-[#ced4da] bg-[#faf6ef] overflow-hidden"
+        className="relative w-full rounded-3xl border border-[#ced4da] bg-[#faf6ef] overflow-hidden"
       >
         {/* CLOSED TABS */}
         <div
-          className={`flex px-2 py-[6px] transition-transform duration-300 ease-out
-          ${activeTab ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}
+          className={`flex px-2 py-[6px] transition-transform duration-500 ease-out
+          ${activeTab ? getHeaderExitState() : 'translate-x-0 opacity-100'}`}
         >
           <TabItem
             item={metal}
@@ -185,7 +177,7 @@ export default function SideAccordionSelector() {
             }}
           />
           <TabItem
-            item={{ label: `${carat.toFixed(2)} ct` }}
+            item={{ label: `${carat.toFixed(2)} ct`, image: '/assets/images/icons/carat-slider.svg' }}
             onClick={() => {
               setActiveTab('carat');
               setActiveIndex(3);
@@ -197,21 +189,21 @@ export default function SideAccordionSelector() {
         {/* OPEN PANEL */}
         <div
           className={`absolute inset-0 flex items-center justify-center
-          transition-all duration-300 ease-out
+          transition-all duration-500 ease-out
           ${
             activeTab
               ? 'translate-x-0 opacity-100'
-              : `${getPanelAnimation()} opacity-0 pointer-events-none`
+              : `${getPanelInitialState()} pointer-events-none`
           }`}
           onClick={() => {
             setActiveTab(null);
-            setActiveIndex(null);
+            // setActiveIndex(null); // Keep index for exit animation
           }}
         >
           <button
             onClick={() => {
               setActiveTab(null);
-              setActiveIndex(null);
+              // setActiveIndex(null); // Keep index for exit animation
             }}
             className="absolute hidden right-3 top-1/2 -translate-y-1/2 text-lg text-gray-400"
           >

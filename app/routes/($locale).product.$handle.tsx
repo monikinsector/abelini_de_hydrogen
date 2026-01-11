@@ -59,7 +59,7 @@ const ProductDetail = (props: Props) => {
             <ImageTab />
 
             {/* Mobile Options Accordion */}
-            {/* <MobileOptionAccordion/> */}
+            <MobileOptionAccordion/>
 
             {/* <ProductOptionsAccordion/> */}
 
@@ -216,17 +216,17 @@ const ProductDetail = (props: Props) => {
 
       <RelatedMatchingProducts
       relatedProducts={[
-        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
-        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
-        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
-        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "£377", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "£377", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "£377", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "£377", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
 
       ]}
       matchingProducts={[
-        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
-        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
-        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
-        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "364", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""}
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "£377", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "£377", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "£377", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""},
+        {id: "1", name: "4 Prong Round Diamond White Gold / Platinum Engagement Ring", price: "£377", image: "/assets/images/setpln_bandpln_shnkstd_none_med_ww_di_rnd_m0001.webp", href: ""}
         
       ]}
       />
