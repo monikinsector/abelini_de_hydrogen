@@ -51,51 +51,51 @@ const FOOTER_SECTIONS: FooterSection[] = [
   {
     title: 'Customer Care',
     links: [
-      {label: 'Free Delivery', href: '/free-delivery'},
-      {label: 'Return & Exchange', href: '/return-exchange'},
-      {label: 'Warranty & Care', href: '/warranty-care'},
+      {label: 'Free Delivery', href: '/free-shipping'},
+      {label: 'Return & Exchange', href: '/return-and-exchange'},
+      {label: 'Warranty & Care', href: '/warranty-and-care'},
       {label: 'Jewellery Insurance', href: '/jewellery-insurance'},
       {label: 'Bespoke', href: '/bespoke'},
-      {label: 'Sample Services', href: '/sample-services'},
+      {label: 'Sample Services', href: '/home-trial'},
       {label: '0% Interest Finance', href: '/finance'},
-      {label: 'Free Resizing Service', href: '/free-resizing'},
+      {label: 'Free Resizing Service', href: '/free-resize-policy'},
     ],
   },
   {
     title: 'Explore',
     links: [
       {label: 'Blog', href: '/blog'},
-      {label: 'Customer Stories', href: '/customer-stories'},
-      {label: 'Birthstone By Month', href: '/birthstone-by-month'},
+      {label: 'Customer Stories', href: '/customer-story'},
+      {label: 'Birthstone By Month', href: '/birthstone-jewellery'},
       {label: 'Jewellery Gift Finder', href: '/jewellery-gift-finder'},
       {label: 'Hallmarking', href: '/hallmarking'},
       {label: 'Jewellery Care', href: '/jewellery-care'},
-      {label: 'Ring Size Chart', href: '/ring-size-chart'},
+      {label: 'Ring Size Chart', href: '/ring-size-guide'},
       {label: 'Bracelet Size Guide', href: '/bracelet-size-guide'},
     ],
   },
   {
     title: 'Guides',
     links: [
-      {label: 'Engagement Ring Guide', href: '/engagement-ring-guide'},
-      {label: 'Earrings Guide', href: '/earrings-guide'},
-      {label: 'Wedding Rings Guide', href: '/wedding-rings-guide'},
-      {label: 'Diamond Ring Guide', href: '/diamond-ring-guide'},
-      {label: 'Diamond Guide', href: '/diamond-guide'},
+      {label: 'Engagement Ring Guide', href: '/blog/engagement-rings-buying-guide'},
+      {label: 'Earrings Guide', href: '/blog/ultimate-guide-on-how-to-buy-diamond-earrings'},
+      {label: 'Wedding Rings Guide', href: '/blog/ultimate-guide-on-how-to-buy-wedding-ring'},
+      {label: 'Diamond Ring Guide', href: '/blog/diamond-ring-buying-guide'},
+      {label: 'Diamond Guide', href: '/diamond-education'},
       {label: 'Metal Guide', href: '/metal-guide'},
-      {label: 'Bracelet Guide', href: '/bracelet-guide'},
+      {label: 'Bracelet Guide', href: '/blog/ultimate-guide-on-how-to-buy-a-bracelet'},
       {label: 'Necklace Size Guide', href: '/necklace-size-guide'},
     ],
   },
   {
     title: 'Contact Us',
     links: [
-      {label: 'Customer Service', href: '/customer-service'},
+      {label: 'Customer Service', href: '/contact-us'},
       {label: '+44 (0) 2038051270', href: 'tel:+442038051270'},
       {label: 'sales@abelini.com', href: 'mailto:sales@abelini.com'},
-      {label: 'Live Chat', href: '/live-chat'},
-      {label: 'Visit Our Store', href: '/visit-our-store'},
-      {label: "FAQ's", href: '/faqs'},
+      {label: 'Live Chat', href: '/javascript:$zopim.livechat.window.show();'},
+      {label: 'Visit Our Store', href: '/book-appointment'},
+      {label: "FAQ's", href: '/faq'},
     ],
   },
 ];
@@ -103,22 +103,22 @@ const FOOTER_SECTIONS: FooterSection[] = [
 const SOCIAL_MEDIA_LINKS = [
   {
     label: 'Facebook',
-    href: 'https://www.facebook.com/abelini',
+    href: 'https://www.facebook.com/abelinijewel/',
     icon: '/assets/images/icons/facebook.svg',
   },
   {
     label: 'Pinterest',
-    href: 'https://www.pinterest.com/abelini',
+    href: 'https://uk.pinterest.com/abelinijewellery/',
     icon: '/assets/images/icons/pinterest.svg',
   },
   {
     label: 'Instagram',
-    href: 'https://www.instagram.com/abelini',
+    href: 'https://www.instagram.com/abelinijewellery/',
     icon: '/assets/images/icons/instagram.svg',
   },
   {
     label: 'YouTube',
-    href: 'https://www.youtube.com/abelini',
+    href: 'https://www.youtube.com/channel/UCdfnfdsPrWJF6wJJu7d13qA',
     icon: '/assets/images/icons/youtube.svg',
   },
 ];
@@ -126,12 +126,12 @@ const SOCIAL_MEDIA_LINKS = [
 const CUSTOMER_SERVICE_LINKS = [
   {
     label: 'Store',
-    href: '/visit-our-store',
+    href: '/book-appointment',
     icon: '/assets/images/icons/store.svg',
   },
   {
     label: 'Live Chat',
-    href: '/live-chat',
+    href: '/javascript:$zopim.livechat.window.show();',
     icon: '/assets/images/icons/chat.svg',
   },
   {
@@ -149,12 +149,12 @@ const CUSTOMER_SERVICE_LINKS = [
 const FOOTER_LINKS = [
   {
     label: 'Cookie Policy',
-    href: '/policies/cookie-policy',
+    href: '/cookie-policy',
     icon: '/assets/images/icons/cookie.svg',
   },
   {
-    label: 'Privacy Policy',
-    href: '/policies/privacy-policy',
+    label: 'Privacy Notice',
+    href: '/privacy-policy',
     icon: '/assets/images/icons/privacy.svg',
   },
   {
@@ -164,7 +164,7 @@ const FOOTER_LINKS = [
   },
   {
     label: 'Sitemap',
-    href: '/sitemap.xml',
+    href: '/sitemap',
     icon: '/assets/images/icons/sitemap.svg',
   },
 ];
@@ -220,7 +220,7 @@ function FooterMenu({}: {}) {
             materials. For further information on how we manage your data,
             please see our{' '}
             <a
-              href="/policies/privacy-policy"
+              href="/privacy-policy"
               className="underline font-medium text-primary hover:opacity-70 transition-opacity"
             >
               Privacy Notice
