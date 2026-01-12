@@ -6,27 +6,17 @@ import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
 
 interface FooterProps {
   footer: Promise<FooterQuery | null>;
-  header: HeaderQuery;
-  publicStoreDomain: string;
 }
 
 export function Footer({
   footer: footerPromise,
-  header,
-  publicStoreDomain,
 }: FooterProps) {
   return (
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
           <footer className="footer">
-            {footer?.menu && header.shop.primaryDomain?.url && (
-              <FooterMenu
-                menu={footer.menu}
-                primaryDomainUrl={header.shop.primaryDomain.url}
-                publicStoreDomain={publicStoreDomain}
-              />
-            )}
+            <FooterMenu />
           </footer>
         )}
       </Await>
@@ -169,7 +159,7 @@ const FOOTER_LINKS = [
   },
   {
     label: 'Company Details',
-    href: 'https://www.abelini.com/company-details',
+    href: '/company-details',
     icon: '/assets/images/icons/company.svg',
   },
   {
@@ -179,15 +169,7 @@ const FOOTER_LINKS = [
   },
 ];
 
-function FooterMenu({
-  menu,
-  primaryDomainUrl,
-  publicStoreDomain,
-}: {
-  menu: FooterQuery['menu'];
-  primaryDomainUrl: FooterProps['header']['shop']['primaryDomain']['url'];
-  publicStoreDomain: string;
-}) {
+function FooterMenu({}: {}) {
   return (
     <nav className="footer-menu bg-[#f4f4f4]" role="navigation">
       {/* Footer Top Section - Newsletter */}
