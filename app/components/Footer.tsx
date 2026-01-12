@@ -194,7 +194,7 @@ function FooterMenu({
       <div className="px-10 items-center grid lg:grid-cols-3 grid-cols-1 gap-6 border-b border-t border-[#dee2e6] pb-6 pt-6">
         {/* Heading */}
         <div className="lg:col-span-1 col-span-1 text-center md:text-left">
-          <h2 className="text-h2 font-bold text-[#111111] capitalize">
+          <h2 className="text-h2 font-bold text-primary capitalize">
             Stay In Touch!
           </h2>
         </div>
@@ -216,13 +216,13 @@ function FooterMenu({
                 style={{
                   boxShadow: 'none !important',
                 }}
-                className="p-3 rounded-[24px] !border-[2px] border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-[#111111] text-[12px] font-regular flex-1"
+                className="p-3 rounded-[24px] !border-[2px] border-[#111111] bg-white text-primary placeholder:text-gray-400 focus:outline-none focus:ring-[#111111] text-[12px] font-regular flex-1"
               />
               <input
                 type="email"
                 placeholder="Your email *"
                 required
-                className="p-3 !focus:shadow-none rounded-[24px] !border-[2px]  border-[#111111] bg-white text-[#111111] placeholder:text-gray-400 focus:outline-none focus:ring-[#111111] text-[12px] flex-1"
+                className="p-3 !focus:shadow-none rounded-[24px] !border-[2px]  border-[#111111] bg-white text-primary placeholder:text-gray-400 focus:outline-none focus:ring-[#111111] text-[12px] flex-1"
               />
               <button type="submit" className="btn-black">
                 Subscribe
@@ -231,7 +231,7 @@ function FooterMenu({
           </form>
 
           {/* Privacy Notice */}
-          <p className="text-[#626262] text-[11px]">
+          <p className="text-secondary text-p-11">
             By subscribing, some personal data such as your name and email
             address are collected and stored securely for the purposes of
             sending you order updates, special offers, and other promotional
@@ -239,7 +239,7 @@ function FooterMenu({
             please see our{' '}
             <a
               href="/policies/privacy-policy"
-              className="underline font-medium text-[#111111] hover:opacity-70 transition-opacity"
+              className="underline font-medium text-primary hover:opacity-70 transition-opacity"
             >
               Privacy Notice
             </a>
@@ -247,13 +247,13 @@ function FooterMenu({
         </div>
       </div>
 
-      <div className="px-4 py-4">
+      <div className="px-4 lg:py-4 py-6">
         <div className="flex mb-12">
           <div className="flex flex-col w-full">
-            <div className="grid grid-cols-2 lg:grid-cols-5 m-0 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-5 m-0">
               {FOOTER_SECTIONS.map((section, index) => (
-                <div key={index} className="col-span-1 px-4">
-                  <h4 className="text-p-14 capitalize font-bold text-[#111111]  my-4 tracking-wider">
+                <div key={index} className="col-span-1 px-4 mb-6">
+                  <h4 className="text-p-14 capitalize font-bold text-primary  lg:my-4 my-2 tracking-wider">
                     {section.title}
                   </h4>
                   <ul className="list-none p-0 m-0">
@@ -261,7 +261,7 @@ function FooterMenu({
                       <li key={linkIndex} className="py-0.5">
                         <Link
                           to={link.href}
-                          className="text-[#626262] text-p-13 tracking-[0.5px]"
+                          className="lg:text-secondary text-primary lg:text-p-13 text-p-14 tracking-[0.5px]"
                         >
                           {link.label}
                         </Link>
@@ -321,14 +321,14 @@ function FooterMenu({
             </div>
 
             {/* Legal Links */}
-            <div className="flex flex-wrap justify-center items-center text-[#626262] text-p-13 mb-2">
+            <div className="flex flex-wrap justify-center items-center text-p-13 mb-2">
               {FOOTER_LINKS.map((link, index) => (
                 <span key={index}>
                   <Link
                     to={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline text-[#111111] text-p-14"
+                    className="underline lg:text-primary lg:text-p-14 text-p-16 lg:text-secondary text-quaternary font-medium"
                   >
                     {link.label}
                   </Link>
