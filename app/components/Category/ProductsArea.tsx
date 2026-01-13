@@ -3,7 +3,6 @@ import FilterBar from "./Filters/FilterBar";
 import { cn } from "~/lib/utils";
 import ProductCard from "./ProductCard";
 
-const a = Array(100).fill("1");
 const sampleRings = [
     {
       id: 1,
