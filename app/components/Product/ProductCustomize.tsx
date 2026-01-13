@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { TabOptions } from './TabOptions';
 import RangeSlider from '../Common/RangeSlider';
 import InfoText from '../Common/InfoText';
+import DiamondSearch from './DiamondSearch';
 
 export const CustomizationPanel: React.FC<{
   initialTab?: 'custom' | 'specific';
@@ -252,6 +253,11 @@ export const CustomizationPanel: React.FC<{
 
 
       </div>
+
+      {tab == "specific" && 
+      
+      <DiamondSearch/>
+      }
     </div>
   );
 };
