@@ -1,31 +1,9 @@
 import { Image } from '@shopify/hydrogen';
 import { Link } from 'react-router';
+import { supportIcons } from './Data/homepage.data';
 
 
 const SupportIcons = () => {
-
- const supportIcons = [
-  {
-    name: 'Assay Office London',
-    image: '/assets/images/why_abelini/assay_office_london_logo_230x90.webp',
-  },
-  {
-    name: 'Assay Assured',
-    image: '/assets/images/why_abelini/assay_assured_230x90.webp',
-  },
-  {
-    name: 'Stop Blood Diamonds',
-    image: '/assets/images/why_abelini/stop_blood_icon_230x90.webp',
-  },
-  {
-    name: 'The National Association of Jewellers',
-    image: '/assets/images/why_abelini/the_national_icon_230x90.webp',
-  },
-  {
-    name: 'GIA',
-    image: '/assets/images/why_abelini/gia_logo_230x90.webp',
-  },
-];
 
   return (
     <div className="my-6 w-full flex justify-center">
@@ -33,7 +11,7 @@ const SupportIcons = () => {
 
         {supportIcons.map((icon, index) => (
           <div
-            key={icon.name}
+            key={icon.id}
             className={`flex justify-center items-center col-span-2 
               ${index === 3 ? 'col-start-2' : ''} 
               lg:col-span-1 lg:col-start-auto

@@ -1,30 +1,9 @@
 import { Image } from "@shopify/hydrogen";
 import { Link } from "react-router";
+import { storeLocations } from "./Data/homepage.data";
 
 const OurStores = () => {
-  const storeLocations = [
-    {
-      image: "/assets/images/uk.png",
-      address: "Abelini Ltd,14 St Cross Street,Hatton Garden, London, EC1N 8UN",
-      country: "United Kingdom",
-      link: "/",
-      isLaunched: true
-    },
-    {
-      image: "/assets/images/australia.png",
-      address: "Abelini Pty Ltd Suite 804,365 Little Collins Street,Melbourne,VIC 3000",
-      country: "Australia",
-      link: "/",
-      isLaunched: true
-    },
-    {
-      image: "/assets/images/germany.png",
-      address: "Coming soon",
-      country: "Germany",
-      link: "/",
-      isLaunched: false
-    },
-  ]
+  
   return (
     <section className="flex flex-col justify-center items-center bg-[#FCF4EC]">
       <div className="container px-4 my-6">
@@ -41,7 +20,7 @@ const OurStores = () => {
             {storeLocations.map((store, index) => {
               return (
                 <div
-                  key={index}
+                  key={store.id}
                   className="flex flex-col items-center text-center h-full lg:order-1 order-2 gap-4"
                 >
                   <Image
