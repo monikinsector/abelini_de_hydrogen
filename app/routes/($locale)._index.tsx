@@ -1,5 +1,4 @@
 import type {Route} from './+types/($locale)._index';
-import {useLoaderData} from 'react-router';
 import HeroBanner from '~/components/Homepage/HeroBanner';
 import CategorySection from '~/components/Homepage/CategorySection';
 import SpotlightSection from '~/components/Homepage/SpotlightSection';

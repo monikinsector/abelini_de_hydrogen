@@ -2,6 +2,8 @@ import {useState, useEffect, useRef} from 'react';
 import {Image} from '@shopify/hydrogen';
 import {Link} from 'react-router';
 import useEmblaCarousel from 'embla-carousel-react';
+import { engagementRings } from './Data/homepage.data';
+import { labGrownDiamonds } from './Data/homepage.data';
 
 export function ImageWithProductSlider({rings}: {rings: any[]}) {
   const [emblaRef, emblaApi] = useEmblaCarousel({loop: false});
@@ -95,81 +97,7 @@ export function ImageWithProductSlider({rings}: {rings: any[]}) {
   );
 }
 
-const rings = [
-  {
-    name: 'Solitaire',
-    href: 'engagement-rings/classic-solitaire',
-    img: '/assets/images/home/category/solitaire_320x300.webp',
-  },
-  {
-    name: 'Side Stone',
-    href: 'engagement-rings/side-stone-shoulder-set-rings',
-    img: '/assets/images/home/category/side_stone_320x300.webp',
-  },
-  {
-    name: 'Halo',
-    href: 'engagement-rings/halo-rings',
-    img: '/assets/images/home/category/halo_320x300.webp',
-  },
-  {
-    name: 'Trilogy',
-    href: 'engagement-rings/three-stone',
-    img: '/assets/images/home/category/trilogy_320x300.webp',
-  },
-  {
-    name: 'Vintage',
-    href: 'engagement-rings/vintage-engagement-rings',
-    img: '/assets/images/home/category/vintage_320x300.webp',
-  },
-  {
-    name: 'Ruby',
-    href: 'engagement-rings/ruby',
-    img: '/assets/images/home/category/ruby_320x300.webp',
-  },
-  {
-    name: 'Emerald',
-    href: 'engagement-rings/emeralds',
-    img: '/assets/images/home/category/emerald_320x300.webp',
-  },
-  {
-    name: 'Oval',
-    href: 'engagement-rings/oval',
-    img: '/assets/images/home/category/oval_320x300.jpeg',
-  },
-  {
-    name: 'Blue Sapphire',
-    href: 'engagement-rings/blue-sapphire',
-    img: '/assets/images/home/category/blue_sapphire_320x300.webp',
-  },
-];
 
-const labGrownDiamonds = [
-  {
-    name: 'Engagement Rings',
-    href: 'engagement-rings/lab-grown-diamond',
-    img: '/assets/images/home/category/solitaire_320x300.webp',
-  },
-  {
-    name: 'Eternity Rings',
-    href: 'diamond-rings/eternity-rings/lab-grown-diamond',
-    img: '/assets/images/home/category/eternity_product.webp',
-  },
-  {
-    name: 'Pendant',
-    href: 'pendants/lab-grown-diamond',
-    img: '/assets/images/home/category/pendant.webp',
-  },
-  {
-    name: 'Earrings',
-    href: 'earrings/lab-grown-diamond',
-    img: '/assets/images/home/category/earring.webp',
-  },
-  {
-    name: 'Bracelets',
-    href: 'bracelets/lab-grown-diamond',
-    img: '/assets/images/home/category/bracelet.webp',
-  },
-];
 
 export default function AbeliniOccasion() {
   return (
@@ -226,7 +154,7 @@ export default function AbeliniOccasion() {
             </div>
 
             <div className="w-[100%] lg:py-12 py-2 relative lg:ml-[48px]">
-              <ImageWithProductSlider rings={rings} />
+              <ImageWithProductSlider rings={engagementRings} />
             </div>
           </div>
 

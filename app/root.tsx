@@ -16,7 +16,6 @@ import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/600.css";
 import "@fontsource/open-sans/700.css";
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
-// import appStyles from '~/styles/app.css?url';
 import tailwindCss from './styles/tailwind.css?url';
 import carouselCss from './styles/carousel.css?url';
 import {PageLayout} from './components/PageLayout';
