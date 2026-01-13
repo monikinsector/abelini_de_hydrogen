@@ -100,7 +100,6 @@ export default function SideAccordionSelector() {
     return (
       <div 
         className="flex gap-4 justify-center overflow-x-auto scrollbar-hide px-3 w-full p-0.5"
-        onClick={(e) => e.stopPropagation()}
       >
         {options.map((o) => (
           <button
@@ -130,7 +129,6 @@ export default function SideAccordionSelector() {
     return (
       <div
         className="flex flex-col items-center gap-2 w-full px-4"
-        onClick={(e) => e.stopPropagation()}
       >
         <RangeSlider
           min={0.2}
@@ -187,7 +185,7 @@ export default function SideAccordionSelector() {
         </div>
 
         {/* OPEN PANEL */}
-        <div
+        <button
           className={`absolute inset-0 flex items-center justify-center
           transition-all duration-500 ease-out
           ${
@@ -200,15 +198,6 @@ export default function SideAccordionSelector() {
             // setActiveIndex(null); // Keep index for exit animation
           }}
         >
-          <button
-            onClick={() => {
-              setActiveTab(null);
-              // setActiveIndex(null); // Keep index for exit animation
-            }}
-            className="absolute hidden right-3 top-1/2 -translate-y-1/2 text-lg text-gray-400"
-          >
-            ×
-          </button>
 
           {activeTab === 'metal' && (
             <OptionGrid options={METAL_OPTIONS} selected={metal} onSelect={setMetal} />
@@ -223,7 +212,7 @@ export default function SideAccordionSelector() {
           )}
 
           {activeTab === 'carat' && <CaratOption />}
-        </div>
+        </button>
       </div>
     </div>
   );
