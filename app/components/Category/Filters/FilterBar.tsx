@@ -62,6 +62,15 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
     );
   };
 
+  const toggleDiamondType = (toggleOption: string) => {
+    setDiamondType((prev) =>
+      prev.includes(toggleOption)
+        ? prev.filter((item) => item !== toggleOption)
+        : [...prev, toggleOption]
+    )
+  }
+  
+
   if (isMobile) {
     return (
       <>
@@ -124,13 +133,7 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
           {filterToggleOptions.map((toggleOption, index) => (
             <button
               key={index}
-              onClick={() => setDiamondType((prev) => {
-                if (prev.includes(toggleOption)) {
-                  return prev.filter((item) => item != toggleOption)
-                } else {
-                  return [...prev, toggleOption]
-                }
-              })}
+              onClick={() => toggleDiamondType(toggleOption)}
               className={cn(
                 "px-6 py-1 md:min-w-[48%] rounded-full text-sm font-thin cursor-pointer transition-all duration-200",
                 diamondType.includes(toggleOption)
@@ -155,13 +158,7 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
             {filterToggleOptions.map((toggleOption, index) => (
               <button
                 key={index}
-                onClick={() => setDiamondType((prev) => {
-                  if (prev.includes(toggleOption)) {
-                    return prev.filter((item) => item != toggleOption)
-                  } else {
-                    return [...prev, toggleOption]
-                  }
-                })}
+                onClick={() => toggleDiamondType(toggleOption)}
                 className={cn(
                   "px-6 py-1 rounded-full text-sm font-thin cursor-pointer transition-all duration-200",
                   diamondType.includes(toggleOption)
