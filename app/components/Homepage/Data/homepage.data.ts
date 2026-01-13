@@ -139,7 +139,7 @@ export const spotlightLogos: SpotlightLogo[] = [
  * home page usp section data
  */
 
-export interface UspItem {
+export interface uspItem {
   id: number;
   target: string;
   src: string;
@@ -148,7 +148,7 @@ export interface UspItem {
 }
 
 
-export const uspItems: UspItem[] = [
+export const uspItems: uspItem[] = [
   {
     id: 1,
     target: '#free_resizing',
@@ -230,5 +230,120 @@ export const supportIcons: SupportIcons[] = [
     id: 5,
     name: 'GIA',
     image: '/assets/images/why_abelini/gia_logo_230x90.webp',
+  },
+];
+
+
+
+
+/**
+ * home page abelini occasion section data
+ */
+
+export interface EngagementRings {
+  id: number;
+  name: string;
+  href: string;
+  img: string;
+}
+
+export const engagementRings: EngagementRings[] = [
+  {
+    id: 1,
+    name: 'Solitaire',
+    href: 'engagement-rings/classic-solitaire',
+    img: '/assets/images/home/category/solitaire_320x300.webp',
+  },
+  {
+    id: 2,
+    name: 'Side Stone',
+    href: 'engagement-rings/side-stone-shoulder-set-rings',
+    img: '/assets/images/home/category/side_stone_320x300.webp',
+  },
+  {
+    id: 3,
+    name: 'Halo',
+    href: 'engagement-rings/halo-rings',
+    img: '/assets/images/home/category/halo_320x300.webp',
+  },
+  {
+    id: 4,
+    name: 'Trilogy',
+    href: 'engagement-rings/three-stone',
+    img: '/assets/images/home/category/trilogy_320x300.webp',
+  },
+  {
+    id: 5,
+    name: 'Vintage',
+    href: 'engagement-rings/vintage-engagement-rings',
+    img: '/assets/images/home/category/vintage_320x300.webp',
+  },
+  {
+    id: 6,
+    name: 'Ruby',
+    href: 'engagement-rings/ruby',
+    img: '/assets/images/home/category/ruby_320x300.webp',
+  },
+  {
+    id: 7,
+    name: 'Emerald',
+    href: 'engagement-rings/emeralds',
+    img: '/assets/images/home/category/emerald_320x300.webp',
+  },
+  {
+    id: 8,
+    name: 'Oval',
+    href: 'engagement-rings/oval',
+    img: '/assets/images/home/category/oval_320x300.jpeg',
+  },
+  {
+    id: 9,
+    name: 'Blue Sapphire',
+    href: 'engagement-rings/blue-sapphire',
+    img: '/assets/images/home/category/blue_sapphire_320x300.webp',
+  },
+];
+
+
+/**
+ * home page lab grown diamonds section data
+ */
+
+export interface LabGrownDiamonds {
+  id: number;
+  name: string;
+  href: string;
+  img: string;
+}
+export const labGrownDiamonds: LabGrownDiamonds[] = [
+  {
+    id: 1,
+    name: 'Engagement Rings',
+    href: 'engagement-rings/lab-grown-diamond',
+    img: '/assets/images/home/category/solitaire_320x300.webp',
+  },
+  {
+    id: 2,
+    name: 'Eternity Rings',
+    href: 'diamond-rings/eternity-rings/lab-grown-diamond',
+    img: '/assets/images/home/category/eternity_product.webp',
+  },
+  {
+    id: 3,
+    name: 'Pendant',
+    href: 'pendants/lab-grown-diamond',
+    img: '/assets/images/home/category/pendant.webp',
+  },
+  {
+    id: 4,
+    name: 'Earrings',
+    href: 'earrings/lab-grown-diamond',
+    img: '/assets/images/home/category/earring.webp',
+  },
+  {
+    id: 5,
+    name: 'Bracelets',
+    href: 'bracelets/lab-grown-diamond',
+    img: '/assets/images/home/category/bracelet.webp',
   },
 ];
