@@ -17,7 +17,7 @@ function RingCategory() {
   return (
     <div className="mx-6 my-4 mb-12">
         <Carousel slidesPerView={9} slidesToScroll={4} scrollDuration={60} >
-            {Array(21).fill({name: "Classic Solitaire"}).map((item, index) => {
+            {new Array(21).fill({name: "Classic Solitaire"}).map((item, index) => {
                 return (
                     <RingCategoryItem name={item.name}/>
                 )
