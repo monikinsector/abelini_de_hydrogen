@@ -12,9 +12,13 @@ import {
 } from 'react-router';
 import type {Route} from './+types/root';
 import favicon from '~/assets/favicon.svg';
+import "@fontsource/open-sans/400.css";
+import "@fontsource/open-sans/600.css";
+import "@fontsource/open-sans/700.css";
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 // import appStyles from '~/styles/app.css?url';
 import tailwindCss from './styles/tailwind.css?url';
+import carouselCss from './styles/carousel.css?url';
 import {PageLayout} from './components/PageLayout';
 
 export type RootLoader = typeof loader;
@@ -150,6 +154,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={tailwindCss}></link>
+        <link rel="stylesheet" href={carouselCss}></link>
         {/* <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link> */}
         <Meta />
