@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, useEffect } from "react";
 import type {
   HeaderData,
   HeaderTypes,
@@ -6,178 +6,12 @@ import type {
   HeaderItem,
   HeaderLink,
 } from "./header.type";
-import { dataForNavigation } from "./header.data";
+import { dataForNavigation, menuItems } from "./header.data";
 import { Link } from "react-router";
 import { Image } from "@shopify/hydrogen";
 import SaleBar from "./Sale";
 import FeatureHeader from "./FeatureHeader";
 import { SubMenuPanel } from "./SubMenuPanel";
-
-const menuItems = [
-  { 
-    label: "ENGAGEMENT RINGS", 
-    hasSubmenu: true,
-    submenu: {
-      title: "ENGAGEMENT RINGS",
-      items: [
-        { label: "SHOP ALL ENGAGEMENT RINGS", type: "link" },
-        { label: "VIEW ALL ENGAGEMENT RINGS", type: "link" },
-        { 
-          label: "SHOP BY ENGAGEMENT RINGS", 
-          type: "dropdown",
-          children: [
-            { label: "Classic Solitaire", icon: "💍" },
-            { label: "Halo Rings", icon: "💍" },
-            { label: "Side Stone Rings", icon: "💍" },
-            { label: "Trilogy Rings", icon: "💍" },
-            { label: "Illusion Set Rings", icon: "💍" },
-            { label: "Cluster Rings", icon: "💍" },
-            { label: "Vintage Engagement Rings", icon: "💍" },
-            { label: "Twisted Engagement Rings", icon: "💍" },
-            { label: "Unique Engagement Rings", icon: "💍" },
-            { label: "Antique Engagement Rings", icon: "💍" },
-            { label: "Gemstone Rings", icon: "💍" },
-            { label: "Couples Rings", icon: "💍" },
-            { label: "Minimalist Engagement Rings", icon: "💍" },
-            { label: "Aquamarine Rings", icon: "💍" },
-          ]
-        },
-        { 
-          label: "BUILD YOUR PERFECT RING", 
-          type: "dropdown",
-          children: [
-            { label: "Start with a Setting", icon: "⚙️" },
-            { label: "Start with a Diamond", icon: "💎" },
-          ]
-        },
-        { 
-          label: "SHOP BY SHAPES", 
-          type: "dropdown",
-          children: [
-            { label: "Round", icon: "⭕" },
-            { label: "Princess", icon: "◽" },
-            { label: "Oval", icon: "⬭" },
-            { label: "Cushion", icon: "🔷" },
-            { label: "Emerald", icon: "▬" },
-            { label: "Pear", icon: "💧" },
-          ]
-        },
-        { 
-          label: "SHOP BY METALS", 
-          type: "dropdown",
-          children: [
-            { label: "White Gold", icon: "⚪" },
-            { label: "Yellow Gold", icon: "🟡" },
-            { label: "Rose Gold", icon: "🌸" },
-            { label: "Platinum", icon: "⬜" },
-          ]
-        },
-        { 
-          label: "SHOP BY GEMSTONES", 
-          type: "dropdown",
-          children: [
-            { label: "Diamond", icon: "💎" },
-            { label: "Sapphire", icon: "🔵" },
-            { label: "Ruby", icon: "🔴" },
-            { label: "Emerald", icon: "🟢" },
-          ]
-        },
-        { label: "ENGAGEMENT RINGS SALE", type: "link" },
-        { 
-          label: "MORE LINKS", 
-          type: "dropdown",
-          children: [
-            { label: "Ring Size Guide", icon: "📏" },
-            { label: "Care Instructions", icon: "📋" },
-          ]
-        },
-      ]
-    }
-  },
-  { 
-    label: "WEDDING & ETERNITY RINGS", 
-    hasSubmenu: true,
-    submenu: {
-      title: "WEDDING & ETERNITY RINGS",
-      items: [
-        { label: "SHOP ALL WEDDING RINGS", type: "link" },
-        { label: "VIEW ALL ETERNITY RINGS", type: "link" },
-      ]
-    }
-  },
-  { 
-    label: "DIAMOND RINGS", 
-    hasSubmenu: true,
-    submenu: {
-      title: "DIAMOND RINGS",
-      items: [
-        { label: "SHOP ALL DIAMOND RINGS", type: "link" },
-      ]
-    }
-  },
-  { 
-    label: "EARRINGS", 
-    hasSubmenu: true,
-    submenu: {
-      title: "EARRINGS",
-      items: [
-        { label: "SHOP ALL EARRINGS", type: "link" },
-      ]
-    }
-  },
-  { 
-    label: "NECKLACES", 
-    hasSubmenu: true,
-    submenu: {
-      title: "NECKLACES",
-      items: [
-        { label: "SHOP ALL NECKLACES", type: "link" },
-      ]
-    }
-  },
-  { 
-    label: "BRACELETS", 
-    hasSubmenu: true,
-    submenu: {
-      title: "BRACELETS",
-      items: [
-        { label: "SHOP ALL BRACELETS", type: "link" },
-      ]
-    }
-  },
-  { 
-    label: "QUICKSHIP", 
-    hasSubmenu: true,
-    submenu: {
-      title: "QUICKSHIP",
-      items: [
-        { label: "SHOP QUICKSHIP ITEMS", type: "link" },
-      ]
-    }
-  },
-  { 
-    label: "INSPIRATION", 
-    hasSubmenu: true,
-    submenu: {
-      title: "INSPIRATION",
-      items: [
-        { label: "BROWSE INSPIRATION", type: "link" },
-      ]
-    }
-  },
-  { 
-    label: "INFORMATION", 
-    hasSubmenu: true,
-    submenu: {
-      title: "INFORMATION",
-      items: [
-        { label: "ABOUT US", type: "link" },
-        { label: "CONTACT", type: "link" },
-      ]
-    }
-  },
-  { label: "BLOG", hasSubmenu: false },
-];
 
 
 function MenuHeader() {
@@ -314,6 +148,28 @@ function MobileHeaderNav({
     onClose();
   };
 
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      // Apply styles to prevent scrolling
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      
+      return () => {
+        // Restore scroll position when menu closes
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isOpen]);
+
 
   return (
     <nav className="md:hidden block bg-white border-t-2 border-t-gray-300 relative">
@@ -383,19 +239,21 @@ function MobileHeaderNav({
           aria-label="Close navigation menu overlay"
           onClick={onClose}
           className="fixed inset-0 z-100 bg-black/40"
+          style={{ touchAction: 'none' }}
         />
       )}
 
       {/* Sidebar */}
       <div
         className={`
-          fixed inset-y-0 left-0 z-110 w-80 max-w-[75vw] px-2
+          fixed inset-y-0 left-0 z-110 w-[330px] max-w-[85vw] px-2
           bg-white shadow-xl border-r border-gray-200
           transform transition-transform duration-200 ease-out
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
+        style={{ touchAction: 'pan-y' }}
       >
-        <div className="flex justify-between py-2 px-3 border-b border-gray-200">
+        <div className="flex justify-between py-2 border-b border-gray-200">
           {/* Action Buttons */}
           {iconBar.map((item, index) => (
             <button
@@ -407,21 +265,95 @@ function MobileHeaderNav({
             </button>
           ))}
         </div>
-        <div className="overflow-y-auto h-[calc(100%-100px)]">
-          {menuItems.map((item, index) => (
-            <button
-              key={index}
-              onClick={() => item.hasSubmenu && setActiveSubmenu(item)}
-              className="w-full flex items-center justify-between px-6 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
-            >
-              <span className="text-sm font-medium tracking-wide text-gray-800">
-                {item.label}
-              </span>
-              {item.hasSubmenu && (
-                <Image src="/assets/images/icons/c_right.svg" alt="Right" width={20}/>
-              )}
+        <div className="overflow-y-auto overscroll-contain h-[calc(100%-100px)]" style={{ WebkitOverflowScrolling: 'touch' }}>
+          {menuItems.map((item, index) => {
+            return (
+              <div key={index}>
+                {(item as any).link && !item.hasSubmenu ? (
+                  (item as any).link.startsWith("http") ? (
+                    <a
+                      href={(item as any).link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-between px-2 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
+                    >
+                      <span className="text-sm font-medium tracking-wide text-gray-800">
+                        {item.label}
+                      </span>
+                    </a>
+                  ) : (
+                    <Link
+                      to={(item as any).link}
+                      className="w-full flex items-center justify-between px-2 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
+                    >
+                      <span className="text-sm font-medium tracking-wide text-gray-800">
+                        {item.label}
+                      </span>
+                    </Link>
+                  )
+                ) : (
+                  <button
+                    onClick={() => {
+                      if (item.hasSubmenu) {
+                        setActiveSubmenu(item);
+                      }
+                    }}
+                    className="w-full flex items-center justify-between px-2 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
+                  >
+                    <span className="text-sm font-medium tracking-wide text-gray-800">
+                      {item.label}
+                    </span>
+                    {item.hasSubmenu && (
+                      <Image src="/assets/images/icons/c_right.svg" alt="Right" width={20}/>
+                    )}
+                  </button>
+                )}
+              </div>
+            );
+          })}
+          
+          {/* Contact Information Section */}
+          <div className="bg-gray-50 px-4 py-5 border-b border-gray-100">
+            <div className="space-y-3 mb-4">
+              <div className="flex items-center gap-3">
+                <Image src="/assets/images/icons/phone.svg" alt="Phone" width={16} height={16}/>
+                <Link to="tel:+442038051270" className="text-sm text-gray-800 hover:text-gray-600 transition-colors">
+                  +44 (0) 2038051270
+                </Link>
+              </div>
+              <div className="flex items-center gap-3">
+                <Image src="/assets/images/icons/email.svg" alt="Email" width={16} height={16}/>
+                <Link to="mailto:sales@abelini.com" className="text-sm text-gray-800 hover:text-gray-600 transition-colors">
+                  sales@abelini.com
+                </Link>
+              </div>
+              <div className="flex items-center gap-3">
+                <Image src="/assets/images/icons/chat.svg" alt="Chat" width={16} height={16}/>
+                <button className="text-sm text-gray-800 hover:text-gray-600 transition-colors text-left">
+                  LIVE CHAT
+                </button>
+              </div>
+            </div>
+            <button className="!font-normal !text-[12px] btn-black ">
+              BOOK AN APPOINTMENT
             </button>
-          ))}
+          </div>
+          
+          {/* Additional Links Section */}
+          <div className="bg-white px-4 py-4 space-y-3 border-b border-gray-100">
+            <Link to="/customer-reviews" className="block text-[12px] font-medium tracking-wide text-gray-800 hover:text-gray-600 transition-colors">
+              INDEPENDENT CUSTOMER REVIEWS
+            </Link>
+            <Link to="/faq" className="block text-[12px] font-medium tracking-wide text-gray-800 hover:text-gray-600 transition-colors">
+              FAQS
+            </Link>
+            <Link to="/free-shipping" className="block text-[12px] font-medium tracking-wide text-gray-800 hover:text-gray-600 transition-colors">
+              FREE DELIVERY
+            </Link>
+            <Link to="/return-and-exchange" className="block text-[12px] font-medium tracking-wide text-gray-800 hover:text-gray-600 transition-colors">
+              MONEY BACK GUARANTEE
+            </Link>
+          </div>
         </div>
 
         <SubMenuPanel

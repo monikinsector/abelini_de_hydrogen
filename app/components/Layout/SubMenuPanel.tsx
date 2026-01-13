@@ -1,11 +1,20 @@
 import { Image } from "@shopify/hydrogen";
 import { useState } from "react";
+import { Link } from "react-router";
 import { cn } from "~/lib/utils";
+
+interface SubmenuChild {
+  label: string;
+  link?: string;
+  icon?: string;
+  image?: string;
+}
 
 interface SubmenuItem {
   label: string;
   type: string;
-  children?: { label: string; icon: string }[];
+  link?: string;
+  children?: SubmenuChild[];
 }
 
 interface SubMenuPanelProps {
@@ -46,7 +55,7 @@ export function SubMenuPanel({ isOpen, submenu, onBack, onClose }: SubMenuPanelP
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200">
+      <div className="flex items-center justify-between px-2 py-4 border-b border-gray-200">
         <button
           onClick={handleBack}
           className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -61,12 +70,23 @@ export function SubMenuPanel({ isOpen, submenu, onBack, onClose }: SubMenuPanelP
         {submenu?.items.map((item, index) => (
           <div key={index} className="border-b border-gray-100">
             {item.type === "link" ? (
-              <a
-                href="#"
-                className="block px-6 py-5 text-sm font-medium tracking-wide text-gray-800 hover:bg-gray-50 transition-colors"
-              >
-                {item.label}
-              </a>
+              item.link?.startsWith("http") ? (
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block px-6 py-5 text-sm font-medium tracking-wide text-gray-800 hover:bg-gray-50 transition-colors"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  to={item.link ?? "/"}
+                  className="block px-6 py-5 text-sm font-medium tracking-wide text-gray-800 hover:bg-gray-50 transition-colors"
+                >
+                  {item.label}
+                </Link>
+              )
             ) : (
               <>
                 <button
@@ -82,7 +102,7 @@ export function SubMenuPanel({ isOpen, submenu, onBack, onClose }: SubMenuPanelP
                       expandedItems.has(item.label) ? "rotate-180" : ""
                     )}
                   >
-                    <Image src="/assets/images/c_down.svg" alt="Down" width={20}/>
+                    <Image src="/assets/images/icons/c_down.svg" alt="Down" width={20}/>
                   </div>
                 </button>
 
@@ -94,16 +114,49 @@ export function SubMenuPanel({ isOpen, submenu, onBack, onClose }: SubMenuPanelP
                       : "max-h-0 opacity-0"
                   )}
                 >
-                  {item.children?.map((child, childIndex) => (
-                    <a
-                      key={childIndex}
-                      href="#"
-                      className="flex items-center gap-3 px-8 py-3 hover:bg-gray-100 transition-colors"
-                    >
-                      <span className="text-lg">{child.icon}</span>
-                      <span className="text-sm text-gray-700">{child.label}</span>
-                    </a>
-                  ))}
+                  {item.children?.map((child, childIndex) => 
+                    child.link?.startsWith("http") ? (
+                      <a
+                        key={childIndex}
+                        href={child.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 px-8 py-3 hover:bg-gray-100 transition-colors"
+                      >
+                        {child.image ? (
+                          <Image
+                            src={child.image}
+                            alt={child.label}
+                            width={24}
+                            height={24}
+                            className="rounded"
+                          />
+                        ) : (
+                          <span className="text-lg">{child.icon}</span>
+                        )}
+                        <span className="text-sm text-gray-700">{child.label}</span>
+                      </a>
+                    ) : (
+                      <Link
+                        key={childIndex}
+                        to={child.link ?? "/"}
+                        className="flex items-center gap-3 px-8 py-3 hover:bg-gray-100 transition-colors"
+                      >
+                        {child.image ? (
+                          <Image
+                            src={child.image}
+                            alt={child.label}
+                            width={24}
+                            height={24}
+                            className="rounded"
+                          />
+                        ) : (
+                          <span className="text-lg">{child.icon}</span>
+                        )}
+                        <span className="text-sm text-gray-700">{child.label}</span>
+                      </Link>
+                    )
+                  )}
                 </div>
               </>
             )}
