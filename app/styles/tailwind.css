@@ -1,7 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Dancing+Script:wght@400..700&display=swap');
-
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
-
+@theme {
+    --font-sans: "Open Sans", ui-sans-serif, system-ui;
+    --font-weight-regular: 400;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+}
 
 
 @import "tailwindcss";
@@ -10,6 +12,8 @@
     --color-primary: #111111;
     --color-secondary: #626262;
     --color-tertiary: #f60;
+    --color-quaternary: #0A5050;
+    
 }
 
 @theme {
@@ -19,6 +23,7 @@
     --color-primary: var(--color-primary);
     --color-secondary: var(--color-secondary);
     --color-tertiary: var(--color-tertiary);
+    --color-quaternary: var(--color-quaternary);
   
     /* ===============================
        FONT SIZES (Desktop)
