@@ -454,9 +454,9 @@ function MenuDropdown({totalCols, data, leftBorderFromIndex, lastColDoubleSpace,
           case "links_with_image": {
             return (data?.links ?? []).map((d: HeaderLink, ixs: number) => {
               return (
-                <Link to={d.link} className="flex gap-2"> 
-                  <Image src={d.image} alt={d.name} className="!w-8 !h-auto"/>
-                  <h3 className="text-p-14 font-regular py-[6px] text-muted">{d.name}</h3>
+                <Link to={d.link} className="flex items-center gap-2 py-[6px] "> 
+                  <Image src={d.image} alt={d.name} width={25}/>
+                  <h3 className="text-p-14 font-regular text-muted">{d.name}</h3>
                 </Link>
               )
             })
