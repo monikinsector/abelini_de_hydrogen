@@ -18,6 +18,7 @@ export interface HeaderItemData {
     links?: Array<HeaderLink>;
     image?: string
     theme?: string;
+    link?: string
 }
 
 export interface HeaderItem {
