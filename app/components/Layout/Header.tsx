@@ -1,7 +1,7 @@
 import { Image } from "@shopify/hydrogen";
 import { Link } from "react-router";
 
-function Header() {
+function Header({globalPhone}: {globalPhone: string}) {
   return (
     <>
       {/* Desktop navigation */}
@@ -9,9 +9,9 @@ function Header() {
         <div className="flex justify-between container mx-auto">
           <div className="flex gap-6">
             <div className="flex items-center gap-4">
-            <Link to={"/"} className="flex items-center gap-1">
+            <Link to={`tel:${globalPhone}`} className="flex items-center gap-1">
                 <Image src="/assets/images/icons/phone.svg" alt="Phone" className="!w-5"/>
-                <p>+44 (0) 2038051270</p>
+                <p>{globalPhone}</p>
               </Link>
               <div className="bg-[#F3E7D7] rounded-[24px] px-3 py-0 text-[1rem]">24/7</div>
             </div>

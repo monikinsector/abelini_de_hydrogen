@@ -12,9 +12,9 @@ import {
 } from 'react-router';
 import type {Route} from './+types/root';
 import favicon from '~/assets/favicon.svg';
-import "@fontsource/open-sans/400.css";
-import "@fontsource/open-sans/600.css";
-import "@fontsource/open-sans/700.css";
+// import "@fontsource/open-sans/400.css";
+// import "@fontsource/open-sans/600.css";
+// import "@fontsource/open-sans/700.css";
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import tailwindCss from './styles/tailwind.css?url';
 import carouselCss from './styles/carousel.css?url';
@@ -77,9 +77,43 @@ export async function loader(args: Route.LoaderArgs) {
 
   const {storefront, env} = args.context;
 
+  const marketData = await storefront.query(LOCALIZATION_MARKET_QUERY);
+  const market = marketData.localization.market;
+  const metafields: Record<string, string | null> = Object.fromEntries(
+    market.metafields
+      .filter((m) => m !== null && m !== undefined)
+      .map((m) => [m!.key, m!.value])
+  );
+  const heroBannerId = (JSON.parse(metafields.home_banner || '[]') as string[])[0] as string | undefined;
+  let heroBanner: Record<string, any> = {};
+  if (heroBannerId) {
+    const res = await storefront.query(METAOBJECT_QUERY, {
+      variables: { id: heroBannerId },
+    });
+
+    if (res?.metaobject?.fields) {
+      heroBanner = Object.fromEntries(
+        res.metaobject.fields.map((field: any) => [
+          field.key,
+          field.reference?.image ?? field.value,
+        ])
+      );
+    }
+  }
+
+  // Transform metafields to match PageLayout expected structure
+  const transformedMetafields: { metafields: { [key: string]: string } } = {
+    metafields: Object.fromEntries(
+      Object.entries(metafields).map(([key, value]) => [key, value ?? ''])
+    )
+  };
+
   return {
     ...deferredData,
     ...criticalData,
+    metafields: transformedMetafields.metafields,
+    heroBanner,
+    heroBannerId,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
     shop: getShopAnalytics({
       storefront,
@@ -146,7 +180,7 @@ function loadDeferredData({context}: Route.LoaderArgs) {
 
 export function Layout({children}: {children?: React.ReactNode}) {
   const nonce = useNonce();
-
+  const {localization} = useRouteLoaderData('root')
   return (
     <html lang="en">
       <head>
@@ -160,6 +194,8 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <Links />
       </head>
       <body>
+        <div>
+        </div>
         {children}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
@@ -212,3 +248,57 @@ export function ErrorBoundary() {
     </div>
   );
 }
+
+
+/* ---------------- MARKET QUERY ---------------- */
+
+const LOCALIZATION_MARKET_QUERY = `#graphql
+  query LocalizationMarket {
+    localization {
+      market {
+        handle
+        metafields(
+          identifiers: [
+            { namespace: "custom", key: "announcement_bar_text_desktop" }
+            { namespace: "custom", key: "announcement_bar_link" }
+            { namespace: "custom", key: "trustpilot_text" }
+            { namespace: "custom", key: "global_phone" }
+            { namespace: "custom", key: "global_email" }
+            { namespace: "custom", key: "home_banner" }
+          ]
+        ) {
+          key
+          value
+        }
+      }
+      country {
+        isoCode
+      }
+    }
+  }
+`;
+
+/* ---------------- METAOBJECT QUERY ---------------- */
+
+const METAOBJECT_QUERY = `#graphql
+  query MetaobjectById($id: ID!) {
+    metaobject(id: $id) {
+      id
+      type
+      fields {
+        key
+        value
+        reference {
+          ... on MediaImage {
+            image {
+              url
+              altText
+              width
+              height
+            }
+          }
+        }
+      }
+    }
+  }
+`;

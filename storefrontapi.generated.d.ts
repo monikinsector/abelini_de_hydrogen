@@ -288,6 +288,41 @@ export type FooterQuery = {
   >;
 };
 
+export type LocalizationMarketQueryVariables = StorefrontAPI.Exact<{
+  [key: string]: never;
+}>;
+
+export type LocalizationMarketQuery = {
+  localization: {
+    market: Pick<StorefrontAPI.Market, 'handle'> & {
+      metafields: Array<
+        StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'key' | 'value'>>
+      >;
+    };
+    country: Pick<StorefrontAPI.Country, 'isoCode'>;
+  };
+};
+
+export type MetaobjectByIdQueryVariables = StorefrontAPI.Exact<{
+  id: StorefrontAPI.Scalars['ID']['input'];
+}>;
+
+export type MetaobjectByIdQuery = {
+  metaobject?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Metaobject, 'id' | 'type'> & {
+      fields: Array<
+        Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'> & {
+          reference?: StorefrontAPI.Maybe<{
+            image?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
+            >;
+          }>;
+        }
+      >;
+    }
+  >;
+};
+
 export type ArticleQueryVariables = StorefrontAPI.Exact<{
   articleHandle: StorefrontAPI.Scalars['String']['input'];
   blogHandle: StorefrontAPI.Scalars['String']['input'];
@@ -1126,6 +1161,14 @@ interface GeneratedQueryTypes {
   '#graphql\n  query Footer(\n    $country: CountryCode\n    $footerMenuHandle: String!\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n    menu(handle: $footerMenuHandle) {\n      ...Menu\n    }\n  }\n  #graphql\n  fragment MenuItem on MenuItem {\n    id\n    resourceId\n    tags\n    title\n    type\n    url\n  }\n  fragment ChildMenuItem on MenuItem {\n    ...MenuItem\n  }\n  fragment ParentMenuItem on MenuItem {\n    ...MenuItem\n    items {\n      ...ChildMenuItem\n    }\n  }\n  fragment Menu on Menu {\n    id\n    items {\n      ...ParentMenuItem\n    }\n  }\n\n': {
     return: FooterQuery;
     variables: FooterQueryVariables;
+  };
+  '#graphql\n  query LocalizationMarket {\n    localization {\n      market {\n        handle\n        metafields(\n          identifiers: [\n            { namespace: "custom", key: "announcement_bar_text_desktop" }\n            { namespace: "custom", key: "trustpilot_text" }\n            { namespace: "custom", key: "global_phone" }\n            { namespace: "custom", key: "global_email" }\n            { namespace: "custom", key: "home_banner" }\n          ]\n        ) {\n          key\n          value\n        }\n      }\n      country {\n        isoCode\n      }\n    }\n  }\n': {
+    return: LocalizationMarketQuery;
+    variables: LocalizationMarketQueryVariables;
+  };
+  '#graphql\n  query MetaobjectById($id: ID!) {\n    metaobject(id: $id) {\n      id\n      type\n      fields {\n        key\n        value\n        reference {\n          ... on MediaImage {\n            image {\n              url\n              altText\n              width\n              height\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+    return: MetaobjectByIdQuery;
+    variables: MetaobjectByIdQueryVariables;
   };
   '#graphql\n  query Article(\n    $articleHandle: String!\n    $blogHandle: String!\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n    blog(handle: $blogHandle) {\n      handle\n      articleByHandle(handle: $articleHandle) {\n        handle\n        title\n        contentHtml\n        publishedAt\n        author: authorV2 {\n          name\n        }\n        image {\n          id\n          altText\n          url\n          width\n          height\n        }\n        seo {\n          description\n          title\n        }\n      }\n    }\n  }\n': {
     return: ArticleQuery;

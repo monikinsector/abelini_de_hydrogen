@@ -1,4 +1,6 @@
 import { Image } from "@shopify/hydrogen";
+import type { FixedTextFormat } from "../PageLayout";
+
 
 function FeatureHeader() {
     return (
