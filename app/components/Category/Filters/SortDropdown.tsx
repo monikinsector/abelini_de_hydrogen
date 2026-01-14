@@ -17,7 +17,7 @@ function SortDropdown({
   options,
   placeholder = 'Select an option',
   onChange,
-}: DropdownProps) {
+}: Readonly<DropdownProps>) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<DropdownOption>({label: "Best Seller", value: "best_seller"});
   const ref = useRef<HTMLDivElement>(null);

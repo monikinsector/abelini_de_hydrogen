@@ -25,7 +25,7 @@ export default function Carousel({
   spacing = 32,
   showArrows = true,
   scrollDuration = 25, // 🔥 default smooth
-}: CarouselProps) {
+}: Readonly<CarouselProps>) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop,
     slidesToScroll,
@@ -54,10 +54,6 @@ export default function Carousel({
       emblaApi.off('reInit', update)
     }
   }, [emblaApi])
-
-  const basis = slidesPerView
-  ? `${100 / slidesPerView}%`
-  : undefined
 
   return (
     <div className="relative">

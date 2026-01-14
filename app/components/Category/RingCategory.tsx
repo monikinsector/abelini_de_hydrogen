@@ -2,7 +2,7 @@ import { Image } from "@shopify/hydrogen"
 import Carousel from "../Common/Carousel"
 import { Link } from "react-router"
 
-function RingCategoryItem({name}: {name: string}) {
+function RingCategoryItem({name}: Readonly<{name: string}>) {
     return (
         <Link to="#" className="group">
             <div className="w-20 md:w-auto rounded-full md:rounded-xl overflow-hidden border-1 border-[#e3e3e3] group-hover:border-black">
@@ -19,7 +19,7 @@ function RingCategory() {
         <Carousel slidesPerView={9} slidesToScroll={4} scrollDuration={60} >
             {new Array(21).fill({name: "Classic Solitaire"}).map((item, index) => {
                 return (
-                    <RingCategoryItem name={item.name}/>
+                    <RingCategoryItem name={item.name} key={`${item.name}-${index}`}/>
                 )
             })}
         </Carousel>

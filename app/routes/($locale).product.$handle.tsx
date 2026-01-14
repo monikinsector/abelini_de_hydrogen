@@ -1,4 +1,3 @@
-import {Image} from '@shopify/hydrogen';
 import ProductDetails from '~/components/Product/ProductDetails';
 import Breadcrumb from '~/components/Common/Breadcrumb';
 import UspIcons from '~/components/Homepage/UspIcons';
@@ -6,7 +5,6 @@ import ProductGallery from '~/components/Product/ProductGallery';
 import ProductSpecs from '~/components/Product/ProductSpecs';
 import TopStickBar from '~/components/Common/TopStickBar';
 import ImageTab from '~/components/Product/ImageTab';
-import Button from '~/components/Common/Button';
 import ProductImagesMobile from '~/components/Product/ProductImageMobile';
 import ReviewBox from '~/components/Product/ReviewBox';
 import RelatedMatchingProducts from '~/components/Product/RelatedMatchingProducts';
@@ -90,8 +88,7 @@ const ProductDetail = (props: Props) => {
             <div className="flex justify-between flex-col md:flex-row  md:items-center gap-2">
               <h2 className="text-2xl capitalize font-medium leading-1.2 text-[#111]">Product Description</h2>
               <p className="text-sm leading-6">
-                <span className="text-[#BF8F5F]! mr-1">Reference Code:</span>
-                RINE3170-LBG
+                <span className="text-[#BF8F5F]! mr-1">Reference Code:</span>{" "}RINE3170-LBG
               </p>
             </div>
 

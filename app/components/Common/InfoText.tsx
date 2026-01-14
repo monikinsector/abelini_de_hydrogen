@@ -42,23 +42,14 @@ const InfoText: React.FC<InfoTextProps> = ({
   }
 
   if (onClick) {
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLSpanElement>) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        onClick();
-      }
-    };
-
     return (
-      <span
-        role="button"
-        tabIndex={0}
+      <button
+        type="button"
         onClick={onClick}
-        onKeyDown={handleKeyDown}
-        className={`${baseClass} cursor-pointer ${className}`}
+        className={`${baseClass} ${className}`}
       >
         {content}
-      </span>
+      </button>
     );
   }
 

@@ -17,7 +17,6 @@ const CategoryPage = (props: Props) => {
   ];
 
   return (
-    <>
     <section className='bg-[#fcfcfc]'>
         
         <Breadcrumb items={breadcrumbs} />
@@ -26,7 +25,6 @@ const CategoryPage = (props: Props) => {
         <RingCategory />
         <ProductsArea />
     </section>
-    </>
   );
 };
 

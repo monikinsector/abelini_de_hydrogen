@@ -110,7 +110,6 @@ const ProductsArea = () => {
           ))}
             </div>
         </div>
-        {/* {a.length} */}
     </>
   );
 };

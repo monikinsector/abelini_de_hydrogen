@@ -63,7 +63,7 @@ export async function action({request, context}: Route.ActionArgs) {
       break;
     }
     case CartForm.ACTIONS.GiftCardCodesRemove: {
-      const appliedGiftCardIds = inputs.giftCardCodes as string[];
+      const appliedGiftCardIds = inputs.giftCardCodes;
       result = await cart.removeGiftCardCodes(appliedGiftCardIds);
       break;
     }
