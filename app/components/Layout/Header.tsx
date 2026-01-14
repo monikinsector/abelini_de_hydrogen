@@ -1,7 +1,7 @@
 import { Image } from "@shopify/hydrogen";
 import { Link } from "react-router";
 
-function Header({globalPhone}: {globalPhone: string}) {
+function Header({globalPhone}: Readonly<{globalPhone: string}>) {
   return (
     <>
       {/* Desktop navigation */}

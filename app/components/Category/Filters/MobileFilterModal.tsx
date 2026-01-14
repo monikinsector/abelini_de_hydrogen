@@ -81,7 +81,7 @@ const MobileFilterModal = ({
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto pb-24">
           {Object.keys(categories).map((category, index) => (
-            <div key={index} className="border-b border-filter-border">
+            <div key={category} className="border-b border-filter-border">
               <h3 className="px-5 pt-5 pb-3 text-[12px] font-regular text-[#111111] tracking-wider uppercase">
                 {category}
               </h3>

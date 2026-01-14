@@ -12,9 +12,6 @@ import {
 } from 'react-router';
 import type {Route} from './+types/root';
 import favicon from '~/assets/favicon.svg';
-// import "@fontsource/open-sans/400.css";
-// import "@fontsource/open-sans/600.css";
-// import "@fontsource/open-sans/700.css";
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import tailwindCss from './styles/tailwind.css?url';
 import carouselCss from './styles/carousel.css?url';
@@ -180,7 +177,6 @@ function loadDeferredData({context}: Route.LoaderArgs) {
 
 export function Layout({children}: {children?: React.ReactNode}) {
   const nonce = useNonce();
-  const {localization} = useRouteLoaderData('root')
   return (
     <html lang="en">
       <head>

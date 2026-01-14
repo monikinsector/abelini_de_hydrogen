@@ -37,7 +37,7 @@ function OptionGrid({
   onSelect: (o: OptionItem) => void;
 }>) {
   return (
-    <div
+    <button
       className="flex gap-4 justify-center overflow-x-auto scrollbar-hide px-3 w-full p-0.5"
       onClick={(e) => e.stopPropagation()}
     >
@@ -56,17 +56,17 @@ function OptionGrid({
           <span className="text-[10px] whitespace-nowrap">{o.label}</span>
         </button>
       ))}
-    </div>
+    </button>
   );
 }
 
 function CaratOption({
   value,
   onChange,
-}: {
+}: Readonly<{
   value: number;
   onChange: (value: number) => void;
-}) {
+}>) {
   return (
     <div
       className="flex flex-col items-center gap-2 w-full px-4"
@@ -195,7 +195,7 @@ export default function SideAccordionSelector() {
 
         {/* BACKDROP */}
         {activeTab && (
-          <div
+          <button
             className="absolute inset-0 z-10"
             onClick={() => setActiveTab(null)}
           />

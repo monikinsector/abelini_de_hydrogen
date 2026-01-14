@@ -63,22 +63,23 @@ export default function DiamondSearch() {
       const isSelected = selectedId === diamond.id;
 
       return (
-        <div
-          key={diamond.id}
-          onClick={() => setSelectedId(diamond.id)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === "Enter" && setSelectedId(diamond.id)}
-          className={`grid grid-cols-[40px_1fr_1fr_1fr_auto]
-            lg:grid-cols-[60px_repeat(5,1fr)_auto_auto]
-            gap-2 p-[5px] text-sm cursor-pointer transition
-            ${
-              isSelected
-                ? "bg-[#f8f4ef] border-b border-[#ef9000]"
-                : "border-b border-[#ccc] hover:bg-[#fafafa]"
-            }
-          `}
-        >
+        <button
+  key={diamond.id}
+  type="button"
+  onClick={() => setSelectedId(diamond.id)}
+  className={`grid grid-cols-[40px_1fr_1fr_1fr_auto]
+    lg:grid-cols-[60px_repeat(5,1fr)_auto_auto]
+    gap-2 p-[5px] text-sm transition
+    cursor-pointer text-left
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ef9000]
+    ${
+      isSelected
+        ? "bg-[#f8f4ef] border-b border-[#ef9000]"
+        : "border-b border-[#ccc] hover:bg-[#fafafa]"
+    }
+  `}
+>
+
           {/* Shape */}
           <Image
             src={diamond.shapeImage}
@@ -143,13 +144,12 @@ export default function DiamondSearch() {
 
           {/* Actions */}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-3 justify-center lg:justify-end lg:ml-6">
-            <a
-              href="#"
+            <button
               onClick={(e) => e.stopPropagation()}
               className="w-full lg:w-auto rounded-full border border-black px-6 lg:px-4 py-1 text-xs text-center hover:bg-gray-100"
             >
               More
-            </a>
+            </button>
 
             <button
               onClick={(e) => e.stopPropagation()}
@@ -158,7 +158,7 @@ export default function DiamondSearch() {
               Select
             </button>
           </div>
-        </div>
+        </button>
       );
     })}
   </div>
