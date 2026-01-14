@@ -1,46 +1,9 @@
 import { Image } from '@shopify/hydrogen';
 import React from 'react';
 import { Link } from 'react-router';
+import { categories } from './Data/homepage.data';
 
 const CategorySection = () => {
-  const categories = [
-    {
-      id: 1,
-      name: 'Engagement Rings',
-      image: '/assets/images/home/rings_300x300.webp',
-      link: '/engagement-rings'
-    },
-    {
-      id: 2,
-      name: 'Wedding Rings',
-      image: '/assets/images/home/wedding_300x300.webp',
-      link: '/wedding-rings'
-    },
-    {
-      id: 3,
-      name: 'Eternity Rings',
-      image: '/assets/images/home/eternity-300x300.webp',
-      link: '/diamond-rings/eternity-rings'
-    },
-    {
-      id: 4,
-      name: 'Necklace',
-      image: '/assets/images/home/pendants.webp',
-      link: '/pendants'
-    },
-    {
-      id: 5,
-      name: 'Earrings',
-      image: '/assets/images/home/earrings.webp',
-      link: '/earrings'
-    },
-    {
-      id: 6,
-      name: 'Bracelets',
-      image: '/assets/images/home/bracelets.webp',
-      link: '/bracelets'
-    }
-  ];
 
   return (
     <section className="flex flex-col">
@@ -55,7 +18,7 @@ const CategorySection = () => {
           </Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-6 gap-6 lg:gap-8">
-          {categories.map((category) => (
+          {categories.map((category: Category) => (
             <Link to={category.link} 
               key={category.id} 
               className="block no-underline text-center transition-transform duration-300 cursor-pointer" 
