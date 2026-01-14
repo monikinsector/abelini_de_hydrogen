@@ -347,3 +347,21 @@ export const labGrownDiamonds: LabGrownDiamonds[] = [
     img: '/assets/images/home/category/bracelet.webp',
   },
 ];
+
+
+/**
+ * home page bespoke section data
+ */
+
+export interface BespokeImage {
+  id: number;
+  image: string;
+  mobileImage: string;
+}
+export const bespokeImages: BespokeImage[] = [
+  {
+    id: 1,
+    image: '/assets/images/bespoke_image_1272x350.webp',
+    mobileImage: '/assets/images/mobile/home/bespoke_image_mobile_325x603.webp',
+  },
+];
