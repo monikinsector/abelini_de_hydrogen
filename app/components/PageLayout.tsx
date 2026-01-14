@@ -1,7 +1,6 @@
 import {Await, Link} from 'react-router';
 import {Suspense, useId} from 'react';
 import type {
-  CartApiQueryFragment,
   FooterQuery,
   HeaderQuery,
 } from 'storefrontapi.generated';
