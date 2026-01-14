@@ -6,23 +6,27 @@ export interface FooterLink {
 }
 
 export interface FooterSection {
+  id: number;
   title: string;
   links: FooterLink[];
 }
 
 export interface SocialMediaLink {
+  id: number;
   label: string;
   href: string;
   icon: string;
 }
 
 export interface CustomerServiceLink {
+  id: number;
   label: string;
   href: string;
   icon: string;
 }
 
 export interface FooterLinkItem {
+  id: number;
   label: string;
   href: string;
   icon: string;
@@ -31,6 +35,7 @@ export interface FooterLinkItem {
 // Footer sections data
 export const FOOTER_SECTIONS: FooterSection[] = [
   {
+    id: 1,
     title: 'About Abelini',
     links: [
       {label: 'About Us', href: '/about-us'},
@@ -42,6 +47,7 @@ export const FOOTER_SECTIONS: FooterSection[] = [
     ],
   },
   {
+    id: 2,
     title: 'Customer Care',
     links: [
       {label: 'Free Delivery', href: '/free-shipping'},
@@ -55,6 +61,7 @@ export const FOOTER_SECTIONS: FooterSection[] = [
     ],
   },
   {
+    id: 3,
     title: 'Explore',
     links: [
       {label: 'Blog', href: '/blog'},
@@ -68,6 +75,7 @@ export const FOOTER_SECTIONS: FooterSection[] = [
     ],
   },
   {
+    id: 4,
     title: 'Guides',
     links: [
       {label: 'Engagement Ring Guide', href: '/blog/engagement-rings-buying-guide'},
@@ -81,6 +89,7 @@ export const FOOTER_SECTIONS: FooterSection[] = [
     ],
   },
   {
+    id: 5,
     title: 'Contact Us',
     links: [
       {label: 'Customer Service', href: '/contact-us'},
@@ -96,21 +105,25 @@ export const FOOTER_SECTIONS: FooterSection[] = [
 // Social media links data
 export const SOCIAL_MEDIA_LINKS: SocialMediaLink[] = [
   {
+    id: 1,
     label: 'Facebook',
     href: 'https://www.facebook.com/abelinijewel/',
     icon: '/assets/images/icons/facebook.svg',
   },
   {
+    id: 2,
     label: 'Pinterest',
     href: 'https://uk.pinterest.com/abelinijewellery/',
     icon: '/assets/images/icons/pinterest.svg',
   },
   {
+    id: 3,
     label: 'Instagram',
     href: 'https://www.instagram.com/abelinijewellery/',
     icon: '/assets/images/icons/instagram.svg',
   },
   {
+    id: 4,
     label: 'YouTube',
     href: 'https://www.youtube.com/channel/UCdfnfdsPrWJF6wJJu7d13qA',
     icon: '/assets/images/icons/youtube.svg',
@@ -120,21 +133,25 @@ export const SOCIAL_MEDIA_LINKS: SocialMediaLink[] = [
 // Customer service links data
 export const CUSTOMER_SERVICE_LINKS: CustomerServiceLink[] = [
   {
+    id: 1,
     label: 'Store',
     href: '/book-appointment',
     icon: '/assets/images/icons/store.svg',
   },
   {
+    id: 2,
     label: 'Live Chat',
     href: '/javascript:$zopim.livechat.window.show();',
     icon: '/assets/images/icons/chat.svg',
   },
   {
+    id: 3,
     label: 'Call Us',
     href: 'tel:+442038051270',
     icon: '/assets/images/icons/call-us.svg',
   },
   {
+    id: 4,
     label: 'Email Us',
     href: 'mailto:sales@abelini.com',
     icon: '/assets/images/icons/email.svg',
@@ -144,21 +161,25 @@ export const CUSTOMER_SERVICE_LINKS: CustomerServiceLink[] = [
 // Footer legal links data
 export const FOOTER_LINKS: FooterLinkItem[] = [
   {
+    id: 1,
     label: 'Cookie Policy',
     href: '/cookie-policy',
     icon: '/assets/images/icons/cookie.svg',
   },
   {
+    id: 2,
     label: 'Privacy Notice',
     href: '/privacy-policy',
     icon: '/assets/images/icons/privacy.svg',
   },
   {
+    id: 3,
     label: 'Company Details',
     href: '/company-details',
     icon: '/assets/images/icons/company.svg',
   },
   {
+    id: 4,
     label: 'Sitemap',
     href: '/sitemap',
     icon: '/assets/images/icons/sitemap.svg',
