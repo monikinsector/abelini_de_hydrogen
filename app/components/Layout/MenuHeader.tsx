@@ -11,6 +11,66 @@ import { Link } from "react-router";
 import { Image } from "@shopify/hydrogen";
 import { SubMenuPanel } from "./SubMenuPanel";
 
+const renderNavItem = ({
+  item,
+  shouldRenderLink,
+  isExternalLink,
+  link,
+  setActiveSubmenu,
+}: {
+  item: any;
+  shouldRenderLink: boolean;
+  isExternalLink: boolean;
+  link: string;
+  setActiveSubmenu: (item: any) => void;
+}) => {
+  const className =
+    "w-full flex items-center justify-between px-2 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left";
+
+  if (shouldRenderLink) {
+    const linkProps = isExternalLink
+      ? {
+        to: link,
+        target: "_blank",
+        rel: "noopener noreferrer",
+      }
+      : {
+        to: item.link,
+      };
+
+    return (
+      <Link {...linkProps} className={className}>
+        <span className="text-sm font-medium tracking-wide text-gray-800">
+          {item.label}
+        </span>
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        if (item.hasSubmenu) {
+          setActiveSubmenu(item);
+        }
+      }}
+      className={className}
+    >
+      <span className="text-sm font-medium tracking-wide text-gray-800">
+        {item.label}
+      </span>
+      {item.hasSubmenu && (
+        <Image
+          src="/assets/images/icons/c_right.svg"
+          alt="Right"
+          width={20}
+        />
+      )}
+    </button>
+  );
+};
+
 
 function MenuHeader() {
   const ref = useRef<HTMLDivElement>(null);
@@ -264,56 +324,63 @@ function MobileHeaderNav({
           ))}
         </div>
         <div className="overflow-y-auto overscroll-contain h-[calc(100%-100px)]" style={{ WebkitOverflowScrolling: 'touch' }}>
-          {menuItems.map((item, index) => {
+          {menuItems.map((item) => {
             const link = (item as any).link;
-            const isExternalLink = typeof link === 'string' && link.startsWith('http');
+            const isExternalLink =
+              typeof link === "string" && link.startsWith("http");
             const shouldRenderLink = link && !item.hasSubmenu;
 
+            const className =
+              "w-full flex items-center justify-between px-2 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left";
 
-            return (
-              <div key={item.label}>
-                {shouldRenderLink ? (
-                  isExternalLink ? (
-                    <Link
-                      to={link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full flex items-center justify-between px-2 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
-                    >
-                      <span className="text-sm font-medium tracking-wide text-gray-800">
-                        {item.label}
-                      </span>
-                    </Link>
-                  ) : (
-                    <Link
-                      to={(item as any).link}
-                      className="w-full flex items-center justify-between px-2 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
-                    >
-                      <span className="text-sm font-medium tracking-wide text-gray-800">
-                        {item.label}
-                      </span>
-                    </Link>
-                  )
-                ) : (
-                  <button
-                    onClick={() => {
-                      if (item.hasSubmenu) {
-                        setActiveSubmenu(item);
-                      }
-                    }}
-                    className="w-full flex items-center justify-between px-2 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
-                  >
+            if (shouldRenderLink) {
+              const linkProps = isExternalLink
+                ? {
+                  to: link,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                }
+                : {
+                  to: link,
+                };
+
+              return (
+                <div key={item.label}>
+                  <Link {...linkProps} className={className}>
                     <span className="text-sm font-medium tracking-wide text-gray-800">
                       {item.label}
                     </span>
-                    {item.hasSubmenu && (
-                      <Image src="/assets/images/icons/c_right.svg" alt="Right" width={20} />
-                    )}
-                  </button>
-                )}
+                  </Link>
+                </div>
+              );
+            }
+
+            return (
+              <div key={item.label}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (item.hasSubmenu) {
+                      setActiveSubmenu(item);
+                    }
+                  }}
+                  className={className}
+                >
+                  <span className="text-sm font-medium tracking-wide text-gray-800">
+                    {item.label}
+                  </span>
+                  {item.hasSubmenu && (
+                    <Image
+                      src="/assets/images/icons/c_right.svg"
+                      alt="Right"
+                      width={20}
+                    />
+                  )}
+                </button>
               </div>
             );
           })}
+
 
           {/* Contact Information Section */}
           <div className="bg-gray-50 px-4 py-5 border-b border-gray-100">
@@ -447,7 +514,7 @@ function MenuDropdown({ totalCols, data, leftBorderFromIndex, lastColDoubleSpace
           const columnNumber = +(item.split("-")[1]);
           const colSpanValue = (lastColDoubleSpace && index == (Object.keys(data).length - 1)) ? 2 : columnNumber;
           return (
-            <div key={`item-${index}`} className={`mt-2  col-span-${colSpanValue} pl-4`} style={{
+            <div key={`${item}`} className={`mt-2  col-span-${colSpanValue} pl-4`} style={{
               borderLeft: index >= leftBorderFromIndex ? "1px solid #dee2e6" : ""
             }}>
               {data[item].map((d: HeaderItem, idx: number) => {

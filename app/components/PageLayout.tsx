@@ -30,10 +30,8 @@ interface HeroBannerTypes {
 }
 
 interface PageLayoutProps {
-  cart: Promise<CartApiQueryFragment | null>;
   footer: Promise<FooterQuery | null>;
   header: HeaderQuery;
-  isLoggedIn: Promise<boolean>;
   publicStoreDomain: string;
   children?: React.ReactNode;
   heroBanner: HeroBannerTypes;
@@ -57,7 +55,6 @@ export function PageLayout({
     url: string;
     altText: string;
   } => {
-    // return { key: "", value: "" };
     return (type?.[key as keyof typeof type]) as string || "";
   }
   return (
