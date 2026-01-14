@@ -18,6 +18,17 @@ import FeatureHeader from './Layout/FeatureHeader';
 import Header from './Layout/Header';
 import MenuHeader from './Layout/MenuHeader';
 
+interface MetafieldTypes {
+  [key: string]: string;
+}
+
+interface HeroBannerTypes {
+  [key: string]: string | {
+    url: string;
+    altText: string;
+  };
+}
+
 interface PageLayoutProps {
   cart: Promise<CartApiQueryFragment | null>;
   footer: Promise<FooterQuery | null>;
@@ -25,24 +36,36 @@ interface PageLayoutProps {
   isLoggedIn: Promise<boolean>;
   publicStoreDomain: string;
   children?: React.ReactNode;
+  heroBanner: HeroBannerTypes;
+  metafields: MetafieldTypes;
+}
+
+export interface FixedTextFormat {
+  key: string;
+  value: string;
 }
 
 export function PageLayout({
-  cart,
+  heroBanner,
+  metafields,
   children = null,
   footer,
   header,
-  isLoggedIn,
   publicStoreDomain,
 }: PageLayoutProps) {
+  const returnSpecificData = (type: object, key: string): string | {
+    url: string;
+    altText: string;
+  } => {
+    // return { key: "", value: "" };
+    return (type?.[key as keyof typeof type]) as string || "";
+  }
   return (
     <Aside.Provider>
-      {/* <CartAside cart={cart} /> */}
-      {/* <SearchAside /> */}
-      {/* <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} /> */}
-      <SaleBar />
-      <FeatureHeader />
-      <Header/>
+      <SaleBar text={returnSpecificData(metafields, 'announcement_bar_text_desktop') as string} saleEndTime={returnSpecificData(heroBanner, 'sale_finish_time') as string} link={returnSpecificData(metafields, 'announcement_bar_link') as string}/>
+
+      <FeatureHeader trustpilotText={returnSpecificData(metafields, 'trustpilot_text') as string}/>
+      <Header globalPhone={returnSpecificData(metafields, 'global_phone') as string}/>
       <MenuHeader />
 
       <main>{children}</main>

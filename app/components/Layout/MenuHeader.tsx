@@ -9,8 +9,6 @@ import type {
 import { dataForNavigation, menuItems } from "./header.data";
 import { Link } from "react-router";
 import { Image } from "@shopify/hydrogen";
-import SaleBar from "./Sale";
-import FeatureHeader from "./FeatureHeader";
 import { SubMenuPanel } from "./SubMenuPanel";
 
 

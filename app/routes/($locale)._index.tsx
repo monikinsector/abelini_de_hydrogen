@@ -16,15 +16,49 @@ export const meta: Route.MetaFunction = () => {
   return [{title: 'Abelini - Buy Diamond Jewellery Online | UK Jewellers - Abelini'}];
 };
 
+
 export async function loader({context}: Route.LoaderArgs) {
-  return {};
+  const {storefront} = context;
+  
+  // Fetch market metafields to get hero banner ID
+  const marketData = await storefront.query(LOCALIZATION_MARKET_QUERY);
+  const market = marketData.localization.market;
+  const metafields: Record<string, string | null> = Object.fromEntries(
+    (market.metafields || [])
+      .filter((m: { key: string; value: string | null } | null | undefined): m is { key: string; value: string | null } => m !== null && m !== undefined)
+      .map((m: { key: string; value: string | null }) => [m.key, m.value])
+  );
+  
+  const heroBannerId = (JSON.parse(metafields.home_banner || '[]') as string[])[0] as string | undefined;
+  
+  let heroBannerMetaobject = null;
+  if (heroBannerId) {
+    const res = await storefront.query(METAOBJECT_QUERY, {
+      variables: { id: heroBannerId },
+    });
+    
+    if (res?.metaobject?.fields) {
+      // Transform fields array into key-value object
+      heroBannerMetaobject = Object.fromEntries(
+        res.metaobject.fields.map((field: any) => [
+          field.key,
+          field.reference?.image ?? field.value
+        ])
+      );
+    }
+  }
+
+  return {
+    heroBannerMetaobject,
+  };
 }
 
 export default function Homepage() {
+  const {heroBannerMetaobject} = useLoaderData<typeof loader>();
   
   return (
     <>
-    <HeroBanner />
+    <HeroBanner data={heroBannerMetaobject} />
     <CategorySection />
     <Review />
     <SpotlightSection />
@@ -38,3 +72,42 @@ export default function Homepage() {
     </>
   );
 }
+
+const LOCALIZATION_MARKET_QUERY = `#graphql
+  query LocalizationMarket {
+    localization {
+      market {
+        metafields(identifiers: [
+          {namespace: "custom", key: "home_banner"}
+        ]) {
+          key
+          value
+        }
+      }
+    }
+  }
+`;
+
+
+const METAOBJECT_QUERY = `#graphql
+  query Metaobject($id: ID!) {
+    metaobject(id: $id) {
+      id
+      type
+      fields {
+        key
+        value
+        reference {
+          ... on MediaImage {
+            image {
+              url
+              altText
+              width
+              height
+            }
+          }
+        }
+      }
+    }
+  }
+`;
