@@ -71,7 +71,7 @@ export default function DiamondSearch() {
     lg:grid-cols-[60px_repeat(5,1fr)_auto_auto]
     gap-2 p-[5px] text-sm transition
     cursor-pointer text-left
-    focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ef9000]
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ef9000] w-full
     ${
       isSelected
         ? "bg-[#f8f4ef] border-b border-[#ef9000]"
@@ -146,14 +146,14 @@ export default function DiamondSearch() {
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-3 justify-center lg:justify-end lg:ml-6">
             <button
               onClick={(e) => e.stopPropagation()}
-              className="w-full lg:w-auto rounded-full border border-black px-6 lg:px-4 py-1 text-xs text-center hover:bg-gray-100"
+              className="w-full lg:w-auto rounded-full border border-black px-6 lg:px-4 py-1 text-xs text-center hover:bg-black hover:text-white cursor-pointer"
             >
               More
             </button>
 
             <button
               onClick={(e) => e.stopPropagation()}
-              className="w-full lg:w-auto rounded-full bg-black px-6 lg:px-4 py-1 text-sm text-white hover:opacity-90"
+              className="w-full lg:w-auto rounded-full bg-black px-6 lg:px-4 py-1 text-sm text-white hover:opacity-90 hover:bg-white hover:text-black border border-black cursor-pointer"
             >
               Select
             </button>
@@ -172,7 +172,7 @@ export default function DiamondSearch() {
             key={n}
             onClick={() => setCurrentPage(n)}
             className={`px-3 py-1  ${
-              currentPage === n ? "bg-black text-white" : "hover:bg-gray-100"
+              currentPage === n ? "bg-black text-white" : "hover:bg-black hover:text-white cursor-pointer hover:ml-2 transition ease-in"
             }`}
           >
             {n}

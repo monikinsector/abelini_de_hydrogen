@@ -134,10 +134,21 @@ export const CustomizationPanel: React.FC<{
           <div className="flex items-center justify-between">
             <div className="text-sm leading-4 flex gap-2 items-center">
               <span>Carat</span>
-              <InfoText text="How to Choose?" href="/ring-size-guide" />
+              {tab === 'custom' ? (
+                <InfoText text="How to Choose?" href="/ring-size-guide" />
+              ) : null}
             </div>
           </div>
-          <RangeSlider />
+          {tab === 'custom' ? (
+            <RangeSlider key="single" value={1.5} onChange={(v) => console.log(v)} />
+          ) : (
+            <RangeSlider
+              key="double"
+              variant="double"
+              rangeValue={[0.2, 10]}
+              onRangeChange={(v) => console.log(v)}
+            />
+          )}
         </div>
 
         {/* Clarity / Colour / Cut etc. (use TabOptions) */}
