@@ -139,7 +139,7 @@ export const spotlightLogos: SpotlightLogo[] = [
  * home page usp section data
  */
 
-export interface uspItem {
+export interface UspItem {
   id: number;
   target: string;
   src: string;
@@ -148,7 +148,7 @@ export interface uspItem {
 }
 
 
-export const uspItems: uspItem[] = [
+export const uspItems: UspItem[] = [
   {
     id: 1,
     target: '#free_resizing',

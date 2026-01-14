@@ -1,5 +1,4 @@
 import {Image, useOptimisticCart} from '@shopify/hydrogen';
-import {Link} from 'react-router';
 import {useState} from 'react';
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
@@ -52,7 +51,6 @@ function CartEmpty({
   hidden: boolean;
   layout?: CartMainProps['layout'];
 }) {
-  const {close} = useAside();
   const [showPromoInput, setShowPromoInput] = useState(false);
   
   if (hidden) return null;

@@ -1,5 +1,5 @@
-import {Image} from '@shopify/hydrogen';
-import React, {useState} from 'react';
+import { Image } from '@shopify/hydrogen';
+import React, { useState } from 'react';
 import InfoText from '../Common/InfoText';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
   }) => void;
 };
 
-const ProductOptions = ({onChange}: Props) => {
+const ProductOptions = ({ onChange }: Props) => {
   const groups = [
     {
       key: 'setting',
@@ -93,7 +93,7 @@ const ProductOptions = ({onChange}: Props) => {
 
   const select = (groupKey: string, id: string) => {
     setSelected((prev) => {
-      const next = {...prev, [groupKey]: id};
+      const next = { ...prev, [groupKey]: id };
       setTimeout(emitChange, 0);
       return next;
     });
@@ -106,69 +106,71 @@ const ProductOptions = ({onChange}: Props) => {
         id="div_setting_style"
         className="pr-2 lg:pr-3 customize-detail-block product-option-block flex "
       >
-        {groups.map((group) => (
-          <div
-            key={group.key}
-            id={`div_${group.key}`}
-            className={`${
-              group.key === 'setting'
-                ? 'pr-2 lg:pr-3'
-                : group.key === 'band'
-                  ? 'px-2 lg:px-3 border-l border-r border-[#d3d2d2]'
-                  : 'pl-2 lg:pl-3'
-            } customize-detail-block product-option-block flex-1`}
-            // className={`${group.key === 'setting' ? 'pr-2 lg:pr-3' : group.key === 'band' ? 'px-2 lg:px-3' : 'pl-2 lg:pl-3'} customize-detail-block product-option-block flex-1`}
-          >
-            <span className="text-black option_text text-sm leading-4">
-              <span>{group.label}</span>
-              {group.info && (
-                <InfoText text="How to Choose?" href="/ring-size-guide" />
-              )}
-            </span>
+        {groups.map((group) => {
+          let spacingClass = 'pl-2 lg:pl-3';
 
-            <ul className="flex m-0 mt-2">
-              {group.options.map((opt) => (
-                <li
-                  key={opt.id}
-                  className="w-auto px-1 md:inline-block customizeoption-label optvaluer"
-                  id={opt.id}
-                >
-                  <button
-                    type="button"
-                    title={opt.title}
-                    onClick={() => select(group.key, opt.id)}
-                    className={`rounded-full option_square text-center flex items-center justify-center transition-transform duration-150 focus:outline-none ${
-                      selected[group.key] === opt.id
-                        ? 'ring-1 ring-[#ef9000] bg-[#f8f4ef] cursor-pointer scale-105'
-                        : ''
-                    }`}
+          if (group.key === 'setting') {
+            spacingClass = 'pr-2 lg:pr-3';
+          } else if (group.key === 'band') {
+            spacingClass = 'px-2 lg:px-3 border-l border-r border-[#d3d2d2]';
+          }
+
+          return (
+            <div
+              key={group.key}
+              id={`div_${group.key}`}
+              className={`${spacingClass} customize-detail-block product-option-block flex-1`}
+            >
+              <span className="text-black option_text text-sm leading-4">
+                <span>{group.label}</span>
+                {group.info && (
+                  <InfoText text="How to Choose?" href="/ring-size-guide" />
+                )}
+              </span>
+
+              <ul className="flex m-0 mt-2">
+                {group.options.map((opt) => (
+                  <li
+                    key={opt.id}
+                    className="w-auto px-1 md:inline-block customizeoption-label optvaluer"
+                    id={opt.id}
                   >
-                    <Image
-                      src={opt.img}
-                      alt={opt.title}
-                      className="max-w-full h-auto m-auto option_img_45"
-                      width={45}
-                      height={45}
-                      loading="lazy"
-                    />
-                  </button>
-                  <span className="block text-center option_name text-xs leading-4">
-                    {opt.title}
-                  </span>
-                </li>
-              ))}
-            </ul>
+                    <button
+                      type="button"
+                      title={opt.title}
+                      onClick={() => select(group.key, opt.id)}
+                      className={`rounded-full option_square text-center flex items-center justify-center transition-transform duration-150 focus:outline-none ${selected[group.key] === opt.id
+                          ? 'ring-1 ring-[#ef9000] bg-[#f8f4ef] cursor-pointer scale-105'
+                          : ''
+                        }`}
+                    >
+                      <Image
+                        src={opt.img}
+                        alt={opt.title}
+                        className="max-w-full h-auto m-auto option_img_45"
+                        width={45}
+                        height={45}
+                        loading="lazy"
+                      />
+                    </button>
+                    <span className="block text-center option_name text-xs leading-4">
+                      {opt.title}
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-            <input
-              type="hidden"
-              name={group.name}
-              value={
-                group.options.find((s) => s.id === selected[group.key])
-                  ?.inputValue ?? ''
-              }
-            />
-          </div>
-        ))}
+              <input
+                type="hidden"
+                name={group.name}
+                value={
+                  group.options.find((s) => s.id === selected[group.key])
+                    ?.inputValue ?? ''
+                }
+              />
+            </div>
+          )
+        })}
       </div>
     </div>
   );

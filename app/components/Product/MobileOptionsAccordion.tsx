@@ -4,45 +4,20 @@ import RangeSlider from '../Common/RangeSlider';
 
 type TabKey = 'metal' | 'stone' | 'shape' | 'carat' | null;
 
-type OptionItem = {
-  label: string;
-  value: string;
-  image: string;
-};
-
-const METAL_OPTIONS: OptionItem[] = [
-  { label: 'White Gold', value: 'white', image: '/assets/images/icons/white-gold.svg' },
-  { label: 'Yellow Gold', value: 'yellow', image: '/assets/images/icons/white-gold.svg' },
-  { label: 'Rose Gold', value: 'rose', image: '/assets/images/icons/rose-gold.svg' },
-];
-
-const STONE_OPTIONS: OptionItem[] = [
-  { label: 'Moissanite', value: 'moissanite', image: '/assets/images/icons/di.svg' },
-  { label: 'Lab Diamond', value: 'lab', image: '/assets/images/icons/di.svg' },
-  { label: 'Natural Diamond', value: 'natural', image: '/assets/images/icons/di.svg' },
-];
-
-const SHAPE_OPTIONS: OptionItem[] = [
-  { label: 'Round', value: 'round', image: '/assets/images/icons/rnd.svg' },
-  { label: 'Oval', value: 'oval', image: '/assets/images/icons/rnd.svg' },
-  { label: 'Pear', value: 'pear', image: '/assets/images/icons/rnd.svg' },
-  { label: 'Heart', value: 'heart', image: '/assets/images/icons/rnd.svg' },
-];
-
 function TabItem({
   item,
   onClick,
   isLast,
-}: {
+}: Readonly<{
   item: OptionItem | { label: string; image?: string };
   onClick: () => void;
   isLast?: boolean;
-}) {
+}>) {
   return (
     <button
       onClick={onClick}
       className={`flex flex-col items-center justify-center flex-1 px-1 py-1 gap-1
-      ${!isLast ? 'border-r border-gray-300' : ''}`}
+      ${isLast ? "" : 'border-r border-gray-300'}`}
     >
       {item.image && (
         <Image src={item.image} alt={item.label} width={28} height={28} />
@@ -56,11 +31,11 @@ function OptionGrid({
   options,
   selected,
   onSelect,
-}: {
+}: Readonly<{
   options: OptionItem[];
   selected: OptionItem;
   onSelect: (o: OptionItem) => void;
-}) {
+}>) {
   return (
     <div
       className="flex gap-4 justify-center overflow-x-auto scrollbar-hide px-3 w-full p-0.5"
@@ -108,6 +83,32 @@ function CaratOption({
     </div>
   );
 }
+
+
+type OptionItem = {
+  label: string;
+  value: string;
+  image: string;
+};
+
+const METAL_OPTIONS: OptionItem[] = [
+  { label: 'White Gold', value: 'white', image: '/assets/images/icons/white-gold.svg' },
+  { label: 'Yellow Gold', value: 'yellow', image: '/assets/images/icons/white-gold.svg' },
+  { label: 'Rose Gold', value: 'rose', image: '/assets/images/icons/rose-gold.svg' },
+];
+
+const STONE_OPTIONS: OptionItem[] = [
+  { label: 'Moissanite', value: 'moissanite', image: '/assets/images/icons/di.svg' },
+  { label: 'Lab Diamond', value: 'lab', image: '/assets/images/icons/di.svg' },
+  { label: 'Natural Diamond', value: 'natural', image: '/assets/images/icons/di.svg' },
+];
+
+const SHAPE_OPTIONS: OptionItem[] = [
+  { label: 'Round', value: 'round', image: '/assets/images/icons/rnd.svg' },
+  { label: 'Oval', value: 'oval', image: '/assets/images/icons/rnd.svg' },
+  { label: 'Pear', value: 'pear', image: '/assets/images/icons/rnd.svg' },
+  { label: 'Heart', value: 'heart', image: '/assets/images/icons/rnd.svg' },
+];
 
 export default function SideAccordionSelector() {
   const [activeTab, setActiveTab] = useState<TabKey>(null);

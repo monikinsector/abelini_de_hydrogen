@@ -48,7 +48,7 @@ const Instagram: React.FC = () => {
         <div className="flex flex-nowrap lg:gap-10 gap-2 items-center justify-around overflow-x-scroll [&::-webkit-scrollbar]:hidden">
           {InstagramItems.map((item, index) => (
             <Image
-              key={index}
+              key={`${item.alt}-${index}`}
               src={item.src}
               alt={item.alt}
               width={250}

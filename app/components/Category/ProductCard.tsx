@@ -35,7 +35,6 @@ const ProductCard = ({
   onQuickView,
   onWishlist,
 }: RingCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
   const [activeMetal, setActiveMetal] = useState(selectedMetal || metals[0]?.name);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
@@ -127,7 +126,7 @@ const ProductCard = ({
           <div className="hidden group-hover:flex justify-center gap-2 animate-fade-in">
             {thumbnails.slice(0, 4).map((thumb, index) => (
               <div
-                key={index}
+                key={thumb}
                 className={
                   "w-10 h-10 rounded-lg border-1 overflow-hidden cursor-pointer transition-colors hover:border-[#c9a96e] border-gray-200"}
               >

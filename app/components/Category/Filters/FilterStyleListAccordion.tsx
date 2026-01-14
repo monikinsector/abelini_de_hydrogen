@@ -30,7 +30,7 @@ function FilterStyleListAccordion() {
 						<div className="pb-4">
 							<ul className="space-y-2">
 								{styles[open].slice(0, seeMore ? Infinity : 4).map((item, index) => (
-									<li key={index}>
+									<li key={item.label}>
 										<label htmlFor={`radio-${item.label}`} className="cursor-pointer flex items-center gap-1">
 											<input
 												id={`radio-${item.label}`}

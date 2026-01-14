@@ -1,11 +1,10 @@
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect} from 'react';
 import {Image} from '@shopify/hydrogen';
 import {Link} from 'react-router';
 import useEmblaCarousel from 'embla-carousel-react';
-import { engagementRings } from './Data/homepage.data';
-import { labGrownDiamonds } from './Data/homepage.data';
+import { engagementRings, labGrownDiamonds } from './Data/homepage.data';
 
-export function ImageWithProductSlider({rings}: {rings: any[]}) {
+export function ImageWithProductSlider({rings}: Readonly<{rings: any[]}>) {
   const [emblaRef, emblaApi] = useEmblaCarousel({loop: false});
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
@@ -36,7 +35,7 @@ export function ImageWithProductSlider({rings}: {rings: any[]}) {
     >
       <div className="flex lg:w-[calc(100%-120px)] w-full mx-auto">
         {rings.map((ring, index) => (
-          <div className="flex-none lg:w-1/3 w-1/2 min-w-0 relative px-2">
+          <div className="flex-none lg:w-1/3 w-1/2 min-w-0 relative px-2" key={ring.id}>
             <Image
               src={ring.img}
               alt={ring.name}
