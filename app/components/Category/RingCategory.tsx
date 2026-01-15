@@ -1,6 +1,7 @@
 import { Image } from "@shopify/hydrogen"
 import Carousel from "../Common/Carousel"
 import { Link } from "react-router"
+import { ringCategories } from "./Data/category.data"
 
 function RingCategoryItem({name}: Readonly<{name: string}>) {
     return (
@@ -17,7 +18,7 @@ function RingCategory() {
   return (
     <div className="mx-6 my-4 mb-12">
         <Carousel slidesPerView={9} slidesToScroll={4} scrollDuration={60} >
-            {new Array(21).fill({name: "Classic Solitaire"}).map((item, index) => {
+            {ringCategories.map((item, index) => {
                 return (
                     <RingCategoryItem name={item.name} key={`${item.name}-${index}`}/>
                 )
