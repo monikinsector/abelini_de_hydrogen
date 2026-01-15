@@ -35,7 +35,7 @@ export function ImageWithProductSlider({rings}: Readonly<{rings: any[]}>) {
     >
       <div className="flex lg:w-[calc(100%-120px)] w-full mx-auto">
         {rings.map((ring, index) => (
-          <div className="flex-none lg:w-1/3 w-1/2 min-w-0 relative px-2" key={ring.id}>
+          <div className="flex-none lg:w-1/4 w-1/2 min-w-0 relative px-2" key={ring.id}>
             <Image
               src={ring.img}
               alt={ring.name}
@@ -100,13 +100,13 @@ export function ImageWithProductSlider({rings}: Readonly<{rings: any[]}>) {
 
 export default function AbeliniOccasion() {
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-col px-0 lg:px-6">
       <div className="flex flex-col container-fluid my-6">
-        <div className="text-center my-6">
+        <div className="text-center mt-6 lg:mb-28 mb-12">
           <p className="mb-3 text-p-14 font-light text-primary tracking-wider">
             OUR JEWELLERY
           </p>
-          <h2 className="lg:text-h2 text-h2-m lg:leading-h2 leading-h2-m font-bold text-primary mb-3 tracking-wider">
+          <h2 className="lg:text-h2 text-h2-m lg:leading-h2 leading-h2-m font-bold text-primary tracking-wider">
             Abelini For
             <br />
             Any Occasion
@@ -125,17 +125,17 @@ export default function AbeliniOccasion() {
                 <Image
                   src="/assets/images/mobile/home/most_loved_engagement_mobile_1-450x660.webp"
                   alt="Engagement Rings"
-                  className="object-cover lg:hidden block "
+                  className="object-cover lg:hidden block"
                 />
               </div>
-              <div className="absolute lg:top-1/2 lg:w-[50%] lg:-translate-y-1/2 lg:mr-[60px] lg:bottom-[unset] bottom-0 right-0 w-full lg:p-0 p-8">
+              <div className="absolute lg:top-1/2 lg:w-[300px] lg:-translate-y-1/2 lg:mr-[60px] lg:bottom-[unset] bottom-0 right-0 w-full lg:p-0 p-8">
                 <h3 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary mb-3 tracking-wider">
                   Most Loved
                   <br />
                   Engagement Rings
                 </h3>
 
-                <p className="text-p-14 font-light text-primary mb-6 tracking-wider">
+                <p className="text-p-13 font-light text-primary mb-6 tracking-wider">
                   Our engagement ring collection includes meticulously crafted,
                   elegant rings that symbolize love and commitment. From classic
                   solitaires to intricate halos and vintage-inspired pieces are
@@ -143,16 +143,13 @@ export default function AbeliniOccasion() {
                   diamonds and gemstones.
                 </p>
 
-                <Link
-                  to="engagement-rings"
-                  className="flex btn-transparent lg:w-fit justify-center"
-                >
+                <Link to="engagement-rings" className="flex btn-transparent lg:w-fit justify-center">
                   <span>Engagement Rings</span>
                 </Link>
               </div>
             </div>
 
-            <div className="w-[100%] lg:py-12 py-2 relative lg:ml-[48px]">
+            <div className="w-full lg:py-12 py-2 relative lg:ml-[48px]">
               <ImageWithProductSlider rings={engagementRings} />
             </div>
           </div>
@@ -162,7 +159,7 @@ export default function AbeliniOccasion() {
               src="/assets/images/home/young_woman_709x551.webp"
               loading="lazy"
               alt="Model wearing jewelry"
-              className="object-cover w-[100%] h-[100%]"
+              className="object-cover w-full h-full"
             />
           </div>
         </div>
@@ -195,14 +192,14 @@ export default function AbeliniOccasion() {
                 />
               </div>
 
-              <div className="absolute lg:top-1/2 lg:w-[50%] lg:-translate-y-1/2 lg:ml-[60px] lg:bottom-[unset] bottom-0 left-0  w-full lg:p-0 p-8">
+              <div className="absolute lg:top-1/2 lg:w-[340px] lg:-translate-y-1/2 lg:ml-[60px] lg:bottom-[unset] bottom-0 left-0  w-full lg:p-0 p-8">
                 <h3 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary mb-3 tracking-wider flex justify-left">
                   In Trend
                   <br />
                   Lab Grown Diamonds
                 </h3>
 
-                <p className="text-p-14 font-light text-primary mb-6 tracking-wider">
+                <p className="text-p-13 font-light text-primary mb-6 tracking-wider">
                   Embrace Brilliant Savings with Trending Lab Grown Diamond
                   Jewellery! Enjoy the allure of natural diamonds at a fraction
                   of the cost. Our collection offers captivating beauty,
