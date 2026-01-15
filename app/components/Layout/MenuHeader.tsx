@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import type {
   HeaderData,
   HeaderTypes,
@@ -10,73 +10,16 @@ import { dataForNavigation, menuItems } from "./header.data";
 import { Link } from "react-router";
 import { Image } from "@shopify/hydrogen";
 import { SubMenuPanel } from "./SubMenuPanel";
-
-const renderNavItem = ({
-  item,
-  shouldRenderLink,
-  isExternalLink,
-  link,
-  setActiveSubmenu,
-}: {
-  item: any;
-  shouldRenderLink: boolean;
-  isExternalLink: boolean;
-  link: string;
-  setActiveSubmenu: (item: any) => void;
-}) => {
-  const className =
-    "w-full flex items-center justify-between px-2 py-5 border-b border-gray-100 hover:bg-gray-50 transition-colors text-left";
-
-  if (shouldRenderLink) {
-    const linkProps = isExternalLink
-      ? {
-        to: link,
-        target: "_blank",
-        rel: "noopener noreferrer",
-      }
-      : {
-        to: item.link,
-      };
-
-    return (
-      <Link {...linkProps} className={className}>
-        <span className="text-sm font-medium tracking-wide text-gray-800">
-          {item.label}
-        </span>
-      </Link>
-    );
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={() => {
-        if (item.hasSubmenu) {
-          setActiveSubmenu(item);
-        }
-      }}
-      className={className}
-    >
-      <span className="text-sm font-medium tracking-wide text-gray-800">
-        {item.label}
-      </span>
-      {item.hasSubmenu && (
-        <Image
-          src="/assets/images/icons/c_right.svg"
-          alt="Right"
-          width={20}
-        />
-      )}
-    </button>
-  );
-};
+import { cn } from "~/lib/utils";
+import TopbarIconContent from "../Common/TopbarIconContent";
 
 
-function MenuHeader() {
-  const ref = useRef<HTMLDivElement>(null);
+function MenuHeader({globalPhone}: Readonly<{globalPhone: string}>) {
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const [hoverEntered, setHoverEntered] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isNavbarStuck, setIsNavbarStuck] = useState(false);
 
   const headerLinks = [
     "Engagement Rings",
@@ -89,41 +32,53 @@ function MenuHeader() {
     "Inspiration"
   ]
 
-  useLayoutEffect(() => {
-    if (!ref.current) return;
+  // Detect when navbar becomes stuck (fixed to top)
+  useEffect(() => {
+    if (!sentinelRef.current) return;
 
-    // Height of the sale header - top-2 = 2 rem = 32px
-    const TOP_OFFSET_PX = 32;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // When sentinel is not visible (scrolled past), navbar is stuck
+        setIsNavbarStuck(!entry.isIntersecting);
+      },
+      {
+        threshold: 0,
+        rootMargin: '0px 0px 0px 0px',
+      }
+    );
 
-    const update = (height: number) => {
-      console.log("height + TOP_OFFSET_PX", height + TOP_OFFSET_PX)
-      document.documentElement.style.setProperty(
-        "--app-header-height",
-        `${height + TOP_OFFSET_PX}px`
-      );
-    };
-
-    update(ref.current.offsetHeight);
-
-    const ro = new ResizeObserver(([entry]) => {
-      update(entry.contentRect.height);
-    });
-
-    ro.observe(ref.current);
-    return () => ro.disconnect();
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
   }, []);
 
 
   return (
     <>
+      {/* Sentinel element to detect when navbar becomes stuck - placed just before nav */}
+      <div 
+        ref={sentinelRef} 
+        className="md:block hidden h-px pointer-events-none"
+        aria-hidden="true"
+      />
+      
       {/* Desktop navigation */}
-      <nav ref={ref} className='sticky top-8 z-99 md:block hidden relative bg-white border-t-1 border-t-gray-300'>
+      <nav className='sticky top-8 z-99 md:block hidden relative bg-white border-t-1 border-t-gray-300'>
         <ul className='flex items-center justify-between relative bg-white md:px-10 lg:px-12'>
 
+          {isNavbarStuck &&
+            <li className="flex items-center gap-4">
+              <TopbarIconContent data={["Phone", "Location", "Abelini"]} isDesktop={false} phone={globalPhone}/>
+            </li>
+          }
           {headerLinks.map((item, index) => {
             return (
               <div key={item} className="mx-auto group" onMouseLeave={() => setHoverEntered("")}>
-                <li onMouseEnter={() => setHoverEntered(item)} className='px-4 h-full text-[1rem] py-5 px-3 border-b-2 border-b-white hover:border-b-2 hover:border-b-yellow-500 tracking-wide cursor-pointer mb-0'>{item}</li>
+                <li onMouseEnter={() => setHoverEntered(item)} className={
+                  cn(
+                    'px-4 h-full text-[1rem] py-5 text-wrap whitespace-nowrap  border-b-2 border-b-white hover:border-b-2 hover:border-b-yellow-500 tracking-wide cursor-pointer mb-0',
+                    isNavbarStuck ? "px-2" : "px-3"
+                  )
+                }>{item}</li>
                 {hoverEntered == item &&
                   <div
                     className={`
@@ -142,8 +97,9 @@ function MenuHeader() {
               </div>
             )
           })}
+          {/* Icons shown when navbar is Sticked */}
+          
           <li className="">
-
             <div className="relative ml-6 mr-4 min-w-[220px] max-w-sm">
               <input
                 type="search"
@@ -160,6 +116,12 @@ function MenuHeader() {
               </span>
             </div>
           </li>
+          {isNavbarStuck && (
+            <li className="flex items-center gap-4">
+              <TopbarIconContent data={["Login", "Wish List", "Cart"]} isDesktop={false} />
+            </li>
+          )}
+          
         </ul>
 
         {/* {hoverEntered && ( */}
@@ -281,7 +243,7 @@ function MobileHeaderNav({
             aria-label="Cart"
             className="p-1"
           >
-            <img
+            <Image
               src="/assets/images/icons/cart.svg"
               alt="Cart"
               className="h-5 w-5"
