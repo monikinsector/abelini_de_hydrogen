@@ -6,10 +6,10 @@ const BookAppointmentSection = () => {
 
   return (
     <section>
-      <div className="container-fluid px-4 my-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 bg-[#f6f6f6]">
+      <div className="container-fluid px-4 lg:px-10 my-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 bg-bg-secondary">
 
-          <div className="lg:col-span-2 col-span-1">
+          <div className="lg:col-span-7 col-span-1">
             <Image
               src="/assets/images/gate-view.webp"
               alt="Visit Showroom"
@@ -21,7 +21,7 @@ const BookAppointmentSection = () => {
             />
           </div>
 
-          <div className="col-span-1 flex flex-col justify-center px-4">
+          <div className="lg:col-span-5 col-span-1 flex flex-col justify-center lg:px-6 px-4">
 
               <h3 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary my-4 tracking-wider flex justify-left">
                 Step Into Luxury – Our New Jewellery Store Is Now Open
