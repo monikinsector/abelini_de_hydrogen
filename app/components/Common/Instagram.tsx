@@ -41,10 +41,9 @@ const Instagram: React.FC = ()  => {
   if (!loading && feed.length === 0) return null;
 
   return (
-    <section className="overflow-x-hidden flex flex-col">
-        <div className="flex flex-col container-fluid px-4 my-6">
-
-         <h2 className="text-h3 font-bold text-primary my-6 tracking-wider text-center flex items-center justify-center gap-3">
+   <section className="overflow-x-hidden flex flex-col">
+      <div className="flex flex-col container-fluid lg:px-10 px-4 my-6">
+        <h2 className="text-h3 font-bold text-primary my-6 tracking-wider text-center flex items-center justify-center gap-3">
           <Image
             src="/assets/images/icons/instagram.svg"
             alt="Instagram"
@@ -56,31 +55,20 @@ const Instagram: React.FC = ()  => {
           {loading ? (
             <div className="flex h-64 items-center justify-center text-gray-400">Loading Feed...</div>
           ) : (
-              <div className="flex flex-nowrap gap-10 items-center justify-around overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+              <div className="flex flex-nowrap lg:gap-1 gap-2 items-center justify-around overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+                  {feed.map((item, index) => (
+                    <Link key={index} to={item.link || item.permalink} target='_blank' className='flex lg:w-[250px] w-[200px] flex-shrink-0'>
 
-                {feed.map((item, index) => (
-                    <Link 
-                      to={item.link || item.permalink} target='_blank'
-                    >
-                      {item.display_url ? (
-                        <Image 
-                          src={item.display_url} 
-                          alt={item.alt} 
-                          width={250}
-                          crossOrigin="anonymous"
-                          className="rounded-lg object-cover h-[250px] w-full"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-gray-200 text-xs text-gray-400">
-                          No Image
-                        </div>
-                      )}
-                    </Link>
-                ))}
+                      <Image  
+                      src={item.display_url} 
+                      alt={item.alt} 
+                      width={250}
+                      className="rounded-lg object-cover lg:h-[250px] lg:w-[250px] h-[255px] w-[198px]"
+                      />
+                      </Link>
+                  ))}
              </div>
           )}
-        {/* </div> */}
       </div>
     </section>
   );
