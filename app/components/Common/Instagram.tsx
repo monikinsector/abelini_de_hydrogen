@@ -1,43 +1,50 @@
+import React, { useState, useEffect } from 'react';
 import {Image} from '@shopify/hydrogen';
-import React from 'react';
+import {Link} from 'react-router';
 
-interface InstagramItem {
-  src: string;
-  alt: string;
-}
+const SHOP_DOMAIN = 'abelini-australia';
 
-const InstagramItems: InstagramItem[] = [
-  {
-    src: '/assets/images/instagram/insta-1.avif',
-    alt: 'Abelini Instagram',
-  },
-  {
-    src: '/assets/images/instagram/insta-2.avif',
-    alt: 'Abelini Instagram',
-  },
-  {
-    src: '/assets/images/instagram/insta-3.avif',
-    alt: 'Abelini Instagram',
-  },
-  {
-    src: '/assets/images/instagram/insta-4.avif',
-    alt: 'Abelini Instagram',
-  },
-  {
-    src: '/assets/images/instagram/insta-5.avif',
-    alt: 'Abelini Instagram',
-  },
-  {
-    src: '/assets/images/instagram/insta-5.avif',
-    alt: 'Abelini Instagram',
-  },
-];
+const Instagram: React.FC = ()  => {
+  const [feed, setFeed] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-const Instagram: React.FC = () => {
+  useEffect(() => {
+    async function fetchInstagram() {
+      const url = `https://instafeed.nfcube.com/feed/v6?limit=8&account=${SHOP_DOMAIN}.myshopify.com&fu=0&fid=0&hash=b235df62bfcaa704aee14a1f3712c19d`;
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
+        const data = result?.data || result?.previous_response?.data || [];
+        
+        const excludedIds = ["18166609282334512"];
+        const filtered = data
+          .filter((item: any) => !excludedIds.includes(item.id))
+          .map((item: any) => {
+            const rawUrl = item.images?.standard_resolution?.url || item.media_url || item.thumbnail_url;
+            const proxiedUrl = rawUrl 
+              ? `https://images.weserv.nl/?url=${encodeURIComponent(rawUrl)}&w=500&h=500&fit=cover` 
+              : null;
+            return { ...item, display_url: proxiedUrl };
+          })
+          .slice(0, 6);
+
+        setFeed(filtered);
+      } catch (err) {
+        console.error("Instagram load error:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchInstagram();
+  }, []);
+
+  if (!loading && feed.length === 0) return null;
+
   return (
     <section className="overflow-x-hidden flex flex-col">
-      <div className="flex flex-col container-fluid px-4 my-6">
-        <h2 className="text-h3 font-bold text-primary my-6 tracking-wider text-center flex items-center justify-center gap-3">
+        <div className="flex flex-col container-fluid px-4 my-6">
+
+         <h2 className="text-h3 font-bold text-primary my-6 tracking-wider text-center flex items-center justify-center gap-3">
           <Image
             src="/assets/images/icons/instagram.svg"
             alt="Instagram"
@@ -45,20 +52,39 @@ const Instagram: React.FC = () => {
           />
           @abelinijewellery
         </h2>
-        <div className="flex flex-nowrap lg:gap-10 gap-2 items-center justify-around overflow-x-scroll [&::-webkit-scrollbar]:hidden">
-          {InstagramItems.map((item, index) => (
-            <Image
-              key={`${item.alt}-${index}`}
-              src={item.src}
-              alt={item.alt}
-              width={250}
-              className="rounded-lg object-cover h-[250px] w-full"
-            />
-          ))}
-        </div>
+
+          {loading ? (
+            <div className="flex h-64 items-center justify-center text-gray-400">Loading Feed...</div>
+          ) : (
+              <div className="flex flex-nowrap gap-10 items-center justify-around overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+
+                {feed.map((item, index) => (
+                    <Link 
+                      to={item.link || item.permalink} target='_blank'
+                    >
+                      {item.display_url ? (
+                        <Image 
+                          src={item.display_url} 
+                          alt={item.alt} 
+                          width={250}
+                          crossOrigin="anonymous"
+                          className="rounded-lg object-cover h-[250px] w-full"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-gray-200 text-xs text-gray-400">
+                          No Image
+                        </div>
+                      )}
+                    </Link>
+                ))}
+             </div>
+          )}
+        {/* </div> */}
       </div>
     </section>
   );
 };
+
 
 export default Instagram;
