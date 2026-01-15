@@ -5,7 +5,7 @@ import { storeLocations } from "./Data/homepage.data";
 const OurStores = () => {
   
   return (
-    <section className="flex flex-col justify-center items-center bg-[#FCF4EC]">
+    <section className="flex flex-col justify-center items-center bg-bg-primary">
       <div className="container lg:px-6 px-4 my-10 flex flex-col items-center">
         <div className="flex justify-center flex-col items-center w-full lg:w-10/12 mb-12">
           <h2 className="lg:text-h2 text-h2-m lg:leading-h2 leading-h2-m font-bold text-primary mb-4 tracking-wider">Our Stores</h2>
