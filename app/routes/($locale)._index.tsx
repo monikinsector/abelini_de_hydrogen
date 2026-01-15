@@ -12,6 +12,8 @@ import Review from '~/components/Common/Review';
 import Instagram from '~/components/Common/Instagram';
 import { useLoaderData } from 'react-router';
 
+import { fetchGoogleReviews } from '~/lib/swagger.server';
+
 export const meta: Route.MetaFunction = ({data, location}) => {
   // Use canonical URL from loader data, or construct from location
   const canonicalUrl = data?.seo?.canonical || location.pathname;
@@ -43,7 +45,7 @@ export const meta: Route.MetaFunction = ({data, location}) => {
 export async function loader({context, request}: Route.LoaderArgs) {
   const url = new URL(request.url);
   const canonicalUrl = `${url.origin}${url.pathname}`;
-
+  const reviewsData = await fetchGoogleReviews();
   const {storefront} = context;
   
   // Fetch market metafields to get hero banner ID
@@ -82,6 +84,7 @@ export async function loader({context, request}: Route.LoaderArgs) {
       canonical: canonicalUrl,
       noindex: false, // Set to true if you want to prevent indexing
     },
+    reviewsData : reviewsData
   };
 }
 

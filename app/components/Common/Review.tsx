@@ -1,5 +1,9 @@
 import { Image } from '@shopify/hydrogen';
 import React, { useState, useEffect, useRef } from 'react';
+import {Script} from '@shopify/hydrogen';
+import {useLoaderData} from 'react-router';
+import useEmblaCarousel from 'embla-carousel-react';
+import type { SwaggerReviewResponse } from '~/lib/swagger.server';
 
 // Declare custom element for TypeScript
 declare global {
@@ -14,59 +18,51 @@ declare global {
 
 const ReviewSection = () => {
   const [activeTab, setActiveTab] = useState<'trustpilot' | 'trustshop' | 'google'>('trustpilot');
-  
+
   const trustpilotWidgetRef = useRef<HTMLDivElement>(null);
   const trustpilotReviewsRef = useRef<HTMLDivElement>(null);
   const etrustedWidgetRef = useRef<HTMLDivElement>(null);
   const etrustedReviewsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && !document.querySelector('script[src*="widget.trustpilot.com"]')) {
-      const script = document.createElement('script');
-      script.src = 'https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js';
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, []);
+  const googleContainerRef = useRef(null);
+  const { reviewsData } = useLoaderData<{ reviewsData: SwaggerReviewResponse }>();
 
-  const tabContent = {
-    trustpilot: (
-      <div className="trustpilot-content">
-        <div 
-          ref={trustpilotReviewsRef}
-          className="trustpilot-widget" 
-          data-locale="en-GB"
-          data-template-id="53aa8912dec7e10d38f59f36"
-          data-businessunit-id="5982fc490000ff0005a809d7"
-          data-style-height="" 
-          data-style-width="100%" 
-          data-theme="light"
-          data-stars="1,2,3,4,5" 
-          data-review-languages="en"
-        >
-          <a
-            href="https://uk.trustpilot.com/review/abelini.com"
-            target="_blank"
-            rel="noopener"
-          >
-            Trustpilot
-          </a>
-        </div>
-      </div>
-    ),
-    trustshop: (
-      <div className="trustshop-content">
-        <div ref={etrustedReviewsRef}>
-          <etrusted-widget
-            data-etrusted-widget-id="wdg-673e15ea-7c32-4a80-8a04-a688541a7c6b"
-          ></etrusted-widget>
-        </div>
-      </div>
-    )
-  };
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({loop: false});
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+
+  const scrollPrev = () => emblaApi?.scrollPrev();
+  const scrollNext = () => emblaApi?.scrollNext();
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    setScrollSnaps(emblaApi.scrollSnapList());
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+
+    emblaApi.on('select', () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    });
+
+    emblaApi.on('reInit', () => {
+      setScrollSnaps(emblaApi.scrollSnapList());
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    });
+  }, [emblaApi]);
 
   return (
-    <section className="bg-[#f6f6f6] px-4 py-12 flex justify-center">
+    <section className="bg-[#f6f6f6] px-4 py-8 flex justify-center">
+      <Script 
+        async 
+        src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" 
+      />
+      <Script
+        async
+        src="https://integrations.etrusted.com/applications/widget.js/v2"
+        type="text/javascript"
+      />
+
       <div className="container">
         <div className="flex flex-col items-center justify-center mb-6">
           <p className="text-p-14 font-light text-primary tracking-wider text-center">TESTIMONIALS</p>
@@ -81,7 +77,7 @@ const ReviewSection = () => {
               aria-selected={activeTab === 'trustpilot'}
               aria-controls="trustpilot-tabpanel"
               id="trustpilot-tab"
-              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] w-full border-b-3 transition-all duration-200 h-full ${
+              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'trustpilot' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('trustpilot')}
@@ -119,7 +115,7 @@ const ReviewSection = () => {
               aria-selected={activeTab === 'trustshop'}
               aria-controls="trustshop-tabpanel"
               id="trustshop-tab"
-              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] w-full border-b-3 transition-all duration-200 h-full ${
+              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'trustshop' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('trustshop')}
@@ -137,7 +133,7 @@ const ReviewSection = () => {
                   className="pointer-events-none"
                 >
                   <p className="lg:text-p-14 text-p-10 font-light text-[#111111] mb-2 tracking-wider">
-                    Trust Shop 4.9 | 3171 reviews
+                    Trust Shop {reviewsData?.trust_shops_total_review?.percentage} | {reviewsData?.trust_shops_total_review?.total_review} reviews
                   </p>
                 </div>
               </div>
@@ -151,7 +147,7 @@ const ReviewSection = () => {
               aria-selected={activeTab === 'google'}
               aria-controls="google-tabpanel"
               id="google-tab"
-              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] w-full border-b-3 transition-all duration-200 h-full ${
+              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] border-b-3 transition-all duration-200 h-full ${
                 activeTab === 'google' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('google')}
@@ -165,7 +161,7 @@ const ReviewSection = () => {
               />
               <div className="flex items-center justify-center">
                 <p className="lg:text-p-14 text-p-10 font-light text-[#111111] mb-2 tracking-wider">
-                  Google 4.9 | 3171 reviews
+                  Google {reviewsData?.google_total_review?.percentage} | {reviewsData?.google_total_review?.total_review} reviews
                 </p>
                 
               </div>
@@ -184,7 +180,28 @@ const ReviewSection = () => {
                 aria-labelledby="trustpilot-tab"
                 className="w-full flex-shrink-0 px-1"
               >
-                {tabContent.trustpilot}
+                <div className="trustpilot-content">
+                  <div 
+                    ref={trustpilotReviewsRef}
+                    className="trustpilot-widget" 
+                    data-locale="en-GB"
+                    data-template-id="53aa8912dec7e10d38f59f36"
+                    data-businessunit-id="5982fc490000ff0005a809d7"
+                    data-style-height="" 
+                    data-style-width="100%" 
+                    data-theme="light"
+                    data-stars="1,2,3,4,5" 
+                    data-review-languages="en"
+                  >
+                    <a
+                      href="https://uk.trustpilot.com/review/abelini.com"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      Trustpilot
+                    </a>
+                  </div>
+                </div>
               </div>
               <div 
                 id="trustshop-tabpanel"
@@ -192,7 +209,13 @@ const ReviewSection = () => {
                 aria-labelledby="trustshop-tab"
                 className="w-full flex-shrink-0 px-1"
               >
-                {tabContent.trustshop}
+                <div className="trustshop-content">
+                  <div ref={etrustedReviewsRef}>
+                    <etrusted-widget
+                      data-etrusted-widget-id="wdg-673e15ea-7c32-4a80-8a04-a688541a7c6b"
+                    ></etrusted-widget>
+                  </div>
+                </div>
               </div>
               <div 
                 id="google-tabpanel"
@@ -200,7 +223,91 @@ const ReviewSection = () => {
                 aria-labelledby="google-tab"
                 className="w-full flex-shrink-0 px-1"
               >
-                <h3>Google</h3>
+                <div 
+                  className="w-full relative overflow-hidden flex justify-center"
+                  ref={emblaRef}
+                >
+                  <div
+                    className="flex lg:w-[calc(100%-120px)] w-full mx-auto gap-4"
+                    // className="flex gap-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 px-4 py-8 google-revews-scroll-container"
+                  >
+                    {reviewsData?.google_reviews.map((review, i) => (
+                      <div
+                        key={i}
+                        /* Combined s-item-new and s-item-2 logic:
+                          - w-[320px] h-[300px]: Fixed dimensions from your CSS
+                          - border-black/10: Mapping rgba(0,0,0,.1)
+                          - transition-all duration-1000: Mapping transition: height 1s
+                        */
+                        className="flex-shrink-0 w-[320px] h-[300px] bg-white p-12 
+                                  cursor-pointer relative transition-all duration-1000 
+                                  border-[0.05em] border-black/10 rounded-[0.2em] 
+                                  text-center flex flex-col justify-between hover:shadow-md"
+                      >
+                        <div className="text-center relative overflow-hidden flex flex-col">
+                          {/* Star Rating Section */}
+                          <div className="flex justify-center mt-3 gap-1">
+                            {[...Array(5)].map((_, index) => (
+                              <Image src="/assets/images/icons/star.svg" alt="Star" className="!w-5"/>
+                            ))}
+                          </div>
+                          <p className="text-[14px] text-black font-bold my-4 text-xl capitalize"></p>
+                          <p className="text-[14px] font-light text-[#111] leading-[20px] tracking-[0.8px] mb-2 line-clamp-4">
+                            {review.text}
+                          </p>
+                          {/* Author Text */}
+                          <p className="text-[12px] font-medium tracking-widest text-[#626262] mt-auto">
+                            {review.author}
+                          </p>
+                        </div>
+
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={scrollPrev}
+                    disabled={selectedIndex === 0}
+                    className="absolute left-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none w-fit disabled:opacity-50 disabled:cursor-not-allowed p-3"
+                  >
+                    <Image
+                      src="/assets/images/icons/arrow-left-white.svg"
+                      alt="Previous"
+                      className="lg:block hidden"
+                      width={24}
+                      height={24}
+                    />
+                    <Image
+                      src="/assets/images/icons/arrow-left-black.svg"
+                      alt="Previous"
+                      className="lg:hidden block"
+                      width={24}
+                      height={24}
+                    />
+                  </button>
+
+                  <button
+                    onClick={scrollNext}
+                    disabled={selectedIndex === scrollSnaps.length - 1}
+                    className="absolute right-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none w-fit disabled:opacity-50 disabled:cursor-not-allowed p-3"
+                  >
+                    <Image
+                      src="/assets/images/icons/arrow-right-white.svg"
+                      alt="Next"
+                      className="lg:block hidden"
+                      width={24}
+                      height={24}
+                    />
+                    <Image
+                      src="/assets/images/icons/arrow-right-black.svg"
+                      alt="Next"
+                      className="lg:hidden block"
+                      width={24}
+                      height={24}
+                    />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
