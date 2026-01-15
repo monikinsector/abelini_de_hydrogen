@@ -1,7 +1,8 @@
-import { Image } from "@shopify/hydrogen";
-import { useState } from "react";
-import { Link } from "react-router";
-import { cn } from "~/lib/utils";
+import {Image} from "@shopify/hydrogen";
+import {memo, useState} from "react";
+import {Link} from "react-router";
+import {cn} from "~/lib/utils";
+import {ShapeStoneDropdown} from "./ShapeStoneDropdown";
 
 interface MetalOption {
   name: string;
@@ -34,7 +35,7 @@ const ProductCard = ({
   stoneLabel = "Lab Grown Diamond",
   onQuickView,
   onWishlist,
-}: RingCardProps) => {
+}: Readonly<RingCardProps>) => {
   const [activeMetal, setActiveMetal] = useState(selectedMetal || metals[0]?.name);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
@@ -46,7 +47,7 @@ const ProductCard = ({
   return (
     <div
       className={
-        "group relative bg-white rounded-2xl transition-all duration-300 overflow-hidden hover:shadow-[0_0_#0000,0_0_#0000,0px_8px_16px_rgba(49,63,78,0.1)]"}
+        "group relative bg-white rounded-2xl transition-all duration-300 hover:shadow-[0_0_#0000,0_0_#0000,0px_8px_16px_rgba(49,63,78,0.1)]"}
     >
       {/* Image Container */}
       <div className="relative bg-[#fcfbf9] aspect-square m-2 overflow-hidden">
@@ -105,23 +106,13 @@ const ProductCard = ({
       </div>
 
       {/* Shape & Stone Dropdowns */}
-      <div className="flex gap-2 px-4 pb-3">
-        <button className="flex-1 flex items-center gap-2 px-2 py-1 border border-gray-200 rounded-full bg-white hover:border-gray-300 transition-colors">
-          <Image src="/assets/images/icons/rnd.svg" alt={shapeLabel} width={16}/>
-          <span className="text-[10px] text-gray-700 flex-1 text-left truncate">{shapeLabel}</span>
-          <Image src="/assets/images/icons/c_down.svg" alt={"More"} width={16}/>
-					
-          {/* <ChevronDown className="w-4 h-4 text-gray-400" /> */}
-        </button>
-        <button className="flex-1 flex items-center gap-2 px-2 py-1 border border-gray-200 rounded-full bg-white hover:border-gray-300 transition-colors">
-					<Image src="/assets/images/lbg.png" alt={shapeLabel} width={16}/>
-          <span className="text-[10px] text-gray-700 flex-1 text-left truncate">{stoneLabel}</span>
-					<Image src="/assets/images/icons/c_down.svg" alt={"More"} width={16}/>
-        </button>
-      </div>
+      <ShapeStoneDropdown
+        shapeLabel={shapeLabel}
+        stoneLabel={stoneLabel}
+      />
 
       {/* Title & Thumbnails - toggle on hover, fixed height container */}
-      <div className="md:h-12 h-16 px-4">
+      <div className="md:h-12 h-auto px-4">
         {/* {isHovered && thumbnails.length > 0 ? ( */}
           <div className="hidden group-hover:flex justify-center gap-2 animate-fade-in">
             {thumbnails.slice(0, 4).map((thumb, index) => (
@@ -155,4 +146,4 @@ const ProductCard = ({
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

@@ -16,6 +16,7 @@ import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import tailwindCss from './styles/tailwind.css?url';
 import carouselCss from './styles/carousel.css?url';
 import {PageLayout} from './components/PageLayout';
+import {ZendeskScript} from './components/ZendeskScript';
 
 export type RootLoader = typeof loader;
 
@@ -204,7 +205,12 @@ export default function App() {
   const data = useRouteLoaderData<RootLoader>('root');
 
   if (!data) {
-    return <Outlet />;
+    return (
+      <>
+        <ZendeskScript />
+        <Outlet />
+      </>
+    );
   }
 
   return (
@@ -213,6 +219,7 @@ export default function App() {
       shop={data.shop}
       consent={data.consent}
     >
+      <ZendeskScript />
       <PageLayout {...data}>
         <Outlet />
       </PageLayout>

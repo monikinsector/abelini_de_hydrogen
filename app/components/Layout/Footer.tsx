@@ -81,7 +81,7 @@ function FooterMenu() {
           </form>
 
           {/* Privacy Notice */}
-          <p className="text-secondary text-p-11">
+          <p className="text-secondary text-p-10">
             By subscribing, some personal data such as your name and email
             address are collected and stored securely for the purposes of
             sending you order updates, special offers, and other promotional
