@@ -14,6 +14,7 @@
     --color-tertiary: #f60;
     --color-quaternary: #0A5050;
     --color-bg-primary: #FCF4EC;
+    --color-bg-secondary: #f6f6f6;
 }
 
 @theme {
@@ -26,6 +27,7 @@
     --color-quaternary: var(--color-quaternary);
 
     --color-bg-primary: var(--color-bg-primary);
+    --color-bg-secondary: var(--color-bg-secondary);
   
     /* ===============================
        FONT SIZES (Desktop)
