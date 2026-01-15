@@ -28,15 +28,26 @@ const RangeSlider = ({
   rangeValue,
   onRangeChange,
 }: RangeSliderProps) => {
+  const [value, setValue] = useState(controlledValue ?? min);
+
+  const [range, setRange] = useState<[number, number]>(
+    rangeValue ?? [min, max]
+  );
+
+  useEffect(() => {
+    if (variant === 'single' && controlledValue !== undefined) {
+      setValue(controlledValue);
+    }
+  }, [variant, controlledValue]);
+
+  useEffect(() => {
+    if (variant === 'double' && rangeValue) {
+      setRange(rangeValue);
+    }
+  }, [variant, rangeValue]);
+
+  // Single slider 
   if (variant === 'single') {
-    const [value, setValue] = useState(controlledValue ?? min);
-
-    useEffect(() => {
-      if (controlledValue !== undefined) {
-        setValue(controlledValue);
-      }
-    }, [controlledValue]);
-
     const percentage = ((value - min) / (max - min)) * 100;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
