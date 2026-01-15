@@ -168,7 +168,7 @@ export default function AbeliniOccasion() {
         </div>
 
         <div className="grid grid-cols-1 flex flex-col lg:grid-cols-2 min-h-[600px]">
-          <div className="col-span-1 relative overflow-hidden order-[-1] lg:order-[0]">
+          <div className="col-span-1 relative overflow-hidden order-[-1] lg:order-[0] z-10 position-relative">
             <Image
               src="/assets/images/home/young_blonde_woman_707x551.webp"
               loading="lazy"
