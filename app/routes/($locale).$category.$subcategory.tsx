@@ -3,19 +3,9 @@ import Hero from '~/components/Category/Hero';
 import AbeliniFeatures from '~/components/Category/AbeliniFeatures';
 import ProductsArea from '~/components/Category/ProductsArea';
 import RingCategory from '~/components/Category/RingCategory';
+import { breadcrumbs } from '~/components/Category/Data/category.data';
 
-type Props = {};
-
-const CategoryPage = (props: Props) => {
-  const breadcrumbs = [
-    {label: 'Home', href: '/'},
-    {label: 'Engagement Rings', href: '/engagement-rings'},
-    {
-      label:
-        'Low Set Round 9k White Gold Lab Grown Diamond Classic Solitaire Engagement Rings',
-    },
-  ];
-
+const CategoryPage = () => {
   return (
     <section className='bg-[#fcfcfc]'>
         
