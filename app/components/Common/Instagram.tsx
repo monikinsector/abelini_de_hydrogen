@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Image} from '@shopify/hydrogen';
-import {Link} from 'react-router';
 
-const SHOP_DOMAIN = 'abelini-australia';
+const INSTAGRAM_DOMAIN = 'abelini-australia';
 
 const Instagram: React.FC = ()  => {
   const [feed, setFeed] = useState<any[]>([]);
@@ -10,11 +9,11 @@ const Instagram: React.FC = ()  => {
 
   useEffect(() => {
     async function fetchInstagram() {
-      const url = `https://instafeed.nfcube.com/feed/v6?limit=8&account=${SHOP_DOMAIN}.myshopify.com&fu=0&fid=0&hash=b235df62bfcaa704aee14a1f3712c19d`;
+      const url = `https://instafeed.nfcube.com/feed/v6?limit=8&account=${INSTAGRAM_DOMAIN}.myshopify.com&fu=0&fid=0&hash=b235df62bfcaa704aee14a1f3712c19d`;
       try {
         const response = await fetch(url);
         const result = await response.json();
-        const data = result?.data || result?.previous_response?.data || [];
+        const data = result?.data || [];
         
         const excludedIds = ["18166609282334512"];
         const filtered = data
@@ -55,19 +54,18 @@ const Instagram: React.FC = ()  => {
           {loading ? (
             <div className="flex h-64 items-center justify-center text-gray-400">Loading Feed...</div>
           ) : (
-              <div className="flex flex-nowrap lg:gap-1 gap-2 items-center justify-around overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+            <div className="flex gap-2 lg:gap-1 items-center overflow-x-auto md:overflow-x-visible px-2 md:px-6 lg:px-8 [&::-webkit-scrollbar]:hidden"  >
                   {feed.map((item, index) => (
-                    <Link key={index} to={item.link || item.permalink} target='_blank' className='flex lg:w-[250px] w-[200px] flex-shrink-0'>
-
-                      <Image  
-                      src={item.display_url} 
-                      alt={item.alt} 
-                      width={250}
-                      className="rounded-lg object-cover lg:h-[250px] lg:w-[250px] h-[255px] w-[198px]"
+                    <a href={item.link || item.permalink} target='_blank' className="flex-none basis-1/2 md:basis-1/6">
+                       <Image
+                        src={item.display_url}
+                        alt={item.alt}
+                        width={250}
+                        className="w-full rounded-lg object-cover"
                       />
-                      </Link>
+                    </a>
                   ))}
-             </div>
+                </div>
           )}
       </div>
     </section>
