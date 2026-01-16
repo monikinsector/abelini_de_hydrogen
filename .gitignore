@@ -9,3 +9,4 @@ node_modules
 .react-router
 reports/
 .DS_Store
+/coverage
