@@ -62,7 +62,7 @@ export function PageLayout({
 
       <FeatureHeader trustpilotText={returnSpecificData(metafields, 'trustpilot_text') as string}/>
       <Header globalPhone={returnSpecificData(metafields, 'global_phone') as string}/>
-      <MenuHeader />
+      <MenuHeader globalPhone={returnSpecificData(metafields, 'global_phone') as string}/>
 
       <main>{children}</main>
       <Footer

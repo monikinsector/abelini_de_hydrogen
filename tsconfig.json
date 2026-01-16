@@ -8,7 +8,9 @@
     "*.tsx",
     "*.d.ts",
     ".graphqlrc.ts",
-    ".react-router/types/**/*"
+    ".react-router/types/**/*",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
   ],
   "exclude": ["node_modules", "dist", "build", "packages/**/dist/**/*"],
   "compilerOptions": {
@@ -29,7 +31,9 @@
       "@shopify/oxygen-workers-types",
       "react-router",
       "@shopify/hydrogen/react-router-types",
-      "vite/client"
+      "vite/client",
+      "jest",
+      "@testing-library/jest-dom"
     ],
     "paths": {
       "~/*": ["app/*"]
