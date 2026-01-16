@@ -14,6 +14,31 @@ export interface Category {
   link: string;
 }
 
+export type HeroBannerProps = {
+  main_title: string;
+  content_under_title: string;
+  button_1_text: string;
+  button_1_link: string;
+  button_2_text?: string;
+  button_2_link?: string;
+  desktop_banner_image: {
+    url: string;
+    altText: string;
+  };
+  mobile_banner_image: {
+    url: string;
+    altText: string;
+  };
+  terms_conditions_text: string;
+  banner_link_only: string;
+  background_color: string;
+  background_image: {
+    url: string;
+    altText: string;
+  };
+}
+
+
 export const categories: Category[] = [
   {
     id: 1,
