@@ -4,7 +4,6 @@ import SaleBar from '~/components/Layout/Sale';
 // Mock react-router Link component
 jest.mock('react-router', () => ({
   Link: ({ to, children, className, id, ...props }: any) => (
-
     <a href={to} className={className} {...props} data-testid="sale-link">
       {children}
     </a>
