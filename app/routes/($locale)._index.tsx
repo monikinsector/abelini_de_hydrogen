@@ -12,7 +12,6 @@ import Review from '~/components/Common/Review';
 import Instagram from '~/components/Common/Instagram';
 import { useLoaderData } from 'react-router';
 import type { HeroBannerProps } from '~/components/Homepage/Data/homepage.data';
-
 import { fetchGoogleReviews, type SwaggerEnv } from '~/services/swagger.server';
 
 export const meta: Route.MetaFunction = ({data, location}) => {
