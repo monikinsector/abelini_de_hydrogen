@@ -462,8 +462,9 @@ function MenuDropdown({ totalCols, data, leftBorderFromIndex, lastColDoubleSpace
         const { text, theme } = data as { text: string, theme: string };
         return <button className={`${theme} mt-2`}>{text}</button>;
       }
-      default:
-        return <h5>Error Here</h5>;
+      default: {
+        return "";
+      }
     }
 
   }
