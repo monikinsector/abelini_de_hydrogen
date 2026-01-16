@@ -1,10 +1,10 @@
 import { Image } from '@shopify/hydrogen';
 import { Link } from 'react-router';
 import { cn } from '~/lib/utils';
+import type { HeroBannerProps } from './Data/homepage.data';
 
-const HeroBanner = ({ data }: any) => {
-  console.log("data", data)
-  if (!data) return null;
+
+const HeroBanner = ({ data }: {data: HeroBannerProps}) => {
   const { background_image, main_title, content_under_title, button_1_text, button_1_link, button_2_text, button_2_link, desktop_banner_image, mobile_banner_image, terms_conditions_text, banner_link_only, background_color } = data;
   return (
     <div className={cn("relative grid grid-cols-1 pb-2 md:pb-0 md:grid-cols-5 min-h-[50vh] bg-cover")} style={{
