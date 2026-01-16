@@ -11,6 +11,7 @@ import OurStore from '~/components/Homepage/OurStore';
 import Review from '~/components/Common/Review';
 import Instagram from '~/components/Common/Instagram';
 import { useLoaderData } from 'react-router';
+import type { HeroBannerProps } from '~/components/Homepage/Data/homepage.data';
 
 export const meta: Route.MetaFunction = ({data, location}) => {
   // Use canonical URL from loader data, or construct from location
@@ -75,7 +76,7 @@ export async function loader({context, request}: Route.LoaderArgs) {
   }
 
   return {
-    heroBannerMetaobject,
+    heroBannerMetaobject: heroBannerMetaobject as HeroBannerProps,
     seo: {
       title: 'Abelini - Buy Diamond Jewellery Online | UK Jewellers - Abelini',
       description: 'Discover exquisite diamond jewellery at Abelini. Shop online for engagement rings, wedding rings, and fine jewellery. UK\'s premier jewellers with bespoke design services.',
