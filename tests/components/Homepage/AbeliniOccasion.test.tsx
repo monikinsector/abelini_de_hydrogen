@@ -1,23 +1,41 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import AbeliniOccasion from '~/components/Homepage/AbeliniOccasion';
 
 // Mock embla-carousel-react
 // Create stable mock API object to prevent infinite loops
 const mockScrollPrev = jest.fn();
 const mockScrollNext = jest.fn();
-const mockOn = jest.fn(); // Don't call callbacks immediately to prevent infinite loops
+const mockOn = jest.fn((event, callback) => {
+  // Store callbacks for testing
+  if (!mockOn.callbacks) {
+    mockOn.callbacks = {};
+  }
+  mockOn.callbacks[event] = callback;
+});
+
+// Create mutable functions for testing different states
+let mockSelectedScrollSnap = jest.fn(() => 0);
+let mockScrollSnapList = jest.fn(() => [0, 1, 2]);
+
+// Control whether to return null API for testing
+let shouldReturnNullApi = false;
 
 const stableMockApi = {
   scrollPrev: mockScrollPrev,
   scrollNext: mockScrollNext,
-  scrollSnapList: () => [0, 1, 2],
-  selectedScrollSnap: () => 0,
+  scrollSnapList: () => mockScrollSnapList(),
+  selectedScrollSnap: () => mockSelectedScrollSnap(),
   on: mockOn,
 };
 
 jest.mock('embla-carousel-react', () => ({
   __esModule: true,
-  default: () => [null, stableMockApi],
+  default: () => {
+    if (shouldReturnNullApi) {
+      return [null, null];
+    }
+    return [null, stableMockApi];
+  },
 }));
 
 // Mock the data file to test component behavior, not specific data values
@@ -48,6 +66,10 @@ const mockLabGrownDiamonds = [
 describe('AbeliniOccasion', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset mock functions to default state
+    mockSelectedScrollSnap = jest.fn(() => 0);
+    mockScrollSnapList = jest.fn(() => [0, 1, 2]);
+    shouldReturnNullApi = false;
   });
 
   describe('Rendering without failure', () => {
@@ -145,21 +167,83 @@ describe('AbeliniOccasion', () => {
       });
     });
 
-    it('renders main engagement rings banner images', () => {
+    it('renders most loved engagement rings banner images', () => {
       render(<AbeliniOccasion />);
-      const bannerImages = screen.getAllByRole('img', { name: /Engagement Rings/i });
+      const bannerImages = screen.getAllByRole('img', { name: /Most Loved Engagement Rings/i });
       expect(bannerImages.length).toBeGreaterThan(0);
       // Check that at least one banner image has the expected src
       const hasBannerImage = bannerImages.some(img => 
-        img.getAttribute('src')?.includes('most_loved_engagement')
+        img.getAttribute('src')?.includes('most_loved_engagement_1_1410x666')
+      );
+      expect(hasBannerImage).toBe(true);
+    });
+
+
+    it('renders most loved engagement rings mobile banner images', () => {
+      render(<AbeliniOccasion />);
+      const bannerImages = screen.getAllByRole('img', { name: /Most Loved Engagement Rings/i });
+      expect(bannerImages.length).toBeGreaterThan(0);
+      // Check that at least one banner image has the expected src
+      const hasBannerImage = bannerImages.some(img => 
+        img.getAttribute('src')?.includes('most_loved_engagement_mobile_1')
+      );
+      expect(hasBannerImage).toBe(true);
+    });
+
+
+    it('renders young woman wearing jewelry images', () => {
+      render(<AbeliniOccasion />);
+      const bannerImages = screen.getAllByRole('img', { name: /Young woman wearing jewelry/i });
+      expect(bannerImages.length).toBeGreaterThan(0);
+      // Check that at least one banner image has the expected src
+      const hasBannerImage = bannerImages.some(img => 
+        img.getAttribute('src')?.includes('young_woman_709x551')
+      );
+      expect(hasBannerImage).toBe(true);
+    });
+
+    it('renders blonde woman wearing jewelry images', () => {
+      render(<AbeliniOccasion />);
+      const bannerImages = screen.getAllByRole('img', { name: /Blonde woman wearing jewelry/i });
+      expect(bannerImages.length).toBeGreaterThan(0);
+      // Check that at least one banner image has the expected src
+      const hasBannerImage = bannerImages.some(img => 
+        img.getAttribute('src')?.includes('young_blonde_woman_707x551')
+      );
+      expect(hasBannerImage).toBe(true);
+    });
+
+
+    it('renders lab grown diamonds jewellry banner images', () => {
+      render(<AbeliniOccasion />);
+      const bannerImages = screen.getAllByRole('img', { name: /Lab Grown Diamonds Jewellery/i });
+      expect(bannerImages.length).toBeGreaterThan(0);
+      // Check that at least one banner image has the expected src
+      const hasBannerImage = bannerImages.some(img => 
+        img.getAttribute('src')?.includes('plain_wedding_rings_1_1410x666')
+      );
+      expect(hasBannerImage).toBe(true);
+    });
+
+
+    it('renders lab grown diamonds jewellry mobile banner images', () => {
+      render(<AbeliniOccasion />);
+      const bannerImages = screen.getAllByRole('img', { name: /Lab Grown Diamonds Jewellery/i });
+      expect(bannerImages.length).toBeGreaterThan(0);
+      // Check that at least one banner image has the expected src
+      const hasBannerImage = bannerImages.some(img => 
+        img.getAttribute('src')?.includes('plain_wedding_rings_mobile_1')
       );
       expect(hasBannerImage).toBe(true);
     });
 
     it('renders model images with correct alt text', () => {
       render(<AbeliniOccasion />);
-      const modelImages = screen.getAllByRole('img', { name: /Model wearing jewelry/i });
-      expect(modelImages.length).toBeGreaterThan(0);
+      // Check for both model images with their actual alt texts
+      const youngWomanImages = screen.getAllByRole('img', { name: /Young woman wearing jewelry/i });
+      const blondeWomanImages = screen.getAllByRole('img', { name: /Blonde woman wearing jewelry/i });
+      expect(youngWomanImages.length).toBeGreaterThan(0);
+      expect(blondeWomanImages.length).toBeGreaterThan(0);
     });
   });
 
@@ -325,6 +409,222 @@ describe('AbeliniOccasion', () => {
         expect(image).toHaveAttribute('src', diamond.img);
         expect(image).toHaveAttribute('alt', diamond.name);
       });
+    });
+  });
+
+  describe('Carousel event handlers and state management', () => {
+    it('calls scrollPrev when previous button is clicked on ImageWithProductSlider', () => {
+      // Import ImageWithProductSlider directly
+      const { ImageWithProductSlider } = require('~/components/Homepage/AbeliniOccasion');
+      
+      // Set initial state to index 1 so prev button is enabled
+      mockSelectedScrollSnap.mockReturnValue(1);
+      mockScrollSnapList.mockReturnValue([0, 1, 2]);
+      
+      const { rerender } = render(<ImageWithProductSlider rings={mockEngagementRings} />);
+      
+      // Trigger the select callback to update component state to index 1
+      const selectCall = mockOn.mock.calls.find(call => call[0] === 'select');
+      if (selectCall && selectCall[1]) {
+        act(() => {
+          selectCall[1]();
+        });
+      }
+      
+      // Re-render to update button states based on new selectedIndex
+      rerender(<ImageWithProductSlider rings={mockEngagementRings} />);
+      
+      const prevButton = screen.getByRole('button', { name: /Previous/i });
+      
+      // Verify button is enabled (not at start)
+      expect(prevButton).not.toBeDisabled();
+      
+      // Click the prev button - this should call scrollPrev
+      mockScrollPrev.mockClear();
+      fireEvent.click(prevButton);
+      expect(mockScrollPrev).toHaveBeenCalled();
+    });
+
+    it('handles null emblaApi gracefully in useEffect', () => {
+      // This test covers line 16: if (!emblaApi) return;
+      // Set shouldReturnNullApi to true to test the null API case
+      shouldReturnNullApi = true;
+      
+      try {
+        // Import ImageWithProductSlider from the component
+        const { ImageWithProductSlider } = require('~/components/Homepage/AbeliniOccasion');
+        
+        // Render with null API - should not crash and should skip useEffect logic
+        const { container } = render(<ImageWithProductSlider rings={mockEngagementRings} />);
+        
+        // Component should still render (just without carousel functionality)
+        expect(container).toBeInTheDocument();
+        
+        // Verify that the component rendered the rings
+        mockEngagementRings.forEach((ring) => {
+          expect(screen.getByText(ring.name)).toBeInTheDocument();
+        });
+      } finally {
+        // Always reset shouldReturnNullApi, even if test fails
+        // (beforeEach will also reset it, but this ensures immediate cleanup)
+        shouldReturnNullApi = false;
+      }
+    });
+
+    it('registers select event handler on mount', () => {
+      render(<AbeliniOccasion />);
+      // Verify that 'select' event handler was registered
+      expect(mockOn).toHaveBeenCalledWith('select', expect.any(Function));
+    });
+
+    it('registers reInit event handler on mount', () => {
+      render(<AbeliniOccasion />);
+      // Verify that 'reInit' event handler was registered
+      expect(mockOn).toHaveBeenCalledWith('reInit', expect.any(Function));
+    });
+
+    it('calls select event handler callback when triggered', () => {
+      render(<AbeliniOccasion />);
+      
+      // Find the select callback
+      const selectCall = mockOn.mock.calls.find(call => call[0] === 'select');
+      expect(selectCall).toBeDefined();
+      
+      const selectCallback = selectCall[1];
+      
+      // Mock selectedScrollSnap to return different index
+      mockSelectedScrollSnap.mockReturnValue(1);
+      
+      // Trigger the callback wrapped in act()
+      act(() => {
+        selectCallback();
+      });
+      
+      // Verify selectedScrollSnap was called
+      expect(mockSelectedScrollSnap).toHaveBeenCalled();
+    });
+
+    it('calls reInit event handler callback when triggered', () => {
+      render(<AbeliniOccasion />);
+      
+      // Find the reInit callback
+      const reInitCall = mockOn.mock.calls.find(call => call[0] === 'reInit');
+      expect(reInitCall).toBeDefined();
+      
+      const reInitCallback = reInitCall[1];
+      
+      // Mock scrollSnapList and selectedScrollSnap
+      mockScrollSnapList.mockReturnValue([0, 1, 2, 3]);
+      mockSelectedScrollSnap.mockReturnValue(2);
+      
+      // Trigger the callback wrapped in act()
+      act(() => {
+        reInitCallback();
+      });
+      
+      // Verify both methods were called
+      expect(mockScrollSnapList).toHaveBeenCalled();
+      expect(mockSelectedScrollSnap).toHaveBeenCalled();
+    });
+
+    it('initializes scrollSnaps and selectedIndex on mount', () => {
+      render(<AbeliniOccasion />);
+      
+      // Verify scrollSnapList and selectedScrollSnap were called during initialization
+      // These are called in the useEffect when emblaApi is available
+      expect(mockScrollSnapList).toHaveBeenCalled();
+      expect(mockSelectedScrollSnap).toHaveBeenCalled();
+    });
+  });
+
+  describe('Button disabled states', () => {
+    it('disables next button when at the end of carousel', () => {
+      // Mock being at the last index
+      mockSelectedScrollSnap.mockReturnValue(2); // Last index (0, 1, 2)
+      mockScrollSnapList.mockReturnValue([0, 1, 2]);
+      
+      render(<AbeliniOccasion />);
+      
+      const nextButtons = screen.getAllByRole('button', { name: /Next/i });
+      // At the end, next buttons should be disabled
+      nextButtons.forEach(button => {
+        expect(button).toBeDisabled();
+      });
+    });
+
+    it('enables next button when not at the end', () => {
+      // Mock being at a middle index
+      mockSelectedScrollSnap.mockReturnValue(0); // First index
+      mockScrollSnapList.mockReturnValue([0, 1, 2]);
+      
+      render(<AbeliniOccasion />);
+      
+      const nextButtons = screen.getAllByRole('button', { name: /Next/i });
+      // When not at the end, next buttons should be enabled
+      nextButtons.forEach(button => {
+        expect(button).not.toBeDisabled();
+      });
+    });
+
+    it('disables prev button when at the start', () => {
+      // Mock being at the first index
+      mockSelectedScrollSnap.mockReturnValue(0);
+      mockScrollSnapList.mockReturnValue([0, 1, 2]);
+      
+      render(<AbeliniOccasion />);
+      
+      const prevButtons = screen.getAllByRole('button', { name: /Previous/i });
+      // At the start, prev buttons should be disabled
+      prevButtons.forEach(button => {
+        expect(button).toBeDisabled();
+      });
+    });
+
+    it('enables prev button when not at the start', () => {
+      // Mock being at a middle index
+      mockSelectedScrollSnap.mockReturnValue(1); // Middle index
+      mockScrollSnapList.mockReturnValue([0, 1, 2]);
+      
+      render(<AbeliniOccasion />);
+      
+      const prevButtons = screen.getAllByRole('button', { name: /Previous/i });
+      // When not at the start, prev buttons should be enabled
+      prevButtons.forEach(button => {
+        expect(button).not.toBeDisabled();
+      });
+    });
+  });
+
+  describe('Component structure and layout', () => {
+    it('renders all engagement ring carousel items', () => {
+      render(<AbeliniOccasion />);
+      
+      // Verify all engagement ring items are rendered in the carousel
+      mockEngagementRings.forEach((ring) => {
+        expect(screen.getByText(ring.name)).toBeInTheDocument();
+      });
+    });
+
+    it('renders all lab grown diamond carousel items', () => {
+      render(<AbeliniOccasion />);
+      
+      // Verify all lab grown diamond items are rendered in the carousel
+      mockLabGrownDiamonds.forEach((diamond) => {
+        const elements = screen.getAllByText(diamond.name);
+        expect(elements.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('renders descriptive text for engagement rings section', () => {
+      render(<AbeliniOccasion />);
+      
+      expect(screen.getByText(/Our engagement ring collection includes meticulously crafted/i)).toBeInTheDocument();
+    });
+
+    it('renders descriptive text for lab grown diamonds section', () => {
+      render(<AbeliniOccasion />);
+      
+      expect(screen.getByText(/Embrace Brilliant Savings with Trending Lab Grown Diamond/i)).toBeInTheDocument();
     });
   });
 });
