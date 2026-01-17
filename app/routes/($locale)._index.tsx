@@ -13,7 +13,7 @@ import Instagram from '~/components/Common/Instagram';
 import { useLoaderData } from 'react-router';
 import type { HeroBannerProps } from '~/components/Homepage/Data/homepage.data';
 
-import { fetchGoogleReviews } from '~/lib/swagger.server';
+import { fetchGoogleReviews, type SwaggerEnv } from '~/services/swagger.server';
 
 export const meta: Route.MetaFunction = ({data, location}) => {
   // Use canonical URL from loader data, or construct from location
@@ -46,7 +46,11 @@ export const meta: Route.MetaFunction = ({data, location}) => {
 export async function loader({context, request}: Route.LoaderArgs) {
   const url = new URL(request.url);
   const canonicalUrl = `${url.origin}${url.pathname}`;
-  const reviewsData = await fetchGoogleReviews();
+  const swaggerEnv: SwaggerEnv = {
+    SWAGGER_API_URL: context?.env?.SWAGGER_API_URL,
+    SWAGGER_API_AUTH: context?.env?.SWAGGER_API_AUTH,
+  };
+  const reviewsData = await fetchGoogleReviews(swaggerEnv);
   const {storefront} = context;
   
   // Fetch market metafields to get hero banner ID

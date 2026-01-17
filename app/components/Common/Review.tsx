@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {Script} from '@shopify/hydrogen';
 import {useLoaderData} from 'react-router';
 import useEmblaCarousel from 'embla-carousel-react';
-import type { SwaggerReviewResponse } from '~/lib/swagger.server';
+import type { SwaggerReviewResponse } from '~/services/swagger.server';
 
 // Declare custom element for TypeScript
 declare global {
@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-const ReviewSection = () => {
+const Review = () => {
   const [activeTab, setActiveTab] = useState<'trustpilot' | 'trustshop' | 'google'>('trustpilot');
 
   const trustpilotWidgetRef = useRef<HTMLDivElement>(null);
@@ -24,9 +24,7 @@ const ReviewSection = () => {
   const etrustedWidgetRef = useRef<HTMLDivElement>(null);
   const etrustedReviewsRef = useRef<HTMLDivElement>(null);
 
-  const googleContainerRef = useRef(null);
   const { reviewsData } = useLoaderData<{ reviewsData: SwaggerReviewResponse }>();
-
 
   const [emblaRef, emblaApi] = useEmblaCarousel({loop: false});
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -35,19 +33,26 @@ const ReviewSection = () => {
   const scrollPrev = () => emblaApi?.scrollPrev();
   const scrollNext = () => emblaApi?.scrollNext();
 
+  const hasInitializedEmbla = useRef(false);
+
   useEffect(() => {
-    if (!emblaApi) return;
+    if (!emblaApi || hasInitializedEmbla.current) return;
 
-    setScrollSnaps(emblaApi.scrollSnapList());
-    setSelectedIndex(emblaApi.selectedScrollSnap());
+    hasInitializedEmbla.current = true;
 
-    emblaApi.on('select', () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
+    const snaps = emblaApi.scrollSnapList?.() ?? [];
+    const index = emblaApi.selectedScrollSnap?.() ?? 0;
+
+    setScrollSnaps(snaps);
+    setSelectedIndex(index);
+
+    emblaApi.on?.('select', () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap?.() ?? 0);
     });
 
-    emblaApi.on('reInit', () => {
-      setScrollSnaps(emblaApi.scrollSnapList());
-      setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on?.('reInit', () => {
+      setScrollSnaps(emblaApi.scrollSnapList?.() ?? []);
+      setSelectedIndex(emblaApi.selectedScrollSnap?.() ?? 0);
     });
   }, [emblaApi]);
 
@@ -65,19 +70,21 @@ const ReviewSection = () => {
 
       <div className="container">
         <div className="flex flex-col items-center justify-center mb-6">
-          <p className="text-p-14 font-light text-primary tracking-wider text-center">TESTIMONIALS</p>
-          <h2 className="lg:text-h2 text-h2-m font-bold text-primary tracking-wider text-center">Our Customers Love Us</h2>
-          <p className="text-p-14 font-light text-primary tracking-wider text-center">More than 10000 happy customers all over Europe</p>
+          <div className="w-full text-center px-[10px]">
+            <p className="text-[14px] font-light text-[#111111] leading-[20px] mb-2 tracking-[0.8px] uppercase mt-6">TESTIMONIALS</p>
+            <h2 className="font-bold tracking-[1px] text-[34px] leading-[38px] lg:text-[42px] lg:leading-[48px] mt-3">Our Customers Love Us</h2>
+            <p className="text-[14px] font-normal leading-[28px] tracking-[1px] text-[#111] lg:font-light lg:leading-[20px] lg:tracking-[0.8px] lg:mb-2 mt-3">More than 10000 happy customers all over Europe</p>
+          </div>
         </div>
          <div className="grid grid-cols-3 lg:gap-4 gap-2 mb-8 tabs-tite-container border-b border-[#E4E4E4]" role="tablist">
-          <div className="text-center">
+          <div className="flex items-center justify-center">
             <button
               type="button"
               role="tab"
               aria-selected={activeTab === 'trustpilot'}
               aria-controls="trustpilot-tabpanel"
               id="trustpilot-tab"
-              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] border-b-3 transition-all duration-200 h-full ${
+              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] border-b-5 transition-all duration-200 h-full flex flex-col lg:block ${
                 activeTab === 'trustpilot' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('trustpilot')}
@@ -100,7 +107,7 @@ const ReviewSection = () => {
                   data-theme="light" 
                   data-style-alignment="center"
                 >
-                  <a href="https://www.trustpilot.com/review/yourdomain.com" target="_blank" rel="noopener">
+                  <a href="https://uk.trustpilot.com/review/abelini.com" target="_blank" rel="noopener">
                     Trustpilot
                   </a>
                 </div>
@@ -115,7 +122,7 @@ const ReviewSection = () => {
               aria-selected={activeTab === 'trustshop'}
               aria-controls="trustshop-tabpanel"
               id="trustshop-tab"
-              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] border-b-3 transition-all duration-200 h-full ${
+              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] border-b-5 transition-all duration-200 h-full ${
                 activeTab === 'trustshop' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('trustshop')}
@@ -132,8 +139,11 @@ const ReviewSection = () => {
                   ref={etrustedWidgetRef}
                   className="pointer-events-none"
                 >
-                  <p className="lg:text-p-14 text-p-10 font-light text-[#111111] mb-2 tracking-wider">
-                    Trust Shop {reviewsData?.trust_shops_total_review?.percentage} | {reviewsData?.trust_shops_total_review?.total_review} reviews
+                  <p className="text-[13px] font-normal leading-5 tracking-[0.8px] text-[#111] mb-2 lg:text-[14px] lg:font-light lg:mb-0 lg:tracking-[0.8px]">
+                    Trust Shop {reviewsData?.trust_shops_total_review?.percentage}
+                    <span className="lg:hidden"><br /></span>
+                    <span className="hidden lg:inline"> | </span>
+                    {reviewsData?.trust_shops_total_review?.total_review} reviews
                   </p>
                 </div>
               </div>
@@ -147,7 +157,7 @@ const ReviewSection = () => {
               aria-selected={activeTab === 'google'}
               aria-controls="google-tabpanel"
               id="google-tab"
-              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] border-b-3 transition-all duration-200 h-full ${
+              className={`overflow-hidden lg:px-4 lg:py-2 min-h-[90px] border-b-5 transition-all duration-200 h-full ${
                 activeTab === 'google' ? 'border-[#EF9000]' : 'border-transparent hover:border-[#EF9000]'
               }`}
               onClick={() => setActiveTab('google')}
@@ -160,10 +170,12 @@ const ReviewSection = () => {
                 height={30} 
               />
               <div className="flex items-center justify-center">
-                <p className="lg:text-p-14 text-p-10 font-light text-[#111111] mb-2 tracking-wider">
-                  Google {reviewsData?.google_total_review?.percentage} | {reviewsData?.google_total_review?.total_review} reviews
+                <p className="text-[13px] font-normal leading-5 tracking-[0.8px] text-[#111] mb-2 lg:text-[14px] lg:font-light lg:mb-0 lg:tracking-[0.8px]">
+                  Google {reviewsData?.google_total_review?.percentage}
+                  <span className="lg:hidden"><br /></span>
+                  <span className="hidden lg:inline"> | </span>
+                  {reviewsData?.google_total_review?.total_review} reviews
                 </p>
-                
               </div>
             </button>
           </div>
@@ -248,7 +260,12 @@ const ReviewSection = () => {
                           {/* Star Rating Section */}
                           <div className="flex justify-center mt-3 gap-1">
                             {[...Array(5)].map((_, index) => (
-                              <Image src="/assets/images/icons/star.svg" alt="Star" className="!w-5"/>
+                              <Image 
+                                key={index} // <--- Add this line
+                                src="/assets/images/icons/star.svg" 
+                                alt="Star" 
+                                className="!w-5"
+                              />
                             ))}
                           </div>
                           <p className="text-[14px] text-black font-bold my-4 text-xl capitalize"></p>
@@ -269,6 +286,7 @@ const ReviewSection = () => {
                   <button
                     onClick={scrollPrev}
                     disabled={selectedIndex === 0}
+                    aria-label="Previous"
                     className="absolute left-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none w-fit disabled:opacity-50 disabled:cursor-not-allowed p-3"
                   >
                     <Image
@@ -290,6 +308,7 @@ const ReviewSection = () => {
                   <button
                     onClick={scrollNext}
                     disabled={selectedIndex === scrollSnaps.length - 1}
+                    aria-label="Next"
                     className="absolute right-[0] top-1/2 -translate-y-1/2 z-10 bg-transparent lg:bg-[#111111] rounded-full lg:rounded-none w-fit disabled:opacity-50 disabled:cursor-not-allowed p-3"
                   >
                     <Image
@@ -317,4 +336,4 @@ const ReviewSection = () => {
   );
 };
 
-export default ReviewSection;
+export default Review;

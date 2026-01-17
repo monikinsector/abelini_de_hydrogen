@@ -1,6 +1,6 @@
-// app/lib/swagger.server.ts
+import { ENV } from '~/lib/env.server';
 
-export interface GoogleReview {
+interface GoogleReview {
     review_id: string;
     author: string;
     title: string;
@@ -21,11 +21,17 @@ export interface SwaggerReviewResponse {
     google_reviews: GoogleReview[];
 }
   
+export interface SwaggerEnv {
+    SWAGGER_API_URL: string;
+    SWAGGER_API_AUTH: string;
+}
+
 // Server-side fetch function
-export async function fetchGoogleReviews(): Promise<SwaggerReviewResponse> {
-    const API_URL = 'https://erp.abelini.com/shopify/api/google_review.php';
-    const API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NDgzNDMzMTYsImlzcyI6Imh0dHBzOi8vZXJwLmFiZWxpbmkuY29tLyJ9.jMDU762J-JX7Y5AA3mxeFYFu8xtaBCInpqnwirrNYpo';
-  
+export async function fetchGoogleReviews(swaggerEnv: SwaggerEnv): Promise<SwaggerReviewResponse> {
+    const API_URL = `${swaggerEnv?.SWAGGER_API_URL}api/google_review.php`;
+    const API_TOKEN = `${swaggerEnv?.SWAGGER_API_AUTH}`;
+    console.log(API_URL);
+    console.log(API_TOKEN);
     const res = await fetch(API_URL, {
         method: 'POST',
         headers: {
