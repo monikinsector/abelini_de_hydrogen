@@ -2,9 +2,9 @@ import {useState, useEffect} from 'react';
 import {Image} from '@shopify/hydrogen';
 import {Link} from 'react-router';
 import useEmblaCarousel from 'embla-carousel-react';
-import { engagementRings, labGrownDiamonds } from './Data/homepage.data';
+import { engagementRings, labGrownDiamonds, type EngagementRings, type LabGrownDiamonds } from './Data/homepage.data';
 
-export function ImageWithProductSlider({rings}: Readonly<{rings: any[]}>) {
+export function ImageWithProductSlider({rings}: Readonly<{rings: EngagementRings[] | LabGrownDiamonds[]}>) {
   const [emblaRef, emblaApi] = useEmblaCarousel({loop: false});
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
@@ -119,12 +119,12 @@ export default function AbeliniOccasion() {
               <div className="w-full">
                 <Image
                   src="/assets/images/home/most_loved_engagement_1_1410x666.webp"
-                  alt="Engagement Rings"
+                  alt="Most Loved Engagement Rings"
                   className="w-full h-auto object-cover hidden lg:block"
                 />
                 <Image
                   src="/assets/images/mobile/home/most_loved_engagement_mobile_1-450x660.webp"
-                  alt="Engagement Rings"
+                  alt="Most Loved Engagement Rings"
                   className="object-cover lg:hidden block"
                 />
               </div>
@@ -150,7 +150,7 @@ export default function AbeliniOccasion() {
             </div>
 
             <div className="w-full lg:py-12 py-2 relative lg:ml-[48px]">
-              <ImageWithProductSlider rings={engagementRings} />
+              <ImageWithProductSlider rings={engagementRings as EngagementRings[]} />
             </div>
           </div>
 
@@ -158,7 +158,7 @@ export default function AbeliniOccasion() {
             <Image
               src="/assets/images/home/young_woman_709x551.webp"
               loading="lazy"
-              alt="Model wearing jewelry"
+              alt="Young woman wearing jewelry"
               className="object-cover w-full h-full"
             />
           </div>
@@ -169,7 +169,7 @@ export default function AbeliniOccasion() {
             <Image
               src="/assets/images/home/young_blonde_woman_707x551.webp"
               loading="lazy"
-              alt="Model wearing jewelry"
+              alt="Blonde woman wearing jewelry"
               className="object-cover w-[100%] h-[100%]"
               width={707}
               height={551}
@@ -180,13 +180,13 @@ export default function AbeliniOccasion() {
               <div className="w-full">
                 <Image
                   src="/assets/images/home/plain_wedding_rings_1_1410x666.webp"
-                  alt="Engagement Rings"
+                  alt="Lab Grown Diamonds Jewellery"
                   className="w-full h-auto object-cover hidden lg:block"
                   width={1410}
                 />
                 <Image
                   src="/assets/images/mobile/home/plain_wedding_rings_mobile_1-450x660.webp"
-                  alt="Engagement Rings"
+                  alt="Lab Grown Diamonds Jewellery"
                   className="w-full sm:h-[860px] object-cover lg:hidden block "
                   width={450}
                 />
