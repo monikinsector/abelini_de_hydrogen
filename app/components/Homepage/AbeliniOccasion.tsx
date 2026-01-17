@@ -2,9 +2,9 @@ import {useState, useEffect} from 'react';
 import {Image} from '@shopify/hydrogen';
 import {Link} from 'react-router';
 import useEmblaCarousel from 'embla-carousel-react';
-import { engagementRings, labGrownDiamonds } from './Data/homepage.data';
+import { engagementRings, labGrownDiamonds, type EngagementRings, type LabGrownDiamonds } from './Data/homepage.data';
 
-export function ImageWithProductSlider({rings}: Readonly<{rings: any[]}>) {
+export function ImageWithProductSlider({rings}: Readonly<{rings: EngagementRings[] | LabGrownDiamonds[]}>) {
   const [emblaRef, emblaApi] = useEmblaCarousel({loop: false});
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
@@ -150,7 +150,7 @@ export default function AbeliniOccasion() {
             </div>
 
             <div className="w-full lg:py-12 py-2 relative lg:ml-[48px]">
-              <ImageWithProductSlider rings={engagementRings} />
+              <ImageWithProductSlider rings={engagementRings as EngagementRings[]} />
             </div>
           </div>
 

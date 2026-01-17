@@ -1,9 +1,9 @@
 import { Image } from '@shopify/hydrogen';
 import React from 'react';
 import { Link } from 'react-router';
-import { categories } from './Data/homepage.data';
+import { categories, type Category } from './Data/homepage.data';
 
-const CategorySection = () => {
+const CategorySection: React.FC = () => {
 
   return (
     <section className="flex flex-col">
