@@ -140,7 +140,7 @@ export const CustomizationPanel: React.FC<{
             </div>
           </div>
           {tab === 'custom' ? (
-            <RangeSlider key="single" value={1.5} onChange={(v) => console.log(v)} />
+            <RangeSlider key="single" value={0.2} onChange={(v) => console.log(v)} />
           ) : (
             <RangeSlider
               key="double"
