@@ -29,7 +29,7 @@ export type HeroBannerProps = {
     url: string;
     altText: string;
   };
-  terms_conditions_text: string;
+  terms_conditions_text?: string;
   banner_link_only: string;
   background_color: string;
   background_image: {
