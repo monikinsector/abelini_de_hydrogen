@@ -16,6 +16,9 @@ import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import tailwindCss from './styles/tailwind.css?url';
 import carouselCss from './styles/carousel.css?url';
 import {PageLayout} from './components/PageLayout';
+/**
+ * Zendesk Script for live chat
+ */
 import {ZendeskScript} from './components/ZendeskScript';
 
 export type RootLoader = typeof loader;
@@ -61,6 +64,15 @@ export function links() {
     {
       rel: 'preconnect',
       href: 'https://shop.app',
+    },
+    // Preconnect to Zendesk domains for improved chat widget loading performance
+    {
+      rel: 'preconnect',
+      href: 'https://static.zdassets.com',
+    },
+    {
+      rel: 'preconnect',
+      href: 'https://widget-mediator.zopim.com',
     },
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
   ];
@@ -113,6 +125,9 @@ export async function loader(args: Route.LoaderArgs) {
     heroBanner,
     heroBannerId,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
+    // Zendesk Web Widget API key - accessed using bracket notation to handle optional env vars
+    // @ts-expect-error - PUBLIC_ZENDESK_KEY may not be in the Env type definition
+    zendeskKey: env['PUBLIC_ZENDESK_KEY'],
     shop: getShopAnalytics({
       storefront,
       publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
