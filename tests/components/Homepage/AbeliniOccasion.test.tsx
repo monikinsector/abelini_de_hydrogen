@@ -5,7 +5,9 @@ import AbeliniOccasion from '~/components/Homepage/AbeliniOccasion';
 // Create stable mock API object to prevent infinite loops
 const mockScrollPrev = jest.fn();
 const mockScrollNext = jest.fn();
-const mockOn = jest.fn((event, callback) => {
+type MockOn = jest.Mock & { callbacks?: Record<string, () => void> };
+
+const mockOn: MockOn = jest.fn((event, callback) => {
   // Store callbacks for testing
   if (!mockOn.callbacks) {
     mockOn.callbacks = {};
@@ -63,6 +65,37 @@ const mockLabGrownDiamonds = [
   { id: 5, name: 'Bracelets', href: 'bracelets/lab-grown-diamond', img: '/assets/images/home/category/bracelet.webp' },
 ];
 
+const renderAbeliniOccasion = () => render(<AbeliniOccasion />);
+
+const getImageBySrc = (images: HTMLElement[], src: string) => {
+  for (const image of images) {
+    if (image.getAttribute('src') === src) {
+      return image;
+    }
+  }
+  return undefined;
+};
+
+const expectHasImageSrcFragment = (images: HTMLElement[], srcFragment: string) => {
+  let hasImage = false;
+  for (const image of images) {
+    if (image.getAttribute('src')?.includes(srcFragment)) {
+      hasImage = true;
+      break;
+    }
+  }
+  expect(hasImage).toBe(true);
+};
+
+const getMockCallback = (eventName: string): (() => void) | undefined => {
+  for (const call of mockOn.mock.calls) {
+    if (call[0] === eventName) {
+      return call[1];
+    }
+  }
+  return undefined;
+};
+
 describe('AbeliniOccasion', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -74,67 +107,67 @@ describe('AbeliniOccasion', () => {
 
   describe('Rendering without failure', () => {
     it('renders without crashing', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       expect(screen.getByRole('heading', { name: /Abelini For Any Occasion/i })).toBeInTheDocument();
     });
   });
 
   describe('UI driven by CMS data', () => {
     it('renders main heading with correct text', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const heading = screen.getByRole('heading', { name: /Abelini For Any Occasion/i });
       expect(heading).toBeInTheDocument();
       expect(heading.tagName).toBe('H2');
     });
 
     it('renders introductory paragraph text', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       expect(screen.getByText(/OUR JEWELLERY/i)).toBeInTheDocument();
     });
 
     it('renders section heading for Most Loved Engagement Rings', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const heading = screen.getByRole('heading', { name: /Most Loved Engagement Rings/i });
       expect(heading).toBeInTheDocument();
       expect(heading.tagName).toBe('H3');
     });
 
     it('renders section heading for Lab Grown Diamonds', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const heading = screen.getByRole('heading', { name: /In Trend Lab Grown Diamonds/i });
       expect(heading).toBeInTheDocument();
       expect(heading.tagName).toBe('H3');
     });
 
     it('renders all engagement ring names from provided data', () => {
-      render(<AbeliniOccasion />);
-      
-      mockEngagementRings.forEach((ring) => {
+      renderAbeliniOccasion();
+
+      for (const ring of mockEngagementRings) {
         expect(screen.getByText(ring.name)).toBeInTheDocument();
-      });
+      }
     });
 
     it('renders all lab grown diamond names from provided data', () => {
-      render(<AbeliniOccasion />);
-      
-      mockLabGrownDiamonds.forEach((diamond) => {
+      renderAbeliniOccasion();
+
+      for (const diamond of mockLabGrownDiamonds) {
         // Use getAllByText since "Engagement Rings" appears in multiple places (link and carousel)
         const elements = screen.getAllByText(diamond.name);
         expect(elements.length).toBeGreaterThan(0);
-      });
+      }
     });
   });
 
   describe('User-visible links', () => {
     it('renders engagement rings link with correct href', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const link = screen.getByRole('link', { name: /Engagement Rings/i });
       expect(link).toBeInTheDocument();
       expect(link).toHaveAttribute('href', 'engagement-rings');
     });
 
     it('renders lab grown diamonds link with correct href', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const link = screen.getByRole('link', { name: /Lab Grown Diamonds/i });
       expect(link).toBeInTheDocument();
       expect(link).toHaveAttribute('href', 'lab-grown-diamonds');
@@ -143,102 +176,84 @@ describe('AbeliniOccasion', () => {
 
   describe('Images', () => {
     it('renders engagement ring images with correct src and alt attributes from data', () => {
-      render(<AbeliniOccasion />);
-      
-      mockEngagementRings.forEach((ring) => {
+      renderAbeliniOccasion();
+
+      for (const ring of mockEngagementRings) {
         const ringImage = screen.getByRole('img', { name: ring.name });
         expect(ringImage).toBeInTheDocument();
         expect(ringImage).toHaveAttribute('src', ring.img);
         expect(ringImage).toHaveAttribute('alt', ring.name);
-      });
+      }
     });
 
     it('renders lab grown diamond images with correct src and alt attributes from data', () => {
-      render(<AbeliniOccasion />);
-      
-      mockLabGrownDiamonds.forEach((diamond) => {
+      renderAbeliniOccasion();
+
+      for (const diamond of mockLabGrownDiamonds) {
         // Use getAllByRole since some alt texts may appear multiple times (e.g., "Engagement Rings" in banners)
         // Filter by src to find the specific carousel image
         const diamondImages = screen.getAllByRole('img', { name: diamond.name });
-        const diamondImage = diamondImages.find(img => img.getAttribute('src') === diamond.img);
+        const diamondImage = getImageBySrc(diamondImages, diamond.img);
         expect(diamondImage).toBeInTheDocument();
         expect(diamondImage).toHaveAttribute('src', diamond.img);
         expect(diamondImage).toHaveAttribute('alt', diamond.name);
-      });
+      }
     });
 
     it('renders most loved engagement rings banner images', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const bannerImages = screen.getAllByRole('img', { name: /Most Loved Engagement Rings/i });
       expect(bannerImages.length).toBeGreaterThan(0);
       // Check that at least one banner image has the expected src
-      const hasBannerImage = bannerImages.some(img => 
-        img.getAttribute('src')?.includes('most_loved_engagement_1_1410x666')
-      );
-      expect(hasBannerImage).toBe(true);
+      expectHasImageSrcFragment(bannerImages, 'most_loved_engagement_1_1410x666');
     });
 
 
     it('renders most loved engagement rings mobile banner images', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const bannerImages = screen.getAllByRole('img', { name: /Most Loved Engagement Rings/i });
       expect(bannerImages.length).toBeGreaterThan(0);
       // Check that at least one banner image has the expected src
-      const hasBannerImage = bannerImages.some(img => 
-        img.getAttribute('src')?.includes('most_loved_engagement_mobile_1')
-      );
-      expect(hasBannerImage).toBe(true);
+      expectHasImageSrcFragment(bannerImages, 'most_loved_engagement_mobile_1');
     });
 
 
     it('renders young woman wearing jewelry images', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const bannerImages = screen.getAllByRole('img', { name: /Young woman wearing jewelry/i });
       expect(bannerImages.length).toBeGreaterThan(0);
       // Check that at least one banner image has the expected src
-      const hasBannerImage = bannerImages.some(img => 
-        img.getAttribute('src')?.includes('young_woman_709x551')
-      );
-      expect(hasBannerImage).toBe(true);
+      expectHasImageSrcFragment(bannerImages, 'young_woman_709x551');
     });
 
     it('renders blonde woman wearing jewelry images', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const bannerImages = screen.getAllByRole('img', { name: /Blonde woman wearing jewelry/i });
       expect(bannerImages.length).toBeGreaterThan(0);
       // Check that at least one banner image has the expected src
-      const hasBannerImage = bannerImages.some(img => 
-        img.getAttribute('src')?.includes('young_blonde_woman_707x551')
-      );
-      expect(hasBannerImage).toBe(true);
+      expectHasImageSrcFragment(bannerImages, 'young_blonde_woman_707x551');
     });
 
 
     it('renders lab grown diamonds jewellry banner images', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const bannerImages = screen.getAllByRole('img', { name: /Lab Grown Diamonds Jewellery/i });
       expect(bannerImages.length).toBeGreaterThan(0);
       // Check that at least one banner image has the expected src
-      const hasBannerImage = bannerImages.some(img => 
-        img.getAttribute('src')?.includes('plain_wedding_rings_1_1410x666')
-      );
-      expect(hasBannerImage).toBe(true);
+      expectHasImageSrcFragment(bannerImages, 'plain_wedding_rings_1_1410x666');
     });
 
 
     it('renders lab grown diamonds jewellry mobile banner images', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const bannerImages = screen.getAllByRole('img', { name: /Lab Grown Diamonds Jewellery/i });
       expect(bannerImages.length).toBeGreaterThan(0);
       // Check that at least one banner image has the expected src
-      const hasBannerImage = bannerImages.some(img => 
-        img.getAttribute('src')?.includes('plain_wedding_rings_mobile_1')
-      );
-      expect(hasBannerImage).toBe(true);
+      expectHasImageSrcFragment(bannerImages, 'plain_wedding_rings_mobile_1');
     });
 
     it('renders model images with correct alt text', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       // Check for both model images with their actual alt texts
       const youngWomanImages = screen.getAllByRole('img', { name: /Young woman wearing jewelry/i });
       const blondeWomanImages = screen.getAllByRole('img', { name: /Blonde woman wearing jewelry/i });
@@ -249,30 +264,30 @@ describe('AbeliniOccasion', () => {
 
   describe('Carousel navigation', () => {
     it('renders previous navigation button', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const prevButtons = screen.getAllByRole('button', { name: /Previous/i });
       expect(prevButtons.length).toBeGreaterThan(0);
     });
 
     it('renders next navigation button', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const nextButtons = screen.getAllByRole('button', { name: /Next/i });
       expect(nextButtons.length).toBeGreaterThan(0);
     });
 
     it('renders previous button that can be clicked when not at start', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const prevButtons = screen.getAllByRole('button', { name: /Previous/i });
       expect(prevButtons.length).toBeGreaterThan(0);
       // Button may be disabled at start (index 0), which is expected behavior
       // We test that the button exists and has proper accessibility
-      prevButtons.forEach(button => {
+      for (const button of prevButtons) {
         expect(button).toBeInTheDocument();
-      });
+      }
     });
 
     it('calls scrollNext when next button is clicked', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const nextButtons = screen.getAllByRole('button', { name: /Next/i });
       fireEvent.click(nextButtons[0]);
       expect(mockScrollNext).toHaveBeenCalled();
@@ -281,23 +296,23 @@ describe('AbeliniOccasion', () => {
 
   describe('Accessibility', () => {
     it('has proper heading structure', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const mainHeading = screen.getByRole('heading', { name: /Abelini For Any Occasion/i });
       expect(mainHeading).toBeInTheDocument();
       expect(mainHeading.tagName).toBe('H2');
     });
 
     it('has accessible images with alt text from data', () => {
-      render(<AbeliniOccasion />);
-      
-      mockEngagementRings.forEach((ring) => {
+      renderAbeliniOccasion();
+
+      for (const ring of mockEngagementRings) {
         const image = screen.getByRole('img', { name: ring.name });
         expect(image).toHaveAttribute('alt', ring.name);
-      });
+      }
     });
 
     it('has accessible navigation buttons with descriptive labels', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const prevButtons = screen.getAllByRole('button', { name: /Previous/i });
       const nextButtons = screen.getAllByRole('button', { name: /Next/i });
       expect(prevButtons.length).toBeGreaterThan(0);
@@ -305,22 +320,22 @@ describe('AbeliniOccasion', () => {
     });
 
     it('next buttons are clickable and trigger scrollNext', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const nextButtons = screen.getAllByRole('button', { name: /Next/i });
       
       // There should be 2 carousels (engagement rings and lab grown diamonds)
       expect(nextButtons.length).toBeGreaterThanOrEqual(2);
       
       // Test clicking each next button
-      nextButtons.forEach((button, index) => {
+      for (const button of nextButtons) {
         mockScrollNext.mockClear();
         fireEvent.click(button);
         expect(mockScrollNext).toHaveBeenCalledTimes(1);
-      });
+      }
     });
 
     it('previous buttons are clickable and trigger scrollPrev when not disabled', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const prevButtons = screen.getAllByRole('button', { name: /Previous/i });
       
       // There should be 2 carousels (engagement rings and lab grown diamonds)
@@ -328,7 +343,7 @@ describe('AbeliniOccasion', () => {
       
       // At the start (index 0), prev buttons are disabled, so clicking them won't trigger scroll
       // This is expected behavior - buttons should be disabled at the start
-      prevButtons.forEach((button) => {
+      for (const button of prevButtons) {
         expect(button).toBeInTheDocument();
         // Button may be disabled at start, which is correct accessibility behavior
         if (!button.hasAttribute('disabled')) {
@@ -341,11 +356,11 @@ describe('AbeliniOccasion', () => {
           fireEvent.click(button);
           expect(mockScrollPrev).not.toHaveBeenCalled();
         }
-      });
+      }
     });
 
     it('navigation buttons work independently for each carousel', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       const prevButtons = screen.getAllByRole('button', { name: /Previous/i });
       const nextButtons = screen.getAllByRole('button', { name: /Next/i });
       
@@ -389,26 +404,26 @@ describe('AbeliniOccasion', () => {
 
   describe('Data mapping behavior', () => {
     it('maps each engagement ring item to an image with correct structure', () => {
-      render(<AbeliniOccasion />);
-      
-      mockEngagementRings.forEach((ring) => {
+      renderAbeliniOccasion();
+
+      for (const ring of mockEngagementRings) {
         const image = screen.getByRole('img', { name: ring.name });
         expect(image).toHaveAttribute('src', ring.img);
         expect(image).toHaveAttribute('alt', ring.name);
-      });
+      }
     });
 
     it('maps each lab grown diamond item to an image with correct structure', () => {
-      render(<AbeliniOccasion />);
-      
-      mockLabGrownDiamonds.forEach((diamond) => {
+      renderAbeliniOccasion();
+
+      for (const diamond of mockLabGrownDiamonds) {
         // Use getAllByRole since some alt texts may appear multiple times (e.g., "Engagement Rings" in banners)
         // Filter by src to find the specific carousel image
         const diamondImages = screen.getAllByRole('img', { name: diamond.name });
-        const image = diamondImages.find(img => img.getAttribute('src') === diamond.img);
+        const image = getImageBySrc(diamondImages, diamond.img);
         expect(image).toHaveAttribute('src', diamond.img);
         expect(image).toHaveAttribute('alt', diamond.name);
-      });
+      }
     });
   });
 
@@ -472,25 +487,26 @@ describe('AbeliniOccasion', () => {
     });
 
     it('registers select event handler on mount', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       // Verify that 'select' event handler was registered
       expect(mockOn).toHaveBeenCalledWith('select', expect.any(Function));
     });
 
     it('registers reInit event handler on mount', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       // Verify that 'reInit' event handler was registered
       expect(mockOn).toHaveBeenCalledWith('reInit', expect.any(Function));
     });
 
     it('calls select event handler callback when triggered', () => {
-      render(<AbeliniOccasion />);
-      
+      renderAbeliniOccasion();
+
       // Find the select callback
-      const selectCall = mockOn.mock.calls.find(call => call[0] === 'select');
-      expect(selectCall).toBeDefined();
-      
-      const selectCallback = selectCall[1];
+      const selectCallback = getMockCallback('select');
+      expect(selectCallback).toBeDefined();
+      if (!selectCallback) {
+        throw new Error('Select callback was not registered');
+      }
       
       // Mock selectedScrollSnap to return different index
       mockSelectedScrollSnap.mockReturnValue(1);
@@ -505,13 +521,14 @@ describe('AbeliniOccasion', () => {
     });
 
     it('calls reInit event handler callback when triggered', () => {
-      render(<AbeliniOccasion />);
-      
+      renderAbeliniOccasion();
+
       // Find the reInit callback
-      const reInitCall = mockOn.mock.calls.find(call => call[0] === 'reInit');
-      expect(reInitCall).toBeDefined();
-      
-      const reInitCallback = reInitCall[1];
+      const reInitCallback = getMockCallback('reInit');
+      expect(reInitCallback).toBeDefined();
+      if (!reInitCallback) {
+        throw new Error('reInit callback was not registered');
+      }
       
       // Mock scrollSnapList and selectedScrollSnap
       mockScrollSnapList.mockReturnValue([0, 1, 2, 3]);
@@ -528,7 +545,7 @@ describe('AbeliniOccasion', () => {
     });
 
     it('initializes scrollSnaps and selectedIndex on mount', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       
       // Verify scrollSnapList and selectedScrollSnap were called during initialization
       // These are called in the useEffect when emblaApi is available
@@ -543,13 +560,13 @@ describe('AbeliniOccasion', () => {
       mockSelectedScrollSnap.mockReturnValue(2); // Last index (0, 1, 2)
       mockScrollSnapList.mockReturnValue([0, 1, 2]);
       
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       
       const nextButtons = screen.getAllByRole('button', { name: /Next/i });
       // At the end, next buttons should be disabled
-      nextButtons.forEach(button => {
+      for (const button of nextButtons) {
         expect(button).toBeDisabled();
-      });
+      }
     });
 
     it('enables next button when not at the end', () => {
@@ -557,13 +574,13 @@ describe('AbeliniOccasion', () => {
       mockSelectedScrollSnap.mockReturnValue(0); // First index
       mockScrollSnapList.mockReturnValue([0, 1, 2]);
       
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       
       const nextButtons = screen.getAllByRole('button', { name: /Next/i });
       // When not at the end, next buttons should be enabled
-      nextButtons.forEach(button => {
+      for (const button of nextButtons) {
         expect(button).not.toBeDisabled();
-      });
+      }
     });
 
     it('disables prev button when at the start', () => {
@@ -571,13 +588,13 @@ describe('AbeliniOccasion', () => {
       mockSelectedScrollSnap.mockReturnValue(0);
       mockScrollSnapList.mockReturnValue([0, 1, 2]);
       
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       
       const prevButtons = screen.getAllByRole('button', { name: /Previous/i });
       // At the start, prev buttons should be disabled
-      prevButtons.forEach(button => {
+      for (const button of prevButtons) {
         expect(button).toBeDisabled();
-      });
+      }
     });
 
     it('enables prev button when not at the start', () => {
@@ -585,44 +602,44 @@ describe('AbeliniOccasion', () => {
       mockSelectedScrollSnap.mockReturnValue(1); // Middle index
       mockScrollSnapList.mockReturnValue([0, 1, 2]);
       
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       
       const prevButtons = screen.getAllByRole('button', { name: /Previous/i });
       // When not at the start, prev buttons should be enabled
-      prevButtons.forEach(button => {
+      for (const button of prevButtons) {
         expect(button).not.toBeDisabled();
-      });
+      }
     });
   });
 
   describe('Component structure and layout', () => {
     it('renders all engagement ring carousel items', () => {
-      render(<AbeliniOccasion />);
-      
+      renderAbeliniOccasion();
+
       // Verify all engagement ring items are rendered in the carousel
-      mockEngagementRings.forEach((ring) => {
+      for (const ring of mockEngagementRings) {
         expect(screen.getByText(ring.name)).toBeInTheDocument();
-      });
+      }
     });
 
     it('renders all lab grown diamond carousel items', () => {
-      render(<AbeliniOccasion />);
-      
+      renderAbeliniOccasion();
+
       // Verify all lab grown diamond items are rendered in the carousel
-      mockLabGrownDiamonds.forEach((diamond) => {
+      for (const diamond of mockLabGrownDiamonds) {
         const elements = screen.getAllByText(diamond.name);
         expect(elements.length).toBeGreaterThan(0);
-      });
+      }
     });
 
     it('renders descriptive text for engagement rings section', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       
       expect(screen.getByText(/Our engagement ring collection includes meticulously crafted/i)).toBeInTheDocument();
     });
 
     it('renders descriptive text for lab grown diamonds section', () => {
-      render(<AbeliniOccasion />);
+      renderAbeliniOccasion();
       
       expect(screen.getByText(/Embrace Brilliant Savings with Trending Lab Grown Diamond/i)).toBeInTheDocument();
     });
