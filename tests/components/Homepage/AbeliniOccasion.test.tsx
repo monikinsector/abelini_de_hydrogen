@@ -105,14 +105,7 @@ const findSelectCallback = (): (() => void) | undefined => {
   return undefined;
 };
 
-const triggerSelectCallback = (): void => {
-  const selectCallback = findSelectCallback();
-  if (selectCallback) {
-    act(() => {
-      selectCallback();
-    });
-  }
-};
+// Removed executeCallbackInAct - call act() directly in tests to minimize nesting
 
 const testPreviousButtonClick = (button: HTMLElement): void => {
   expect(button).toBeInTheDocument();
@@ -149,14 +142,7 @@ const verifyPrevButtonDisabled = (prevButtons: HTMLElement[], index: number): vo
   }
 };
 
-const triggerCallbackInAct = (callback: (() => void) | undefined): void => {
-  if (!callback) {
-    throw new Error('Callback was not registered');
-  }
-  act(() => {
-    callback();
-  });
-};
+// Removed triggerCallbackInAct - call act() directly in tests to avoid nesting
 
 describe('AbeliniOccasion', () => {
   beforeEach(() => {
@@ -469,7 +455,13 @@ describe('AbeliniOccasion', () => {
       const { rerender } = render(<ImageWithProductSlider rings={mockEngagementRings} />);
       
       // Trigger the select callback to update component state to index 1
-      triggerSelectCallback();
+      const selectCallback = findSelectCallback();
+      if (!selectCallback) {
+        throw new Error('Select callback was not registered');
+      }
+      act(() => {
+        selectCallback();
+      });
       
       // Re-render to update button states based on new selectedIndex
       rerender(<ImageWithProductSlider rings={mockEngagementRings} />);
@@ -527,12 +519,17 @@ describe('AbeliniOccasion', () => {
       // Find the select callback
       const selectCallback = getMockCallback('select');
       expect(selectCallback).toBeDefined();
+      if (!selectCallback) {
+        throw new Error('Select callback was not registered');
+      }
       
       // Mock selectedScrollSnap to return different index
       mockSelectedScrollSnap.mockReturnValue(1);
       
       // Trigger the callback wrapped in act()
-      triggerCallbackInAct(selectCallback);
+      act(() => {
+        selectCallback();
+      });
       
       // Verify selectedScrollSnap was called
       expect(mockSelectedScrollSnap).toHaveBeenCalled();
@@ -544,13 +541,18 @@ describe('AbeliniOccasion', () => {
       // Find the reInit callback
       const reInitCallback = getMockCallback('reInit');
       expect(reInitCallback).toBeDefined();
+      if (!reInitCallback) {
+        throw new Error('reInit callback was not registered');
+      }
       
       // Mock scrollSnapList and selectedScrollSnap
       mockScrollSnapList.mockReturnValue([0, 1, 2, 3]);
       mockSelectedScrollSnap.mockReturnValue(2);
       
       // Trigger the callback wrapped in act()
-      triggerCallbackInAct(reInitCallback);
+      act(() => {
+        reInitCallback();
+      });
       
       // Verify both methods were called
       expect(mockScrollSnapList).toHaveBeenCalled();

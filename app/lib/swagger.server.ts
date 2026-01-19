@@ -22,9 +22,13 @@ export interface SwaggerReviewResponse {
 }
   
 // Server-side fetch function
-export async function fetchGoogleReviews(): Promise<SwaggerReviewResponse> {
-    const API_URL = 'https://erp.abelini.com/shopify/api/google_review.php';
-    const API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NDgzNDMzMTYsImlzcyI6Imh0dHBzOi8vZXJwLmFiZWxpbmkuY29tLyJ9.jMDU762J-JX7Y5AA3mxeFYFu8xtaBCInpqnwirrNYpo';
+export async function fetchGoogleReviews(env: SwaggerEnv): Promise<SwaggerReviewResponse> {
+    const API_URL = `${env.SWAGGER_API_URL}api/google_review.php`;
+    const API_TOKEN = env.SWAGGER_API_AUTH;
+
+    if (!API_URL || !API_TOKEN) {
+        throw new Error('SWAGGER_API_URL or SWAGGER_API_AUTH is not set');
+    }
   
     const res = await fetch(API_URL, {
         method: 'POST',
