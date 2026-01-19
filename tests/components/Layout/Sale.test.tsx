@@ -64,7 +64,7 @@ describe('SaleBar', () => {
       mockDateNow(mockDate);
 
       const saleEndTime = new Date('2024-01-20T12:00:00Z').toISOString();
-      const { container } = render(
+      render(
         <SaleBar text="Test" saleEndTime={saleEndTime} link="/test" />
       );
 
@@ -250,7 +250,7 @@ describe('SaleBar', () => {
     });
 
     it('clears interval on unmount', () => {
-      const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
+      const clearIntervalSpy = jest.spyOn(globalThis, 'clearInterval');
       let currentTime = new Date('2024-01-15T12:00:00Z').getTime();
       mockDateNow(() => currentTime);
 
@@ -365,9 +365,6 @@ describe('SaleBar', () => {
       };
 
       const { rerender } = render(<SaleBar {...props} />);
-
-      // Get initial countdown values
-      const initialDays = screen.getByText(/^\d{2}D$/).textContent;
 
       // Rerender with same props
       rerender(<SaleBar {...props} />);

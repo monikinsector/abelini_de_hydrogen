@@ -72,7 +72,7 @@ function MenuHeader({globalPhone}: Readonly<{globalPhone: string}>) {
           }
           {headerLinks.map((item, index) => {
             return (
-              <div key={item} className="mx-auto group" onMouseLeave={() => setHoverEntered("")}>
+              <button key={item} className="mx-auto group" onMouseLeave={() => setHoverEntered("")}>
                 <li onMouseEnter={() => setHoverEntered(item)} className={
                   cn(
                     'px-4 h-full text-[1rem] py-5 text-wrap whitespace-nowrap  border-b-2 border-b-white hover:border-b-2 hover:border-b-yellow-500 tracking-wide cursor-pointer mb-0',
@@ -94,7 +94,7 @@ function MenuHeader({globalPhone}: Readonly<{globalPhone: string}>) {
                     />
                   </div>
                 }
-              </div>
+              </button>
             )
           })}
           {/* Icons shown when navbar is Sticked */}
@@ -412,7 +412,7 @@ function MenuDropdown({ totalCols, data, leftBorderFromIndex, lastColDoubleSpace
     switch (type) {
       case "heading": {
         const { text } = data as { text: string };
-        return <h3 className="text-p-14 font-semibold text-[#111111]">{text}</h3>;
+        return <h3 className="text-p-14 font-semibold text-[#111111] text-left">{text}</h3>;
       }
 
       case "links_with_image": {

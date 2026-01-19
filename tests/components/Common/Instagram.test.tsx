@@ -1,4 +1,4 @@
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import Instagram from '~/components/Common/Instagram';
 
 // Mock Hydrogen Image component
@@ -11,7 +11,7 @@ jest.mock('@shopify/hydrogen', () => ({
 describe('Instagram Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (global as any).fetch = jest.fn();
+    (globalThis as any).fetch = jest.fn();
   });
 
   const mockInstagramResponse = {
