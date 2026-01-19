@@ -96,6 +96,59 @@ const getMockCallback = (eventName: string): (() => void) | undefined => {
   return undefined;
 };
 
+const findSelectCallback = (): (() => void) | undefined => {
+  for (const call of mockOn.mock.calls) {
+    if (call[0] === 'select') {
+      return call[1];
+    }
+  }
+  return undefined;
+};
+
+const triggerSelectCallback = (): void => {
+  const selectCallback = findSelectCallback();
+  if (selectCallback) {
+    act(() => {
+      selectCallback();
+    });
+  }
+};
+
+const testPreviousButtonClick = (button: HTMLElement): void => {
+  expect(button).toBeInTheDocument();
+  if (!button.hasAttribute('disabled')) {
+    mockScrollPrev.mockClear();
+    fireEvent.click(button);
+    expect(mockScrollPrev).toHaveBeenCalledTimes(1);
+  } else {
+    mockScrollPrev.mockClear();
+    fireEvent.click(button);
+    expect(mockScrollPrev).not.toHaveBeenCalled();
+  }
+};
+
+const verifyRingsRendered = (): void => {
+  for (const ring of mockEngagementRings) {
+    expect(screen.getByText(ring.name)).toBeInTheDocument();
+  }
+};
+
+const clickNextButtonIfAvailable = (nextButtons: HTMLElement[], index: number, expectedCallCount: number): void => {
+  if (nextButtons.length > index) {
+    fireEvent.click(nextButtons[index]);
+    expect(mockScrollNext).toHaveBeenCalledTimes(expectedCallCount);
+  }
+};
+
+const verifyPrevButtonDisabled = (prevButtons: HTMLElement[], index: number): void => {
+  if (prevButtons.length > index) {
+    expect(prevButtons[index]).toBeInTheDocument();
+    expect(prevButtons[index]).toBeDisabled();
+    fireEvent.click(prevButtons[index]);
+    expect(mockScrollPrev).not.toHaveBeenCalled();
+  }
+};
+
 describe('AbeliniOccasion', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -344,18 +397,7 @@ describe('AbeliniOccasion', () => {
       // At the start (index 0), prev buttons are disabled, so clicking them won't trigger scroll
       // This is expected behavior - buttons should be disabled at the start
       for (const button of prevButtons) {
-        expect(button).toBeInTheDocument();
-        // Button may be disabled at start, which is correct accessibility behavior
-        if (!button.hasAttribute('disabled')) {
-          mockScrollPrev.mockClear();
-          fireEvent.click(button);
-          expect(mockScrollPrev).toHaveBeenCalledTimes(1);
-        } else {
-          // If disabled, clicking should not trigger scroll
-          mockScrollPrev.mockClear();
-          fireEvent.click(button);
-          expect(mockScrollPrev).not.toHaveBeenCalled();
-        }
+        testPreviousButtonClick(button);
       }
     });
 
@@ -369,36 +411,15 @@ describe('AbeliniOccasion', () => {
       mockScrollPrev.mockClear();
       
       // Click next button for engagement rings carousel (first carousel)
-      if (nextButtons.length > 0) {
-        fireEvent.click(nextButtons[0]);
-        expect(mockScrollNext).toHaveBeenCalledTimes(1);
-      }
+      clickNextButtonIfAvailable(nextButtons, 0, 1);
       
       // Click next button for lab grown diamonds carousel (second carousel)
-      if (nextButtons.length > 1) {
-        fireEvent.click(nextButtons[1]);
-        expect(mockScrollNext).toHaveBeenCalledTimes(2);
-      }
+      clickNextButtonIfAvailable(nextButtons, 1, 2);
       
       // Previous buttons are disabled at start (index 0), so they won't trigger scroll
       // This is expected behavior - verify buttons exist and are properly disabled
-      if (prevButtons.length > 0) {
-        expect(prevButtons[0]).toBeInTheDocument();
-        // At start, prev button should be disabled
-        expect(prevButtons[0]).toBeDisabled();
-        fireEvent.click(prevButtons[0]);
-        // Disabled button should not trigger scroll
-        expect(mockScrollPrev).not.toHaveBeenCalled();
-      }
-      
-      if (prevButtons.length > 1) {
-        expect(prevButtons[1]).toBeInTheDocument();
-        // At start, prev button should be disabled
-        expect(prevButtons[1]).toBeDisabled();
-        fireEvent.click(prevButtons[1]);
-        // Disabled button should not trigger scroll
-        expect(mockScrollPrev).not.toHaveBeenCalled();
-      }
+      verifyPrevButtonDisabled(prevButtons, 0);
+      verifyPrevButtonDisabled(prevButtons, 1);
     });
   });
 
@@ -439,12 +460,7 @@ describe('AbeliniOccasion', () => {
       const { rerender } = render(<ImageWithProductSlider rings={mockEngagementRings} />);
       
       // Trigger the select callback to update component state to index 1
-      const selectCall = mockOn.mock.calls.find(call => call[0] === 'select');
-      if (selectCall && selectCall[1]) {
-        act(() => {
-          selectCall[1]();
-        });
-      }
+      triggerSelectCallback();
       
       // Re-render to update button states based on new selectedIndex
       rerender(<ImageWithProductSlider rings={mockEngagementRings} />);
@@ -476,9 +492,7 @@ describe('AbeliniOccasion', () => {
         expect(container).toBeInTheDocument();
         
         // Verify that the component rendered the rings
-        mockEngagementRings.forEach((ring) => {
-          expect(screen.getByText(ring.name)).toBeInTheDocument();
-        });
+        verifyRingsRendered();
       } finally {
         // Always reset shouldReturnNullApi, even if test fails
         // (beforeEach will also reset it, but this ensures immediate cleanup)
