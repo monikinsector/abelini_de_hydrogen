@@ -170,7 +170,7 @@ function MobileHeaderNav({
 
 
   return (
-    <nav className="md:hidden block bg-white border-t-2 border-t-gray-300 relative">
+    <nav className="sticky top-8 z-99 md:hidden block bg-white border-t-2 border-t-gray-300 relative">
       <div className="flex items-center px-4 py-3">
         <button
           type="button"
@@ -385,7 +385,7 @@ function MenuDropdown({totalCols, data, leftBorderFromIndex, lastColDoubleSpace,
             return (data?.links ?? []).map((d: HeaderLink, ixs: number) => {
               return (
                 <Link to={d.link} className="flex items-center gap-2 py-[6px] "> 
-                  <Image src={d.image} alt={d.name} width={25}/>
+                  <Image src={d.image} alt={d.name} width={31} height={30}/>
                   <h3 className="text-p-14 font-regular text-muted">{d.name}</h3>
                 </Link>
               )
