@@ -25,6 +25,7 @@ export default async function handleRequest(
   let header = baseHeader;
   
   // Add script-src for widget scripts
+  // Zendesk: Allows loading the snippet.js script from zdassets.com
   const scriptSrcMatch = baseHeader.match(/script-src[^;]+/);
   if (scriptSrcMatch) {
     header = header.replace(
@@ -32,13 +33,17 @@ export default async function handleRequest(
       `$1 https://widget.trustpilot.com https://integrations.etrusted.com https://static.zdassets.com https://*.zdassets.com`
     );
   } else {
+    // Extract default-src values (without the directive name) to reuse in script-src
+    const defaultSrcMatch = baseHeader.match(/default-src\s+([^;]+)/);
+    const defaultSrcValues = defaultSrcMatch ? defaultSrcMatch[1] : "'self'";
     header = header.replace(
       /(default-src[^;]+)/,
-      `$1; script-src $1 https://widget.trustpilot.com https://integrations.etrusted.com https://static.zdassets.com https://*.zdassets.com`
+      `$1; script-src ${defaultSrcValues} https://widget.trustpilot.com https://integrations.etrusted.com https://static.zdassets.com https://*.zdassets.com`
     );
   }
   
   // Add style-src for Google Fonts, eTrusted widget, and Zendesk
+  // Zendesk: Allows loading widget styles from zdassets.com
   const styleSrcMatch = header.match(/style-src[^;]+/);
   if (styleSrcMatch) {
     header = header.replace(
@@ -60,15 +65,18 @@ export default async function handleRequest(
     header = header + `; font-src 'self' https://fonts.gstatic.com https://cdn.shopify.com`;
   }
   
-  // Add connect-src for widget API calls
+  // Add connect-src for widget API calls and WebSocket connections
+  // Zendesk: Allows API calls to zendesk.com, zdassets.com, and WebSocket connections to zopim.com
+  // Required for chat widget to establish real-time connections
   const connectSrcMatch = header.match(/connect-src[^;]+/);
   if (connectSrcMatch) {
     header = header.replace(
       /(connect-src[^;]+)/,
-      `$1 https://widget.trustpilot.com https://integrations.etrusted.com https://*.zendesk.com https://*.zdassets.com https://instafeed.nfcube.com`
+      `$1 https://widget.trustpilot.com https://integrations.etrusted.com https://*.zendesk.com https://*.zdassets.com https://*.zopim.com wss://*.zopim.com wss://widget-mediator.zopim.com https://instafeed.nfcube.com`
     );
   } else {
-    header = header + `; connect-src 'self' https://cdn.shopify.com/ https://monorail-edge.shopifysvc.com https://widget.trustpilot.com https://integrations.etrusted.com https://*.zendesk.com https://*.zdassets.com http://localhost:* ws://localhost:* ws://127.0.0.1:* ws://*.tryhydrogen.dev:* https://instafeed.nfcube.com`;
+    header = header + `; connect-src 'self' https://cdn.shopify.com/ https://monorail-edge.shopifysvc.com https://widget.trustpilot.com https://integrations.etrusted.com https://*.zendesk.com https://*.zdassets.com https://*.zopim.com wss://*.zopim.com wss://widget-mediator.zopim.com http://localhost:* ws://localhost:* ws://127.0.0.1:* ws://*.tryhydrogen.dev:* https://instafeed.nfcube.com`;
+
   }
 
   const imgSrcMatch = header.match(/img-src[^;]+/);
@@ -84,6 +92,7 @@ export default async function handleRequest(
   header = header.replace(/;;+/g, ';'); // Remove double semicolons
   
   // Add frame-src for Trustpilot and Zendesk iframes
+  // Zendesk: Allows embedding the chat widget iframe from zendesk.com and zdassets.com
   const frameSrcMatch = header.match(/frame-src[^;]+/);
   if (frameSrcMatch) {
     header = header.replace(
