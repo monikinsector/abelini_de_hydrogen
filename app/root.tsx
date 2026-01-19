@@ -19,7 +19,7 @@ import {PageLayout} from './components/PageLayout';
 /**
  * Zendesk Script for live chat
  */
-import {ZendeskScript} from './components/ZendeskScript';
+import {ZendeskScript} from './components/Common/ZendeskScript';
 
 export type RootLoader = typeof loader;
 
