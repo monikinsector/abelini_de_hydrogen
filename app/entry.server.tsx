@@ -76,6 +76,7 @@ export default async function handleRequest(
     );
   } else {
     header = header + `; connect-src 'self' https://cdn.shopify.com/ https://monorail-edge.shopifysvc.com https://widget.trustpilot.com https://integrations.etrusted.com https://*.zendesk.com https://*.zdassets.com https://*.zopim.com wss://*.zopim.com wss://widget-mediator.zopim.com http://localhost:* ws://localhost:* ws://127.0.0.1:* ws://*.tryhydrogen.dev:* https://instafeed.nfcube.com`;
+
   }
 
   const imgSrcMatch = header.match(/img-src[^;]+/);
