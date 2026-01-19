@@ -40,6 +40,13 @@ export function ZendeskScript() {
       return;
     }
 
+    // Validate Zendesk key format (UUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+    const zendeskKeyPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!zendeskKeyPattern.test(zendeskKey.trim())) {
+      console.warn('Zendesk key format is invalid. Expected UUID format. Chat widget will not be loaded.');
+      return;
+    }
+
     loaded.current = true;
 
     // Create and configure the script element
