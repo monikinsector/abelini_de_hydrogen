@@ -1,5 +1,5 @@
 import {Image} from '@shopify/hydrogen';
-import React, {useState} from 'react';
+import React from 'react';
 import Ratings from '~/components/Common/Ratings';
 import Alert from '../Common/Alert';
 import RingSizeSelector from './RingSizeSelector';

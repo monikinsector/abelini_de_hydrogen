@@ -18,14 +18,14 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
 }) => {
   const baseImages = images.length > 0 ? images : [imageSrc]
   const galleryImages =
-    baseImages.length >= 1
+    baseImages.length >= 5
       ? baseImages
       : [
           ...baseImages,
           '/assets/images/ring.webp',
           '/assets/images/ring.webp',
           '/assets/images/ring.webp',
-          '/assets/images/ring.webp',
+
         ].slice(0, 6)
 
   const [active, setActive] = useState(0)
@@ -36,13 +36,13 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
 
   return (
     <div className="hidden lg:flex flex-col md:flex-row items-start gap-4 mt-4 sticky top-32 self-start">
-      <div className="hidden md:flex flex-col gap-3  flex-shrink-0 order-1">
+      <div className="hidden md:flex flex-col gap-3 flex-shrink-0 order-1">
         {galleryImages.map((img, idx) => (
           <button
             key={img + idx}
             onClick={() => setActive(idx)}
-            className={`rounded-md overflow-hidden border w-full ${
-              idx === active ? 'rounded-xl border-[#cfcfcf]' : 'border-[#cfcfcf]'
+            className={`rounded-xl overflow-hidden border w-full cursor-pointer ${
+              idx === active ? 'rounded-xl border-[#ef9000]' : 'border-[#cfcfcf]'
             }`}
             style={{width: 98, height: 98}}
             aria-label={`Thumbnail ${idx + 1}`}>
@@ -86,20 +86,20 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({
           </button>
         </div>
 
-        {/* <div className="mt-3 md:block hidden">
+        <div className="mt-3 lg:flex lg:justify-center lg:items-center hidden">
           <div ref={thumbRef} className="flex items-center gap-3 overflow-x-auto pb-2">
             {galleryImages.map((img, idx) => (
               <button
                 key={img + idx + '-h'}
                 onClick={() => setActive(idx)}
-                className={`rounded-sm overflow-hidden border ${
-                  idx === active ? 'ring-2 ring-[#bf8f5f]' : 'border-gray-200'
+                className={`rounded-xl overflow-hidden border cursor-pointer ${
+                  idx === active ? ' rounded-xl border-[#ef9000]' : 'border-gray-200'
                 }`}>
-                <Image src={img} alt={`Thumb ${idx + 1}`} width={84} height={84} className="object-cover w-[84px] h-[84px]" />
+                <Image src={img} alt={`Thumb ${idx + 1}`} width={56} height={56} className="object-cover w-[56px] h-[56px]" />
               </button>
             ))}
           </div>
-        </div> */}
+        </div>
       </div>
 
      

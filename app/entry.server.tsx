@@ -29,24 +29,24 @@ export default async function handleRequest(
   if (scriptSrcMatch) {
     header = header.replace(
       /(script-src[^;]+)/,
-      `$1 https://widget.trustpilot.com https://integrations.etrusted.com`
+      `$1 https://widget.trustpilot.com https://integrations.etrusted.com https://static.zdassets.com https://*.zdassets.com`
     );
   } else {
     header = header.replace(
       /(default-src[^;]+)/,
-      `$1; script-src $1 https://widget.trustpilot.com https://integrations.etrusted.com`
+      `$1; script-src $1 https://widget.trustpilot.com https://integrations.etrusted.com https://static.zdassets.com https://*.zdassets.com`
     );
   }
   
-  // Add style-src for Google Fonts and eTrusted widget
+  // Add style-src for Google Fonts, eTrusted widget, and Zendesk
   const styleSrcMatch = header.match(/style-src[^;]+/);
   if (styleSrcMatch) {
     header = header.replace(
       /(style-src[^;]+)/,
-      `$1 https://fonts.googleapis.com https://fonts.gstatic.com https://integrations.etrusted.com`
+      `$1 https://fonts.googleapis.com https://fonts.gstatic.com https://integrations.etrusted.com https://*.zdassets.com`
     );
   } else {
-    header = header + `; style-src 'self' 'unsafe-inline' https://cdn.shopify.com https://fonts.googleapis.com https://fonts.gstatic.com https://integrations.etrusted.com http://localhost:*`;
+    header = header + `; style-src 'self' 'unsafe-inline' https://cdn.shopify.com https://fonts.googleapis.com https://fonts.gstatic.com https://integrations.etrusted.com https://*.zdassets.com http://localhost:*`;
   }
   
   // Add font-src for Google Fonts
@@ -65,21 +65,33 @@ export default async function handleRequest(
   if (connectSrcMatch) {
     header = header.replace(
       /(connect-src[^;]+)/,
-      `$1 https://widget.trustpilot.com https://integrations.etrusted.com`
+      `$1 https://widget.trustpilot.com https://integrations.etrusted.com https://*.zendesk.com https://*.zdassets.com https://instafeed.nfcube.com`
     );
   } else {
-    header = header + `; connect-src 'self' https://cdn.shopify.com/ https://monorail-edge.shopifysvc.com https://widget.trustpilot.com https://integrations.etrusted.com http://localhost:* ws://localhost:* ws://127.0.0.1:* ws://*.tryhydrogen.dev:*`;
+    header = header + `; connect-src 'self' https://cdn.shopify.com/ https://monorail-edge.shopifysvc.com https://widget.trustpilot.com https://integrations.etrusted.com https://*.zendesk.com https://*.zdassets.com http://localhost:* ws://localhost:* ws://127.0.0.1:* ws://*.tryhydrogen.dev:* https://instafeed.nfcube.com`;
   }
+
+  const imgSrcMatch = header.match(/img-src[^;]+/);
+  if (imgSrcMatch) {
+    header = header.replace(
+      /(img-src[^;]+)/,
+      `$1 https://*.cdninstagram.com https://*.fbcdn.net https://images.weserv.nl data:`
+    );
+  } else {
+    header = header + `; img-src 'self' https://*.cdninstagram.com https://*.fbcdn.net https://images.weserv.nl data:`;
+  }
+
+  header = header.replace(/;;+/g, ';'); // Remove double semicolons
   
-  // Add frame-src for Trustpilot iframes
+  // Add frame-src for Trustpilot and Zendesk iframes
   const frameSrcMatch = header.match(/frame-src[^;]+/);
   if (frameSrcMatch) {
     header = header.replace(
       /(frame-src[^;]+)/,
-      `$1 https://widget.trustpilot.com`
+      `$1 https://widget.trustpilot.com https://*.zendesk.com https://*.zdassets.com`
     );
   } else {
-    header = header + `; frame-src 'self' https://widget.trustpilot.com`;
+    header = header + `; frame-src 'self' https://widget.trustpilot.com https://*.zendesk.com https://*.zdassets.com`;
   }
 
   const body = await renderToReadableStream(

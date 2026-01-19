@@ -2,7 +2,7 @@ import {Suspense} from 'react';
 import {Await, Link} from 'react-router';
 import {Image} from '@shopify/hydrogen';
 
-import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
+import type {FooterQuery} from 'storefrontapi.generated';
 import {
   FOOTER_SECTIONS,
   CUSTOMER_SERVICE_LINKS,
@@ -21,7 +21,7 @@ interface FooterProps {
 
 export function Footer({
   footer: footerPromise,
-}: FooterProps) {
+}: Readonly<FooterProps>) {
   return (
     <Suspense>
       <Await resolve={footerPromise}>
@@ -37,7 +37,7 @@ export function Footer({
 
 // Footer menu data structure types are now imported from layout.data.ts
 
-function FooterMenu({}: {}) {
+function FooterMenu() {
   return (
     <nav className="footer-menu bg-[#f4f4f4]" role="navigation">
       {/* Footer Top Section - Newsletter */}
@@ -81,7 +81,7 @@ function FooterMenu({}: {}) {
           </form>
 
           {/* Privacy Notice */}
-          <p className="text-secondary text-p-11">
+          <p className="text-secondary text-p-10">
             By subscribing, some personal data such as your name and email
             address are collected and stored securely for the purposes of
             sending you order updates, special offers, and other promotional
@@ -102,13 +102,13 @@ function FooterMenu({}: {}) {
           <div className="flex flex-col w-full">
             <div className="grid grid-cols-2 lg:grid-cols-5 m-0">
               {FOOTER_SECTIONS.map((section: FooterSection, index: number) => (
-                <div key={index} className="col-span-1 px-4 mb-6">
+                <div key={section.id} className="col-span-1 px-4 mb-6">
                   <h4 className="text-p-14 capitalize font-bold text-primary  lg:my-4 my-2 tracking-wider">
                     {section.title}
                   </h4>
                   <ul className="list-none p-0 m-0">
                     {section.links.map((link: FooterLink, linkIndex: number) => (
-                      <li key={linkIndex} className="py-0.5">
+                      <li key={`${link.label}-${linkIndex}`} className="py-0.5">
                         <Link
                           to={link.href}
                           className="lg:text-secondary text-primary lg:text-p-13 text-p-14 tracking-[0.5px]"
@@ -126,8 +126,9 @@ function FooterMenu({}: {}) {
         {/* Contact Support Section */}
         <div className="border-t border-b border-[#111111] py-6 mb-4">
           <div className="flex justify-center items-center lg:gap-24 gap-8">
-            {CUSTOMER_SERVICE_LINKS.map((link: CustomerServiceLink) => (
+            {CUSTOMER_SERVICE_LINKS.map((link: CustomerServiceLink, linkIndex: number) => (
               <Link
+                key={`${link.label}-${linkIndex}`}
                 to={link.href}
                 className="flex flex-col items-center gap-2 text-black hover:opacity-70 transition-opacity no-underline"
               >
@@ -153,6 +154,7 @@ function FooterMenu({}: {}) {
             <div className="flex justify-center items-center gap-x-8 mb-8 mt-2">
               {SOCIAL_MEDIA_LINKS.map((link: SocialMediaLink) => (
                 <Link
+                  key={link.id}
                   to={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -173,7 +175,7 @@ function FooterMenu({}: {}) {
             {/* Legal Links */}
             <div className="flex flex-wrap justify-center items-center text-p-13 mb-2">
               {FOOTER_LINKS.map((link: FooterLinkItem, index: number) => (
-                <span key={index}>
+                <span key={link.id}>
                   <Link
                     to={link.href}
                     target="_blank"

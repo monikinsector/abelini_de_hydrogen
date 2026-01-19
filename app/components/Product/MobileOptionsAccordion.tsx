@@ -4,19 +4,92 @@ import RangeSlider from '../Common/RangeSlider';
 
 type TabKey = 'metal' | 'stone' | 'shape' | 'carat' | null;
 
+function TabItem({
+  item,
+  onClick,
+  isLast,
+}: Readonly<{
+  item: OptionItem | { label: string; image?: string };
+  onClick: () => void;
+  isLast?: boolean;
+}>) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex flex-col items-center justify-center flex-1 px-1 py-1 gap-1
+      ${isLast ? "" : 'border-r border-gray-300'}`}
+    >
+      {item.image && (
+        <Image src={item.image} alt={item.label} width={28} height={28} />
+      )}
+      <span className="text-[10px] whitespace-nowrap">{item.label}</span>
+    </button>
+  );
+}
+
+function OptionGrid({
+  options,
+  selected,
+  onSelect,
+}: Readonly<{
+  options: OptionItem[];
+  selected: OptionItem;
+  onSelect: (o: OptionItem) => void;
+}>) {
+  return (
+    <button
+      className="flex gap-4 justify-center overflow-x-auto scrollbar-hide px-3 w-full p-0.5"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {options.map((o) => (
+        <button
+          key={o.value}
+          onClick={() => onSelect(o)}
+          className="flex flex-col items-center gap-1 shrink-0"
+        >
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center
+            ${selected.value === o.value ? 'ring-2 ring-[#bf8f5f]' : ''}`}
+          >
+            <Image src={o.image} alt={o.label} width={28} height={28} />
+          </div>
+          <span className="text-[10px] whitespace-nowrap">{o.label}</span>
+        </button>
+      ))}
+    </button>
+  );
+}
+
+function CaratOption({
+  value,
+  onChange,
+}: Readonly<{
+  value: number;
+  onChange: (value: number) => void;
+}>) {
+  return (
+    <div
+      className="flex flex-col items-center gap-2 w-full px-4"
+      onPointerDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+    >
+      <RangeSlider
+        min={0.2}
+        max={10}
+        step={0.1}
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+}
+
+
 type OptionItem = {
   label: string;
   value: string;
   image: string;
 };
-
-const TABS: { key: TabKey; label: string }[] = [
-  { key: 'metal', label: 'Metal' },
-  { key: 'stone', label: 'Stone' },
-  { key: 'shape', label: 'Shape' },
-  { key: 'carat', label: 'Carat' },
-];
-
 
 const METAL_OPTIONS: OptionItem[] = [
   { label: 'White Gold', value: 'white', image: '/assets/images/icons/white-gold.svg' },
@@ -37,7 +110,6 @@ const SHAPE_OPTIONS: OptionItem[] = [
   { label: 'Heart', value: 'heart', image: '/assets/images/icons/rnd.svg' },
 ];
 
-
 export default function SideAccordionSelector() {
   const [activeTab, setActiveTab] = useState<TabKey>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -49,98 +121,32 @@ export default function SideAccordionSelector() {
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  
+  // Close when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent | TouchEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setActiveTab(null);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, []);
+
   function getPanelInitialState() {
-    if (activeIndex === 0) return '-translate-x-full opacity-0'; 
-    if (activeIndex === 3) return 'translate-x-full opacity-0'; 
-    return 'scale-95 opacity-0'; // Center Zoom
+    if (activeIndex === 0) return '-translate-x-full opacity-0';
+    if (activeIndex === 3) return 'translate-x-full opacity-0';
+    return 'scale-95 opacity-0';
   }
 
   function getHeaderExitState() {
-    if (activeIndex === 0) return 'translate-x-full opacity-0'; 
-    if (activeIndex === 3) return '-translate-x-full opacity-0'; 
-    return 'scale-110 opacity-0'; // Center Fade
+    if (activeIndex === 0) return 'translate-x-full opacity-0';
+    if (activeIndex === 3) return '-translate-x-full opacity-0';
+    return 'scale-110 opacity-0';
   }
-
-  
-
-  function TabItem({
-    item,
-    onClick,
-    isLast,
-  }: {
-    item: OptionItem | { label: string; image?: string };
-    onClick: () => void;
-    isLast?: boolean;
-  }) {
-    return (
-      <button
-        onClick={onClick}
-        className={`flex flex-col items-center justify-center flex-1 px-1 py-1 gap-1
-        ${!isLast ? 'border-r border-gray-300' : ''}`}
-      >
-        {item.image && (
-          <Image src={item.image} alt={item.label} width={28} height={28} />
-        )}
-        <span className="text-[10px] whitespace-nowrap">{item.label}</span>
-      </button>
-    );
-  }
-
-
-  function OptionGrid({
-    options,
-    selected,
-    onSelect,
-  }: {
-    options: OptionItem[];
-    selected: OptionItem;
-    onSelect: (o: OptionItem) => void;
-  }) {
-    return (
-      <div 
-        className="flex gap-4 justify-center overflow-x-auto scrollbar-hide px-3 w-full p-0.5"
-      >
-        {options.map((o) => (
-          <button
-            key={o.value}
-            onClick={() => {
-              onSelect(o);
-              setActiveTab(null);
-              // setActiveIndex(null); // Keep index for exit animation
-            }}
-            className="flex flex-col items-center gap-1 shrink-0"
-          >
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center
-              ${selected.value === o.value ? 'ring-2 ring-[#bf8f5f]' : ''}`}
-            >
-              <Image src={o.image} alt={o.label} width={28} height={28} />
-            </div>
-            <span className="text-[10px] whitespace-nowrap">{o.label}</span>
-          </button>
-        ))}
-      </div>
-    );
-  }
-
-
-  function CaratOption() {
-    return (
-      <div
-        className="flex flex-col items-center gap-2 w-full px-4"
-      >
-        <RangeSlider
-          min={0.2}
-          max={10}
-          step={0.1}
-          value={carat}
-          onChange={(newVal) => setCarat(newVal)}
-        />
-      </div>
-    );
-  }
-
 
   return (
     <div className="lg:hidden flex justify-center px-[15px] w-full">
@@ -175,7 +181,10 @@ export default function SideAccordionSelector() {
             }}
           />
           <TabItem
-            item={{ label: `${carat.toFixed(2)} ct`, image: '/assets/images/icons/carat-slider.svg' }}
+            item={{
+              label: `${carat.toFixed(2)} ct`,
+              image: '/assets/images/icons/carat-slider.svg',
+            }}
             onClick={() => {
               setActiveTab('carat');
               setActiveIndex(3);
@@ -184,35 +193,56 @@ export default function SideAccordionSelector() {
           />
         </div>
 
+        {/* BACKDROP */}
+        {activeTab && (
+          <button
+            className="absolute inset-0 z-10"
+            onClick={() => setActiveTab(null)}
+          />
+        )}
+
         {/* OPEN PANEL */}
-        <button
-          className={`absolute inset-0 flex items-center justify-center
-          transition-all duration-500 ease-out
-          ${
-            activeTab
-              ? 'translate-x-0 opacity-100'
-              : `${getPanelInitialState()} pointer-events-none`
-          }`}
-          onClick={() => {
-            setActiveTab(null);
-            // setActiveIndex(null); // Keep index for exit animation
-          }}
+        <div
+          className={`absolute inset-0 z-20 flex items-center justify-center
+            transition-all duration-500 ease-out
+            ${
+              activeTab
+                ? 'translate-x-0 opacity-100'
+                : `${getPanelInitialState()} pointer-events-none`
+            }`}
         >
-
           {activeTab === 'metal' && (
-            <OptionGrid options={METAL_OPTIONS} selected={metal} onSelect={setMetal} />
+            <OptionGrid
+              options={METAL_OPTIONS}
+              selected={metal}
+              onSelect={(o) => {
+                setMetal(o);
+                setActiveTab(null);
+              }}
+            />
           )}
-
           {activeTab === 'stone' && (
-            <OptionGrid options={STONE_OPTIONS} selected={stone} onSelect={setStone} />
+            <OptionGrid
+              options={STONE_OPTIONS}
+              selected={stone}
+              onSelect={(o) => {
+                setStone(o);
+                setActiveTab(null);
+              }}
+            />
           )}
-
           {activeTab === 'shape' && (
-            <OptionGrid options={SHAPE_OPTIONS} selected={shape} onSelect={setShape} />
+            <OptionGrid
+              options={SHAPE_OPTIONS}
+              selected={shape}
+              onSelect={(o) => {
+                setShape(o);
+                setActiveTab(null);
+              }}
+            />
           )}
-
-          {activeTab === 'carat' && <CaratOption />}
-        </button>
+          {activeTab === 'carat' && <CaratOption value={carat} onChange={setCarat} />}
+        </div>
       </div>
     </div>
   );

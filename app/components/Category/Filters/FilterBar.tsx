@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy } from "react";
 import FilterDropdown from "./FilterDropdown";
 import StylePanel from "./StylePanel";
 import { cn } from "~/lib/utils";
@@ -7,7 +7,6 @@ import { Link } from "react-router";
 import SortDropdown from "./SortDropdown";
 import FilterStyleListAccordion from "./FilterStyleListAccordion";
 import type { StyleTypes } from "./filteroption.types";
-import { lazy } from 'react'
 const MobileFilterModal = lazy(() => import('./MobileFilterModal'))
 
 
@@ -110,7 +109,7 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
               {viewTypes.map((vType, index) => {
                 return (
                   <button
-                    key={index}
+                    key={vType.type}
                     onClick={() => setViewMode(vType.type)}
                     className={cn(
                       "p-1 transition-colors duration-200 cursor-pointer rounded-lg",
@@ -132,7 +131,7 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
         <div className="flex justify-between gap-2 mt-3">
           {filterToggleOptions.map((toggleOption, index) => (
             <button
-              key={index}
+              key={toggleOption}
               onClick={() => toggleDiamondType(toggleOption)}
               className={cn(
                 "px-6 py-1 md:min-w-[48%] rounded-full text-sm font-thin cursor-pointer transition-all duration-200",
@@ -157,7 +156,7 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
           <div className="flex items-center gap-2 flex-wrap">
             {filterToggleOptions.map((toggleOption, index) => (
               <button
-                key={index}
+                key={toggleOption}
                 onClick={() => toggleDiamondType(toggleOption)}
                 className={cn(
                   "px-6 py-1 rounded-full text-sm font-thin cursor-pointer transition-all duration-200",
@@ -181,7 +180,7 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
             {viewTypes.map((vType, index) => {
               return (
                 <button
-                  key={index}
+                  key={vType.type}
                   onClick={() => setViewMode(vType.type)}
                   className={cn(
                     "p-1 transition-colors duration-200 cursor-pointer rounded-lg",
@@ -227,31 +226,12 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
       {/* Expandable Panel */}
       {activeFilter && (
         <div className="absolute bg-white z-99 w-full border-1 border-[#dee2e6]">
-          {/* {activeFilter === "Style" && ( */}
           <StylePanel
             activeFilter={activeFilter}
             selectedStyles={selectedStyles}
             onStyleToggle={handleStyleToggle}
             onClose={() => setActiveFilter(null)}
           />
-          {/* )} */}
-          {/* {activeFilter !== "Style" && (
-            <div className="bg-filter-panel p-6">
-              <div className="max-w-7xl mx-auto">
-                <p className="text-filter-placeholder text-sm">
-                  {activeFilter} options would appear here...
-                </p>
-              </div>
-              <button
-                onClick={() => setActiveFilter(null)}
-                className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-filter-close-hover transition-colors"
-              >
-                <svg className="w-5 h-5 text-filter-close" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          )} */}
         </div>
       )}
 

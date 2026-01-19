@@ -1,6 +1,5 @@
 import { Image } from '@shopify/hydrogen';
-import { useRef } from 'react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 type Product = {
   id: string;
@@ -11,7 +10,7 @@ type Product = {
   href: string;
 };
 
-function ProductCard({ product }: { product: any }) {
+function ProductCard({ product }: Readonly<{ product: Product }>) {
   return (
     // Outer wrapper: Full width on mobile/tablet (centers content), normal behavior on desktop (lg)
     <div className="min-w-full lg:min-w-[278px] lg:w-[278px] snap-center flex justify-center lg:block px-1 lg:px-0">
@@ -71,10 +70,10 @@ const tabs = ['Related Product', 'Matching Product'];
 export default function RelatedMatchingProducts({
   relatedProducts,
   matchingProducts,
-}: {
+}: Readonly<{
   relatedProducts: Product[];
   matchingProducts: Product[];
-}) {
+}>) {
   const [activeTab, setActiveTab] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   

@@ -13,7 +13,8 @@
     --color-secondary: #626262;
     --color-tertiary: #f60;
     --color-quaternary: #0A5050;
-    
+    --color-bg-primary: #FCF4EC;
+    --color-bg-secondary: #f6f6f6;
 }
 
 @theme {
@@ -24,6 +25,9 @@
     --color-secondary: var(--color-secondary);
     --color-tertiary: var(--color-tertiary);
     --color-quaternary: var(--color-quaternary);
+
+    --color-bg-primary: var(--color-bg-primary);
+    --color-bg-secondary: var(--color-bg-secondary);
   
     /* ===============================
        FONT SIZES (Desktop)
@@ -36,6 +40,9 @@
   
     --text-p-13: 13px;
     --leading-p-13: 18px;
+
+    --text-p-12: 12px;
+    --leading-p-12: 16px;
   
     --text-p-10: 10px;
     --leading-p-10: 14px;

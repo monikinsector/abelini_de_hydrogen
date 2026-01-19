@@ -30,96 +30,9 @@ const MobileFilterModal = ({
 
 
   const renderOption = (category: any, option: any) => {
-    const isSelected = selections[category.key]?.includes(option.name);
-    const baseClasses = cn(
-      "border transition-all duration-200 flex-shrink-0",
-      isSelected
-        ? "border-filter-style-active-border bg-filter-style-active"
-        : "border-filter-border bg-white hover:border-filter-dropdown-hover-border"
-    );
-
-    // switch (category.variant) {
-    //   case "icon":
-    //     return (
-    //       <button
-    //         key={option.name}
-    //         onClick={() => onOptionToggle(category.key, option.name)}
-    //         className={cn(
-    //           baseClasses,
-    //           "flex flex-col items-center p-2 rounded-lg min-w-[80px]"
-    //         )}
-    //       >
-    //         <div className="w-14 h-14 mb-1.5 text-filter-icon">
-    //           {option.icon}
-    //         </div>
-    //         <span className="text-xs font-medium text-filter-dropdown-foreground text-center leading-tight whitespace-nowrap">
-    //           {option.name}
-    //         </span>
-    //       </button>
-    //     );
-
-    //   case "color":
-    //     return (
-    //       <button
-    //         key={option.name}
-    //         onClick={() => onOptionToggle(category.key, option.name)}
-    //         className={cn(
-    //           baseClasses,
-    //           "flex flex-col items-center gap-1.5 p-2 rounded-lg min-w-[70px]"
-    //         )}
-    //       >
-    //         <div
-    //           className="w-10 h-10 rounded-full border border-gray-300 flex-shrink-0"
-    //           style={{ background: option.gradient || option.color }}
-    //         />
-    //         <span className="text-xs font-medium text-filter-dropdown-foreground text-center whitespace-nowrap">
-    //           {option.name}
-    //         </span>
-    //       </button>
-    //     );
-
-    //   case "shape":
-    //     return (
-    //       <button
-    //         key={option.name}
-    //         onClick={() => onOptionToggle(category.key, option.name)}
-    //         className={cn(
-    //           baseClasses,
-    //           "flex flex-col items-center gap-1.5 p-2 rounded-lg min-w-[70px]"
-    //         )}
-    //       >
-    //         <svg
-    //           viewBox="0 0 24 24"
-    //           className="w-10 h-10 text-filter-icon"
-    //           fill="none"
-    //           stroke="currentColor"
-    //           strokeWidth={1.5}
-    //         >
-    //           <path d={option.path} />
-    //         </svg>
-    //         <span className="text-xs font-medium text-filter-dropdown-foreground text-center whitespace-nowrap">
-    //           {option.name}
-    //         </span>
-    //       </button>
-    //     );
-
-    //   default:
-    //     return (
-    //       <button
-    //         key={option.name}
-    //         onClick={() => onOptionToggle(category.key, option.name)}
-    //         className={cn(
-    //           baseClasses,
-    //           "px-4 py-2 rounded-full text-sm font-medium text-filter-dropdown-foreground whitespace-nowrap"
-    //         )}
-    //       >
-    //         {option.name}
-    //       </button>
-    //     );
-    // }
 
     return (
-        <div>
+        <div key={option.label}>
             <div className="h-14 w-14 rounded-full border-1 border-gray-200 flex justify-center items-center p-2">
                 <Image src={option.image} alt={option.label}/>
             </div>
@@ -168,7 +81,7 @@ const MobileFilterModal = ({
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto pb-24">
           {Object.keys(categories).map((category, index) => (
-            <div key={index} className="border-b border-filter-border">
+            <div key={category} className="border-b border-filter-border">
               <h3 className="px-5 pt-5 pb-3 text-[12px] font-regular text-[#111111] tracking-wider uppercase">
                 {category}
               </h3>

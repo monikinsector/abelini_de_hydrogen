@@ -1,18 +1,18 @@
 import { Image } from '@shopify/hydrogen';
 import React from 'react';
 import { Link } from 'react-router';
-import { categories } from './Data/homepage.data';
+import { categories, type Category } from './Data/homepage.data';
 
-const CategorySection = () => {
+const CategorySection: React.FC = () => {
 
   return (
     <section className="flex flex-col">
-      <div className="container-fluid px-4 my-6">
+      <div className="container-fluid px-4 lg:px-10 my-6">
         <div className="flex justify-between items-center border-b border-gray-200 mb-8">
           <h2 className="lg:text-h3 text-h3-m lg:leading-h3 leading-h3-m font-bold text-primary my-4 tracking-wider">
             Select Category
           </h2>
-          <Link to="/all-categories" className="flex items-center gap-1 text-p-14 underline font-light tracking-wider text-primary">
+          <Link to="/all-categories" className="items-center gap-1 text-p-14 underline font-light tracking-wider text-primary lg:flex hidden">
             Show All
             <Image src="/assets/images/icons/arrow-right-small.svg" alt="Arrow Right" width={22} height={22} />
           </Link>
@@ -38,7 +38,7 @@ const CategorySection = () => {
           ))}
         </div>
 
-        <Link to="/all-categories" className="btn-black w-full flex justify-center items-center mt-4 md:hidden text-p-14 font-light tracking-widest">
+        <Link to="/all-categories" className="btn-black w-full flex justify-center items-center mt-4 lg:hidden text-p-14 font-light tracking-widest">
           Show All
         </Link>
       </div>

@@ -22,7 +22,6 @@ const ProductSpecs: React.FC<ProductSpecsProps> = ({specs, leftColWidth = 'w-36'
       spec.onInfoClick()
     } else {
       // Default handler - can be used for modal in the future
-      // TODO: Implement modal logic here
       console.log('Info icon clicked for:', spec.key)
     }
   }

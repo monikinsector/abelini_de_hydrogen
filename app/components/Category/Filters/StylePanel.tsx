@@ -3,8 +3,6 @@ import type { StyleTypes } from "./filteroption.types";
 import { styles } from "./filteroption.data";
 
 interface StylePanelProps {
-  selectedStyles: string[];
-  onStyleToggle: (style: string) => void;
   onClose: () => void;
   activeFilter: StyleTypes
 }
@@ -18,7 +16,7 @@ const StylePanel = ({ onClose, activeFilter }: StylePanelProps) => {
           {styles[activeFilter].length > 0 ?
             styles[activeFilter].map((style, index) => {
               return (
-                <div className="max-w-[90px] group mt-2 px-2 relative flex flex-col items-center cursor-pointer" key={index}>
+                <div className="max-w-[90px] group mt-2 px-2 relative flex flex-col items-center cursor-pointer" key={style.label}>
                   {style.icon ? 
                   <>
                   <div className="group-hover:border-[0.7px] group-hover:border-[#E07A5F] border-[0.7px] border-white p-4 rounded-2xl">

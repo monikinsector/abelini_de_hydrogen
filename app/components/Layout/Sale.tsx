@@ -9,7 +9,7 @@ type SaleBarProps = {
 
 const ONE_SECOND = 1000;
 
-function SaleBar({text, saleEndTime, link}: SaleBarProps) {
+function SaleBar({text, saleEndTime, link}: Readonly<SaleBarProps>) {
   const endTimestamp = useMemo(
     () => new Date(saleEndTime).getTime(),
     [saleEndTime]
@@ -25,7 +25,7 @@ function SaleBar({text, saleEndTime, link}: SaleBarProps) {
     const interval = setInterval(() => {
       setRemainingMs(() => {
         const diff = endTimestamp - Date.now();
-        return diff > 0 ? diff : 0;
+        return Math.max(diff, 0);
       });
     }, ONE_SECOND);
 

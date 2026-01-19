@@ -11,7 +11,7 @@ const TopStickBar = (props: Props) => {
     const onScroll = () => {
       if (!ticking.current) {
         ticking.current = true;
-        window.requestAnimationFrame(() => {
+        globalThis.requestAnimationFrame(() => {
           const doc = document.documentElement;
           const scrollTop = window.scrollY || window.pageYOffset || doc.scrollTop || 0;
           const maxScroll = doc.scrollHeight - window.innerHeight;
@@ -22,10 +22,10 @@ const TopStickBar = (props: Props) => {
       }
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
+    globalThis.addEventListener("scroll", onScroll, { passive: true });
     // initialize on mount
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => globalThis.removeEventListener("scroll", onScroll);
   }, []);
 
   return (

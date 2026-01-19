@@ -68,7 +68,7 @@ export default function ProductImagesMobile() {
         {/* ● Indicators */}
         <ol className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 max-w-[90%] overflow-x-auto no-scrollbar px-2">
           {images.map((_, i) => (
-            <li key={i} className="list-none">
+            <li key={`${_}`} className="list-none">
               <button
                 onClick={() => setIndex(i)}
                 onKeyDown={(e) => {

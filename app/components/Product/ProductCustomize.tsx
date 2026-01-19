@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { TabOptions } from './TabOptions';
 import RangeSlider from '../Common/RangeSlider';
 import InfoText from '../Common/InfoText';
+import DiamondSearch from './DiamondSearch';
 
 export const CustomizationPanel: React.FC<{
   initialTab?: 'custom' | 'specific';
@@ -133,10 +134,21 @@ export const CustomizationPanel: React.FC<{
           <div className="flex items-center justify-between">
             <div className="text-sm leading-4 flex gap-2 items-center">
               <span>Carat</span>
-              <InfoText text="How to Choose?" href="/ring-size-guide" />
+              {tab === 'custom' ? (
+                <InfoText text="How to Choose?" href="/ring-size-guide" />
+              ) : null}
             </div>
           </div>
-          <RangeSlider />
+          {tab === 'custom' ? (
+            <RangeSlider key="single" value={0.2} onChange={(v) => console.log(v)} />
+          ) : (
+            <RangeSlider
+              key="double"
+              variant="double"
+              rangeValue={[0.2, 10]}
+              onRangeChange={(v) => console.log(v)}
+            />
+          )}
         </div>
 
         {/* Clarity / Colour / Cut etc. (use TabOptions) */}
@@ -252,6 +264,11 @@ export const CustomizationPanel: React.FC<{
 
 
       </div>
+
+      {tab == "specific" && 
+      
+      <DiamondSearch/>
+      }
     </div>
   );
 };

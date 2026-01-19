@@ -14,6 +14,31 @@ export interface Category {
   link: string;
 }
 
+export type HeroBannerProps = {
+  main_title: string;
+  content_under_title: string;
+  button_1_text: string;
+  button_1_link: string;
+  button_2_text?: string;
+  button_2_link?: string;
+  desktop_banner_image: {
+    url: string;
+    altText: string;
+  };
+  mobile_banner_image: {
+    url: string;
+    altText: string;
+  };
+  terms_conditions_text: string;
+  banner_link_only: string;
+  background_color: string;
+  background_image: {
+    url: string;
+    altText: string;
+  };
+}
+
+
 export const categories: Category[] = [
   {
     id: 1,
@@ -139,7 +164,7 @@ export const spotlightLogos: SpotlightLogo[] = [
  * home page usp section data
  */
 
-export interface uspItem {
+export interface UspItem {
   id: number;
   target: string;
   src: string;
@@ -148,7 +173,7 @@ export interface uspItem {
 }
 
 
-export const uspItems: uspItem[] = [
+export const uspItems: UspItem[] = [
   {
     id: 1,
     target: '#free_resizing',
@@ -345,5 +370,23 @@ export const labGrownDiamonds: LabGrownDiamonds[] = [
     name: 'Bracelets',
     href: 'bracelets/lab-grown-diamond',
     img: '/assets/images/home/category/bracelet.webp',
+  },
+];
+
+
+/**
+ * home page bespoke section data
+ */
+
+export interface BespokeImage {
+  id: number;
+  image: string;
+  mobileImage: string;
+}
+export const bespokeImages: BespokeImage[] = [
+  {
+    id: 1,
+    image: '/assets/images/bespoke_image_1272x350.webp',
+    mobileImage: '/assets/images/mobile/home/bespoke_image_mobile_325x603.webp',
   },
 ];

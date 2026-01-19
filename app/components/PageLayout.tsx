@@ -1,7 +1,6 @@
 import {Await, Link} from 'react-router';
 import {Suspense, useId} from 'react';
 import type {
-  CartApiQueryFragment,
   FooterQuery,
   HeaderQuery,
 } from 'storefrontapi.generated';
@@ -30,10 +29,8 @@ interface HeroBannerTypes {
 }
 
 interface PageLayoutProps {
-  cart: Promise<CartApiQueryFragment | null>;
   footer: Promise<FooterQuery | null>;
   header: HeaderQuery;
-  isLoggedIn: Promise<boolean>;
   publicStoreDomain: string;
   children?: React.ReactNode;
   heroBanner: HeroBannerTypes;
@@ -57,7 +54,6 @@ export function PageLayout({
     url: string;
     altText: string;
   } => {
-    // return { key: "", value: "" };
     return (type?.[key as keyof typeof type]) as string || "";
   }
   return (
@@ -66,7 +62,7 @@ export function PageLayout({
 
       <FeatureHeader trustpilotText={returnSpecificData(metafields, 'trustpilot_text') as string}/>
       <Header globalPhone={returnSpecificData(metafields, 'global_phone') as string}/>
-      <MenuHeader />
+      <MenuHeader globalPhone={returnSpecificData(metafields, 'global_phone') as string}/>
 
       <main>{children}</main>
       <Footer
