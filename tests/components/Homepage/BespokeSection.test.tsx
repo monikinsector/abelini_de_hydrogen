@@ -14,6 +14,62 @@ const mockBespokeImages = [
   },
 ];
 
+// Helper functions to reduce nesting depth
+const findImageBySrc = (images: HTMLElement[], src: string): HTMLElement | undefined => {
+  for (const img of images) {
+    if (img.getAttribute('src') === src) {
+      return img;
+    }
+  }
+  return undefined;
+};
+
+const findImageByWidth = (images: HTMLElement[], width: string): HTMLElement | undefined => {
+  for (const img of images) {
+    if (img.getAttribute('width') === width) {
+      return img;
+    }
+  }
+  return undefined;
+};
+
+const findImageBySrcFragment = (images: HTMLElement[], fragment: string): HTMLElement | undefined => {
+  for (const img of images) {
+    if (img.getAttribute('src')?.includes(fragment)) {
+      return img;
+    }
+  }
+  return undefined;
+};
+
+const verifyDesktopImage = (image: typeof mockBespokeImages[0], allImages: HTMLElement[]): void => {
+  const desktopImage = findImageBySrc(allImages, image.image);
+  expect(desktopImage).toBeInTheDocument();
+  expect(desktopImage).toHaveAttribute('src', image.image);
+  expect(desktopImage).toHaveAttribute('alt', 'Bespoke Image');
+};
+
+const verifyMobileImage = (image: typeof mockBespokeImages[0], allImages: HTMLElement[]): void => {
+  const mobileImage = findImageBySrc(allImages, image.mobileImage);
+  expect(mobileImage).toBeInTheDocument();
+  expect(mobileImage).toHaveAttribute('src', image.mobileImage);
+  expect(mobileImage).toHaveAttribute('alt', 'Bespoke Image');
+};
+
+const verifyImageMapping = (image: typeof mockBespokeImages[0], allImages: HTMLElement[]): void => {
+  const desktopImage = findImageBySrc(allImages, image.image);
+  expect(desktopImage).toBeInTheDocument();
+  expect(desktopImage).toHaveAttribute('src', image.image);
+  expect(desktopImage).toHaveAttribute('alt', 'Bespoke Image');
+  expect(desktopImage).toHaveAttribute('width', '1272');
+  
+  const mobileImage = findImageBySrc(allImages, image.mobileImage);
+  expect(mobileImage).toBeInTheDocument();
+  expect(mobileImage).toHaveAttribute('src', image.mobileImage);
+  expect(mobileImage).toHaveAttribute('alt', 'Bespoke Image');
+  expect(mobileImage).toHaveAttribute('width', '325');
+};
+
 
 describe('BespokeSection', () => {
   describe('Rendering without failure', () => {
@@ -71,38 +127,26 @@ describe('BespokeSection', () => {
     it('renders desktop bespoke images with correct src and alt attributes from data', () => {
       render(<BespokeSection />);
       
-      mockBespokeImages.forEach((image) => {
-        const desktopImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
-        const desktopImage = desktopImages.find(img => 
-          img.getAttribute('src') === image.image
-        );
-        expect(desktopImage).toBeInTheDocument();
-        expect(desktopImage).toHaveAttribute('src', image.image);
-        expect(desktopImage).toHaveAttribute('alt', 'Bespoke Image');
-      });
+      const desktopImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
+      for (const image of mockBespokeImages) {
+        verifyDesktopImage(image, desktopImages);
+      }
     });
 
     it('renders mobile bespoke images with correct src and alt attributes from data', () => {
       render(<BespokeSection />);
       
-      mockBespokeImages.forEach((image) => {
-        const mobileImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
-        const mobileImage = mobileImages.find(img => 
-          img.getAttribute('src') === image.mobileImage
-        );
-        expect(mobileImage).toBeInTheDocument();
-        expect(mobileImage).toHaveAttribute('src', image.mobileImage);
-        expect(mobileImage).toHaveAttribute('alt', 'Bespoke Image');
-      });
+      const mobileImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
+      for (const image of mockBespokeImages) {
+        verifyMobileImage(image, mobileImages);
+      }
     });
 
     it('renders desktop images with correct width attribute', () => {
       render(<BespokeSection />);
       
       const desktopImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
-      const desktopImage = desktopImages.find(img => 
-        img.getAttribute('width') === '1272'
-      );
+      const desktopImage = findImageByWidth(desktopImages, '1272');
       expect(desktopImage).toBeInTheDocument();
       expect(desktopImage).toHaveAttribute('width', '1272');
     });
@@ -111,9 +155,7 @@ describe('BespokeSection', () => {
       render(<BespokeSection />);
       
       const mobileImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
-      const mobileImage = mobileImages.find(img => 
-        img.getAttribute('width') === '325'
-      );
+      const mobileImage = findImageByWidth(mobileImages, '325');
       expect(mobileImage).toBeInTheDocument();
       expect(mobileImage).toHaveAttribute('width', '325');
     });
@@ -122,9 +164,7 @@ describe('BespokeSection', () => {
       render(<BespokeSection />);
       
       const desktopImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
-      const desktopImage = desktopImages.find(img => 
-        img.getAttribute('src')?.includes('bespoke_image_1272x350')
-      );
+      const desktopImage = findImageBySrcFragment(desktopImages, 'bespoke_image_1272x350');
       expect(desktopImage).toBeInTheDocument();
       expect(desktopImage?.className).toContain('hidden lg:block');
     });
@@ -133,9 +173,7 @@ describe('BespokeSection', () => {
       render(<BespokeSection />);
       
       const mobileImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
-      const mobileImage = mobileImages.find(img => 
-        img.getAttribute('src')?.includes('bespoke_image_mobile')
-      );
+      const mobileImage = findImageBySrcFragment(mobileImages, 'bespoke_image_mobile');
       expect(mobileImage).toBeInTheDocument();
       expect(mobileImage?.className).toContain('block lg:hidden');
     });
@@ -153,9 +191,9 @@ describe('BespokeSection', () => {
       render(<BespokeSection />);
       
       const allImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
-      allImages.forEach((image) => {
+      for (const image of allImages) {
         expect(image).toHaveAttribute('alt', 'Bespoke Image');
-      });
+      }
     });
 
     it('has accessible link with descriptive text', () => {
@@ -170,26 +208,10 @@ describe('BespokeSection', () => {
     it('maps each bespoke image item to desktop and mobile images with correct structure', () => {
       render(<BespokeSection />);
       
-      mockBespokeImages.forEach((image) => {
-        // Verify desktop image
-        const allImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
-        const desktopImage = allImages.find(img => 
-          img.getAttribute('src') === image.image
-        );
-        expect(desktopImage).toBeInTheDocument();
-        expect(desktopImage).toHaveAttribute('src', image.image);
-        expect(desktopImage).toHaveAttribute('alt', 'Bespoke Image');
-        expect(desktopImage).toHaveAttribute('width', '1272');
-        
-        // Verify mobile image
-        const mobileImage = allImages.find(img => 
-          img.getAttribute('src') === image.mobileImage
-        );
-        expect(mobileImage).toBeInTheDocument();
-        expect(mobileImage).toHaveAttribute('src', image.mobileImage);
-        expect(mobileImage).toHaveAttribute('alt', 'Bespoke Image');
-        expect(mobileImage).toHaveAttribute('width', '325');
-      });
+      const allImages = screen.getAllByRole('img', { name: /Bespoke Image/i });
+      for (const image of mockBespokeImages) {
+        verifyImageMapping(image, allImages);
+      }
     });
   });
 
