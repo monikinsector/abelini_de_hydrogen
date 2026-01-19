@@ -141,6 +141,139 @@ jest.mock('react-router', () => {
   };
 });
 
+// Helper functions to reduce nesting depth
+const findLinkInParagraph = (links: HTMLElement[], paragraphText: string): HTMLElement | undefined => {
+  for (const link of links) {
+    const paragraph = link.closest('p');
+    if (paragraph?.textContent?.includes(paragraphText)) {
+      return link;
+    }
+  }
+  return undefined;
+};
+
+const verifySectionHeading = (section: FooterSection): void => {
+  const heading = screen.getByRole('heading', { name: new RegExp(section.title, 'i') });
+  expect(heading).toBeInTheDocument();
+  expect(heading.tagName).toBe('H4');
+};
+
+const verifySectionLink = (link: FooterLink): void => {
+  const linkElement = screen.getByRole('link', { name: link.label });
+  expect(linkElement).toBeInTheDocument();
+  expect(linkElement).toHaveAttribute('href', link.href);
+};
+
+const verifySectionLinkStructure = (link: FooterLink): void => {
+  const linkElement = screen.getByRole('link', { name: link.label });
+  const listItem = linkElement.closest('li');
+  expect(listItem).toBeInTheDocument();
+};
+
+const verifyCustomerServiceLink = (link: CustomerServiceLink): void => {
+  const linkElement = screen.getByRole('link', { name: new RegExp(link.label, 'i') });
+  expect(linkElement).toBeInTheDocument();
+  expect(linkElement).toHaveAttribute('href', link.href);
+};
+
+const verifyCustomerServiceIcon = (link: CustomerServiceLink): void => {
+  const image = screen.getByRole('img', { name: link.label });
+  expect(image).toBeInTheDocument();
+  expect(image).toHaveAttribute('src', link.icon);
+  expect(image).toHaveAttribute('alt', link.label);
+  expect(image).toHaveAttribute('width', '28');
+  expect(image).toHaveAttribute('height', '28');
+};
+
+const verifyCustomerServiceLabel = (link: CustomerServiceLink): void => {
+  const linkElement = screen.getByRole('link', { name: new RegExp(link.label, 'i') });
+  const labelText = linkElement.querySelector('p');
+  expect(labelText).toBeInTheDocument();
+  expect(labelText).toHaveTextContent(link.label);
+};
+
+const verifySocialMediaLink = (link: SocialMediaLink): void => {
+  const linkElement = screen.getByRole('link', { name: link.label });
+  expect(linkElement).toBeInTheDocument();
+  expect(linkElement).toHaveAttribute('href', link.href);
+  expect(linkElement).toHaveAttribute('target', '_blank');
+  expect(linkElement).toHaveAttribute('rel', 'noopener noreferrer');
+};
+
+const verifySocialMediaIcon = (link: SocialMediaLink): void => {
+  const image = screen.getByRole('img', { name: link.label });
+  expect(image).toBeInTheDocument();
+  expect(image).toHaveAttribute('src', link.icon);
+  expect(image).toHaveAttribute('alt', link.label);
+  expect(image).toHaveAttribute('width', '24');
+  expect(image).toHaveAttribute('height', '24');
+};
+
+const findLegalLink = (allLinks: HTMLElement[], link: FooterLinkItem): HTMLElement | undefined => {
+  for (const l of allLinks) {
+    if (
+      l.getAttribute('target') === '_blank' &&
+      l.getAttribute('rel') === 'noopener noreferrer' &&
+      l.getAttribute('href') === link.href
+    ) {
+      return l;
+    }
+  }
+  return undefined;
+};
+
+const verifyLegalLink = (link: FooterLinkItem): void => {
+  const allLinks = screen.getAllByRole('link', { name: link.label });
+  const legalLink = findLegalLink(allLinks, link);
+  expect(legalLink).toBeInTheDocument();
+  expect(legalLink).toHaveAttribute('href', link.href);
+  expect(legalLink).toHaveAttribute('target', '_blank');
+  expect(legalLink).toHaveAttribute('rel', 'noopener noreferrer');
+};
+
+const countSeparators = (spans: NodeListOf<Element> | never[]): number => {
+  let count = 0;
+  const spansArray = Array.from(spans);
+  for (const span of spansArray) {
+    if (
+      span.textContent?.trim() === '|' &&
+      span.previousElementSibling?.tagName === 'A'
+    ) {
+      count++;
+    }
+  }
+  return count;
+};
+
+const verifyFooterSectionLink = (section: FooterSection): void => {
+  for (const link of section.links) {
+    const linkElement = screen.getByRole('link', { name: link.label });
+    expect(linkElement).toBeInTheDocument();
+  }
+};
+
+const verifyAllSectionsOrder = (
+  footerSections: FooterSection[],
+  customerServiceLinks: CustomerServiceLink[],
+  socialMediaLinks: SocialMediaLink[]
+): void => {
+  expect(screen.getByRole('heading', { name: /Stay In Touch!/i })).toBeInTheDocument();
+  
+  for (const section of footerSections) {
+    expect(screen.getByRole('heading', { name: new RegExp(section.title, 'i') })).toBeInTheDocument();
+  }
+  
+  for (const link of customerServiceLinks) {
+    expect(screen.getByRole('link', { name: new RegExp(link.label, 'i') })).toBeInTheDocument();
+  }
+  
+  for (const link of socialMediaLinks) {
+    expect(screen.getByRole('link', { name: link.label })).toBeInTheDocument();
+  }
+  
+  expect(screen.getByText(/Copyright 2026, ABELINI Ltd/i)).toBeInTheDocument();
+};
+
 describe('Footer', () => {
   const mockFooterSections = getMockFooterSections();
   const mockCustomerServiceLinks = getMockCustomerServiceLinks();
@@ -209,9 +342,7 @@ describe('Footer', () => {
     it('renders privacy notice with link', () => {
       expect(screen.getByText(/By subscribing, some personal data/i)).toBeInTheDocument();
       const privacyLinks = screen.getAllByRole('link', { name: /Privacy Notice/i });
-      const newsletterPrivacyLink = privacyLinks.find(link => 
-        link.closest('p')?.textContent?.includes('By subscribing')
-      );
+      const newsletterPrivacyLink = findLinkInParagraph(privacyLinks, 'By subscribing');
       expect(newsletterPrivacyLink).toBeInTheDocument();
       expect(newsletterPrivacyLink).toHaveAttribute('href', '/privacy-policy');
     });
@@ -219,21 +350,17 @@ describe('Footer', () => {
 
   describe('Footer Sections', () => {
     it('renders all footer section headings with correct tag', () => {
-      mockFooterSections.forEach((section) => {
-        const heading = screen.getByRole('heading', { name: new RegExp(section.title, 'i') });
-        expect(heading).toBeInTheDocument();
-        expect(heading.tagName).toBe('H4');
-      });
+      for (const section of mockFooterSections) {
+        verifySectionHeading(section);
+      }
     });
 
     it('renders all footer section links with correct hrefs', () => {
-      mockFooterSections.forEach((section) => {
-        section.links.forEach((link) => {
-          const linkElement = screen.getByRole('link', { name: link.label });
-          expect(linkElement).toBeInTheDocument();
-          expect(linkElement).toHaveAttribute('href', link.href);
-        });
-      });
+      for (const section of mockFooterSections) {
+        for (const link of section.links) {
+          verifySectionLink(link);
+        }
+      }
     });
 
     it('renders footer section links with target attribute when provided', () => {
@@ -250,109 +377,78 @@ describe('Footer', () => {
     });
 
     it('renders footer section list items with correct structure', () => {
-      mockFooterSections.forEach((section) => {
-        section.links.forEach((link) => {
-          const linkElement = screen.getByRole('link', { name: link.label });
-          const listItem = linkElement.closest('li');
-          expect(listItem).toBeInTheDocument();
-        });
-      });
+      for (const section of mockFooterSections) {
+        for (const link of section.links) {
+          verifySectionLinkStructure(link);
+        }
+      }
     });
   });
 
   describe('Customer Service Links', () => {
     it('renders all customer service links', () => {
-      mockCustomerServiceLinks.forEach((link) => {
-        const linkElement = screen.getByRole('link', { name: new RegExp(link.label, 'i') });
-        expect(linkElement).toBeInTheDocument();
-        expect(linkElement).toHaveAttribute('href', link.href);
-      });
+      for (const link of mockCustomerServiceLinks) {
+        verifyCustomerServiceLink(link);
+      }
     });
 
     it('renders customer service icons with correct attributes', () => {
-      mockCustomerServiceLinks.forEach((link) => {
-        const image = screen.getByRole('img', { name: link.label });
-        expect(image).toBeInTheDocument();
-        expect(image).toHaveAttribute('src', link.icon);
-        expect(image).toHaveAttribute('alt', link.label);
-        expect(image).toHaveAttribute('width', '28');
-        expect(image).toHaveAttribute('height', '28');
-      });
+      for (const link of mockCustomerServiceLinks) {
+        verifyCustomerServiceIcon(link);
+      }
     });
 
     it('renders customer service link labels', () => {
-      mockCustomerServiceLinks.forEach((link) => {
-        const linkElement = screen.getByRole('link', { name: new RegExp(link.label, 'i') });
-        const labelText = linkElement.querySelector('p');
-        expect(labelText).toBeInTheDocument();
-        expect(labelText).toHaveTextContent(link.label);
-      });
+      for (const link of mockCustomerServiceLinks) {
+        verifyCustomerServiceLabel(link);
+      }
     });
   });
 
   describe('Social Media Links', () => {
     it('renders all social media links', () => {
-      mockSocialMediaLinks.forEach((link) => {
-        const linkElement = screen.getByRole('link', { name: link.label });
-        expect(linkElement).toBeInTheDocument();
-        expect(linkElement).toHaveAttribute('href', link.href);
-        expect(linkElement).toHaveAttribute('target', '_blank');
-        expect(linkElement).toHaveAttribute('rel', 'noopener noreferrer');
-      });
+      for (const link of mockSocialMediaLinks) {
+        verifySocialMediaLink(link);
+      }
     });
 
     it('renders social media icons with correct attributes', () => {
-      mockSocialMediaLinks.forEach((link) => {
-        const image = screen.getByRole('img', { name: link.label });
-        expect(image).toBeInTheDocument();
-        expect(image).toHaveAttribute('src', link.icon);
-        expect(image).toHaveAttribute('alt', link.label);
-        expect(image).toHaveAttribute('width', '24');
-        expect(image).toHaveAttribute('height', '24');
-      });
+      for (const link of mockSocialMediaLinks) {
+        verifySocialMediaIcon(link);
+      }
     });
 
     it('renders social media links with aria-label', () => {
-      mockSocialMediaLinks.forEach((link) => {
+      for (const link of mockSocialMediaLinks) {
         const linkElement = screen.getByRole('link', { name: link.label });
         expect(linkElement).toHaveAttribute('aria-label', link.label);
-      });
+      }
     });
   });
 
   describe('Legal Links', () => {
     it('renders all legal links', () => {
-      mockFooterLinks.forEach((link) => {
-        const allLinks = screen.getAllByRole('link', { name: link.label });
-        const legalLink = allLinks.find(l => 
-          l.getAttribute('target') === '_blank' && 
-          l.getAttribute('rel') === 'noopener noreferrer' &&
-          l.getAttribute('href') === link.href
-        );
-        
-        expect(legalLink).toBeInTheDocument();
-        expect(legalLink).toHaveAttribute('href', link.href);
-        expect(legalLink).toHaveAttribute('target', '_blank');
-        expect(legalLink).toHaveAttribute('rel', 'noopener noreferrer');
-      });
+      for (const link of mockFooterLinks) {
+        verifyLegalLink(link);
+      }
     });
 
     it('renders separator between legal links', () => {
       const allSpans = screen.getByText(/Copyright 2026/i).parentElement?.querySelectorAll('span') || [];
-      const separators = Array.from(allSpans).filter(span => 
-        span.textContent?.trim() === '|' && 
-        span.previousElementSibling?.tagName === 'A'
-      );
-      expect(separators.length).toBe(mockFooterLinks.length - 1);
+      const separatorCount = countSeparators(allSpans);
+      expect(separatorCount).toBe(mockFooterLinks.length - 1);
     });
 
     it('does not render separator after last legal link', () => {
       const allSpans = screen.getByText(/Copyright 2026/i).parentElement?.querySelectorAll('span') || [];
-      const separators = Array.from(allSpans).filter(span => 
-        span.textContent?.trim() === '|'
-      );
+      let separatorCount = 0;
+      for (const span of Array.from(allSpans)) {
+        if (span.textContent?.trim() === '|') {
+          separatorCount++;
+        }
+      }
       // Should have n-1 separators for n links
-      expect(separators.length).toBe(mockFooterLinks.length - 1);
+      expect(separatorCount).toBe(mockFooterLinks.length - 1);
     });
   });
 
@@ -377,19 +473,17 @@ describe('Footer', () => {
     });
 
     it('has accessible images with alt text', () => {
-      [...mockCustomerServiceLinks, ...mockSocialMediaLinks].forEach((link) => {
+      const allLinks = [...mockCustomerServiceLinks, ...mockSocialMediaLinks];
+      for (const link of allLinks) {
         const image = screen.getByRole('img', { name: link.label });
         expect(image).toHaveAttribute('alt', link.label);
-      });
+      }
     });
 
     it('has accessible links with descriptive text', () => {
-      mockFooterSections.forEach((section) => {
-        section.links.forEach((link) => {
-          const linkElement = screen.getByRole('link', { name: link.label });
-          expect(linkElement).toBeInTheDocument();
-        });
-      });
+      for (const section of mockFooterSections) {
+        verifyFooterSectionLink(section);
+      }
     });
   });
 
@@ -415,21 +509,7 @@ describe('Footer', () => {
     });
 
     it('renders all sections in correct order', () => {
-      expect(screen.getByRole('heading', { name: /Stay In Touch!/i })).toBeInTheDocument();
-      
-      mockFooterSections.forEach((section) => {
-        expect(screen.getByRole('heading', { name: new RegExp(section.title, 'i') })).toBeInTheDocument();
-      });
-      
-      mockCustomerServiceLinks.forEach((link) => {
-        expect(screen.getByRole('link', { name: new RegExp(link.label, 'i') })).toBeInTheDocument();
-      });
-      
-      mockSocialMediaLinks.forEach((link) => {
-        expect(screen.getByRole('link', { name: link.label })).toBeInTheDocument();
-      });
-      
-      expect(screen.getByText(/Copyright 2026, ABELINI Ltd/i)).toBeInTheDocument();
+      verifyAllSectionsOrder(mockFooterSections, mockCustomerServiceLinks, mockSocialMediaLinks);
     });
   });
 });
