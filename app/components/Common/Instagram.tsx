@@ -15,9 +15,10 @@ const Instagram: React.FC = ()  => {
         const result = await response.json();
         const data = result?.data || [];
         
-        const excludedIds = ["18166609282334512"];
+        const excludedIds = new Set(["18166609282334512"]);
+
         const filtered = data
-          .filter((item: any) => !excludedIds.includes(item.id))
+          .filter((item: any) => !excludedIds.has(item.id))
           .map((item: any) => {
             const rawUrl = item.images?.standard_resolution?.url || item.media_url || item.thumbnail_url;
             const proxiedUrl = rawUrl 
@@ -56,7 +57,7 @@ const Instagram: React.FC = ()  => {
           ) : (
             <div className="flex gap-2 lg:gap-1 items-center overflow-x-auto md:overflow-x-visible px-2 md:px-6 lg:px-8 [&::-webkit-scrollbar]:hidden"  >
                   {feed.map((item, index) => (
-                    <a href={item.link || item.permalink} target='_blank' className="flex-none basis-1/2 md:basis-1/6">
+                    <a key={item.id} href={item.link || item.permalink} target='_blank' className="flex-none basis-1/2 md:basis-1/6">
                        <Image
                         src={item.display_url}
                         alt={item.alt}

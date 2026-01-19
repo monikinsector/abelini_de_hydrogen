@@ -150,7 +150,7 @@ export default function AbeliniOccasion() {
             </div>
 
             <div className="w-full lg:py-12 py-2 relative lg:ml-[48px]">
-              <ImageWithProductSlider rings={engagementRings as EngagementRings[]} />
+              <ImageWithProductSlider rings={engagementRings} />
             </div>
           </div>
 
