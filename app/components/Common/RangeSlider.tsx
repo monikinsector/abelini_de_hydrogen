@@ -30,9 +30,6 @@ const RangeSlider = ({
 }: RangeSliderProps) => {
   const [value, setValue] = useState(controlledValue ?? min);
 
-  const [range, setRange] = useState<[number, number]>(
-    rangeValue ?? [min, max]
-  );
 
   useEffect(() => {
     if (variant === 'single' && controlledValue !== undefined) {
@@ -136,9 +133,6 @@ const RangeSlider = ({
   }
 
   // Double Slider 
-  const [range, setRange] = useState<[number, number]>(
-    rangeValue ?? [min, max]
-  );
 
   const [range, setRange] = useState<[number, number]>(
     rangeValue ?? [min, max]

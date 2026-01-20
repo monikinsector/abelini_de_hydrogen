@@ -271,7 +271,7 @@ export function ErrorBoundary() {
 /* ---------------- MARKET QUERY ---------------- */
 
 const LOCALIZATION_MARKET_QUERY = `#graphql
-  query LocalizationMarket {
+  query RootLocalizationMarket {
     localization {
       market {
         handle

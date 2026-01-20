@@ -288,11 +288,11 @@ export type FooterQuery = {
   >;
 };
 
-export type LocalizationMarketQueryVariables = StorefrontAPI.Exact<{
+export type RootLocalizationMarketQueryVariables = StorefrontAPI.Exact<{
   [key: string]: never;
 }>;
 
-export type LocalizationMarketQuery = {
+export type RootLocalizationMarketQuery = {
   localization: {
     market: Pick<StorefrontAPI.Market, 'handle'> & {
       metafields: Array<
@@ -308,6 +308,40 @@ export type MetaobjectByIdQueryVariables = StorefrontAPI.Exact<{
 }>;
 
 export type MetaobjectByIdQuery = {
+  metaobject?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Metaobject, 'id' | 'type'> & {
+      fields: Array<
+        Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'> & {
+          reference?: StorefrontAPI.Maybe<{
+            image?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
+            >;
+          }>;
+        }
+      >;
+    }
+  >;
+};
+
+export type LocalizationMarketQueryVariables = StorefrontAPI.Exact<{
+  [key: string]: never;
+}>;
+
+export type LocalizationMarketQuery = {
+  localization: {
+    market: {
+      metafields: Array<
+        StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'key' | 'value'>>
+      >;
+    };
+  };
+};
+
+export type MetaobjectQueryVariables = StorefrontAPI.Exact<{
+  id: StorefrontAPI.Scalars['ID']['input'];
+}>;
+
+export type MetaobjectQuery = {
   metaobject?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.Metaobject, 'id' | 'type'> & {
       fields: Array<
@@ -1162,13 +1196,21 @@ interface GeneratedQueryTypes {
     return: FooterQuery;
     variables: FooterQueryVariables;
   };
-  '#graphql\n  query LocalizationMarket {\n    localization {\n      market {\n        handle\n        metafields(\n          identifiers: [\n            { namespace: "custom", key: "announcement_bar_text_desktop" }\n            { namespace: "custom", key: "trustpilot_text" }\n            { namespace: "custom", key: "global_phone" }\n            { namespace: "custom", key: "global_email" }\n            { namespace: "custom", key: "home_banner" }\n          ]\n        ) {\n          key\n          value\n        }\n      }\n      country {\n        isoCode\n      }\n    }\n  }\n': {
-    return: LocalizationMarketQuery;
-    variables: LocalizationMarketQueryVariables;
+  '#graphql\n  query RootLocalizationMarket {\n    localization {\n      market {\n        handle\n        metafields(\n          identifiers: [\n            { namespace: "custom", key: "announcement_bar_text_desktop" }\n            { namespace: "custom", key: "announcement_bar_link" }\n            { namespace: "custom", key: "trustpilot_text" }\n            { namespace: "custom", key: "global_phone" }\n            { namespace: "custom", key: "global_email" }\n            { namespace: "custom", key: "home_banner" }\n          ]\n        ) {\n          key\n          value\n        }\n      }\n      country {\n        isoCode\n      }\n    }\n  }\n': {
+    return: RootLocalizationMarketQuery;
+    variables: RootLocalizationMarketQueryVariables;
   };
   '#graphql\n  query MetaobjectById($id: ID!) {\n    metaobject(id: $id) {\n      id\n      type\n      fields {\n        key\n        value\n        reference {\n          ... on MediaImage {\n            image {\n              url\n              altText\n              width\n              height\n            }\n          }\n        }\n      }\n    }\n  }\n': {
     return: MetaobjectByIdQuery;
     variables: MetaobjectByIdQueryVariables;
+  };
+  '#graphql\n  query LocalizationMarket {\n    localization {\n      market {\n        metafields(identifiers: [\n          {namespace: "custom", key: "home_banner"}\n        ]) {\n          key\n          value\n        }\n      }\n    }\n  }\n': {
+    return: LocalizationMarketQuery;
+    variables: LocalizationMarketQueryVariables;
+  };
+  '#graphql\n  query Metaobject($id: ID!) {\n    metaobject(id: $id) {\n      id\n      type\n      fields {\n        key\n        value\n        reference {\n          ... on MediaImage {\n            image {\n              url\n              altText\n              width\n              height\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+    return: MetaobjectQuery;
+    variables: MetaobjectQueryVariables;
   };
   '#graphql\n  query Article(\n    $articleHandle: String!\n    $blogHandle: String!\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n    blog(handle: $blogHandle) {\n      handle\n      articleByHandle(handle: $articleHandle) {\n        handle\n        title\n        contentHtml\n        publishedAt\n        author: authorV2 {\n          name\n        }\n        image {\n          id\n          altText\n          url\n          width\n          height\n        }\n        seo {\n          description\n          title\n        }\n      }\n    }\n  }\n': {
     return: ArticleQuery;
