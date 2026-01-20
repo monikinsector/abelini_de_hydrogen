@@ -58,17 +58,17 @@ const mockIntersectionObserver = jest.fn((callback: (entries: IntersectionObserv
     disconnect: mockDisconnect,
   };
 });
-window.IntersectionObserver = mockIntersectionObserver as any;
+globalThis.IntersectionObserver = mockIntersectionObserver as any;
 
 describe('MenuHeader', () => {
-  // Mock window.scrollTo to avoid errors in cleanup
-  const originalScrollTo = window.scrollTo;
+  // Mock globalThis.scrollTo to avoid errors in cleanup
+  const originalScrollTo = globalThis.scrollTo;
   beforeAll(() => {
-    window.scrollTo = jest.fn();
+    globalThis.scrollTo = jest.fn();
   });
 
   afterAll(() => {
-    window.scrollTo = originalScrollTo;
+    globalThis.scrollTo = originalScrollTo;
   });
 
   beforeEach(() => {
@@ -171,7 +171,6 @@ describe('MenuHeader', () => {
       const menuButton = screen.getByLabelText('Open navigation menu');
       fireEvent.click(menuButton);
       
-      // Wait for menu to open
       waitFor(() => {
         expect(screen.getByText('Engagement Rings')).toBeInTheDocument();
       });
@@ -204,6 +203,18 @@ describe('MenuHeader', () => {
   });
 
   describe('IntersectionObserver', () => {
+    const simulateIntersection = (isIntersecting: boolean) => {
+      if (!mockObserverCallback) return;
+      
+      const mockEntry = { isIntersecting } as IntersectionObserverEntry;
+      mockObserverCallback([mockEntry]);
+    };
+
+    const verifyStickyIcons = (container: HTMLElement, expectedCount: number) => {
+      const stickyIcons = container.querySelectorAll('[data-testid="topbar-icon-content"]');
+      expect(stickyIcons.length).toBeGreaterThan(expectedCount);
+    };
+
     beforeEach(() => {
       mockObserverCallback = null;
       mockObserve.mockClear();
@@ -228,33 +239,16 @@ describe('MenuHeader', () => {
     it('updates isNavbarStuck when sentinel is not intersecting (scrolled)', () => {
       const { container } = render(<MenuHeader globalPhone="+44 123456789" />);
       
-      // Simulate scroll - sentinel not visible
-      if (mockObserverCallback) {
-        const mockEntry = {
-          isIntersecting: false,
-        } as IntersectionObserverEntry;
-        mockObserverCallback([mockEntry]);
-      }
+      simulateIntersection(false);
 
-      // Check that sticky icons appear when navbar is stuck
-      waitFor(() => {
-        const stickyIcons = container.querySelectorAll('[data-testid="topbar-icon-content"]');
-        expect(stickyIcons.length).toBeGreaterThan(0);
-      });
+      waitFor(() => verifyStickyIcons(container, 0));
     });
 
     it('updates isNavbarStuck when sentinel is intersecting (not scrolled)', () => {
       const { container } = render(<MenuHeader globalPhone="+44 123456789" />);
       
-      // Simulate scroll back - sentinel visible
-      if (mockObserverCallback) {
-        const mockEntry = {
-          isIntersecting: true,
-        } as IntersectionObserverEntry;
-        mockObserverCallback([mockEntry]);
-      }
+      simulateIntersection(true);
 
-      // Sticky icons should not be visible when not stuck
       waitFor(() => {
         const stickyIcons = container.querySelectorAll('[data-testid="topbar-icon-content"][data-items*="Phone"]');
         expect(stickyIcons.length).toBe(0);
@@ -315,48 +309,67 @@ describe('MenuHeader', () => {
     it('applies correct mobile nav classes', () => {
       const { container } = render(<MenuHeader globalPhone="+44 123456789" />);
       
-      const mobileNav = container.querySelector('nav.md\\:hidden');
+      const mobileNav = container.querySelector(
+        String.raw`nav.md\:hidden`
+      );
       expect(mobileNav).toBeInTheDocument();
       expect(mobileNav).toHaveClass('md:hidden', 'block', 'bg-white', 'border-t-2', 'border-t-gray-300');
     });
   });
 
   describe('Body Scroll Prevention', () => {
-    it('prevents body scroll when mobile menu opens', () => {
-      render(<MenuHeader globalPhone="+44 123456789" />);
-      
+    const openMobileMenu = () => {
       const menuButton = screen.getByLabelText('Open navigation menu');
       fireEvent.click(menuButton);
+    };
+
+    const verifyBodyScrollPrevented = () => {
+      expect(document.body.style.overflow).toBe('hidden');
+      expect(document.body.style.position).toBe('fixed');
+    };
+
+    const verifyBodyScrollRestored = () => {
+      expect(document.body.style.overflow).toBe('');
+      expect(document.body.style.position).toBe('');
+    };
+
+    it('prevents body scroll when mobile menu opens', () => {
+      render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
       
-      waitFor(() => {
-        expect(document.body.style.overflow).toBe('hidden');
-        expect(document.body.style.position).toBe('fixed');
-      });
+      waitFor(verifyBodyScrollPrevented);
     });
 
     it('restores body scroll when mobile menu closes', () => {
       render(<MenuHeader globalPhone="+44 123456789" />);
-      
-      const menuButton = screen.getByLabelText('Open navigation menu');
-      fireEvent.click(menuButton);
+      openMobileMenu();
       
       const closeButton = screen.getByLabelText('Close navigation menu');
       fireEvent.click(closeButton);
       
-      waitFor(() => {
-        expect(document.body.style.overflow).toBe('');
-        expect(document.body.style.position).toBe('');
-      });
+      waitFor(verifyBodyScrollRestored);
     });
   });
 
   describe('SubMenuPanel Integration', () => {
-    it('renders SubMenuPanel when submenu is active', () => {
-      render(<MenuHeader globalPhone="+44 123456789" />);
-      
-      // Open mobile menu first
+    const openMobileMenu = () => {
       const menuButton = screen.getByLabelText('Open navigation menu');
       fireEvent.click(menuButton);
+    };
+
+    const clickEngagementRings = () => {
+      const engagementRingsButton = screen.getByText('ENGAGEMENT RINGS');
+      fireEvent.click(engagementRingsButton);
+    };
+
+    const verifySubmenuPanelState = (expectedOpen: boolean) => {
+      const submenuPanel = screen.getByTestId('submenu-panel');
+      expect(submenuPanel).toHaveAttribute('data-open', expectedOpen.toString());
+    };
+
+    it('renders SubMenuPanel when submenu is active', () => {
+      render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
       
       waitFor(() => {
         const submenuPanel = screen.queryByTestId('submenu-panel');
@@ -364,300 +377,288 @@ describe('MenuHeader', () => {
       });
     });
 
-    it('opens submenu when menu item with submenu is clicked', () => {
+    it('opens submenu when menu item with submenu is clicked', async () => {
       render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
       
-      // Open mobile menu
-      const menuButton = screen.getByLabelText('Open navigation menu');
-      fireEvent.click(menuButton);
-      
-      // Find a menu item with submenu (like "ENGAGEMENT RINGS")
-      waitFor(() => {
+      await waitFor(() => {
         const engagementRingsButton = screen.getByText('ENGAGEMENT RINGS');
         expect(engagementRingsButton).toBeInTheDocument();
-        
-        fireEvent.click(engagementRingsButton);
-        
-        // SubMenuPanel should be open
-        const submenuPanel = screen.getByTestId('submenu-panel');
-        expect(submenuPanel).toHaveAttribute('data-open', 'true');
       });
+
+      clickEngagementRings();
+      verifySubmenuPanelState(true);
     });
 
-    it('closes submenu when back button is clicked', () => {
+    it('closes submenu when back button is clicked', async () => {
       render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
       
-      // Open mobile menu
-      const menuButton = screen.getByLabelText('Open navigation menu');
-      fireEvent.click(menuButton);
+      await waitFor(() => screen.getByText('ENGAGEMENT RINGS'));
       
-      waitFor(() => {
-        // Open submenu
-        const engagementRingsButton = screen.getByText('ENGAGEMENT RINGS');
-        fireEvent.click(engagementRingsButton);
-        
-        // Click back button
-        const backButton = screen.getByTestId('submenu-back');
-        fireEvent.click(backButton);
-        
-        // SubMenuPanel should be closed
-        const submenuPanel = screen.getByTestId('submenu-panel');
-        expect(submenuPanel).toHaveAttribute('data-open', 'false');
-      });
+      clickEngagementRings();
+      
+      const backButton = screen.getByTestId('submenu-back');
+      fireEvent.click(backButton);
+      
+      verifySubmenuPanelState(false);
     });
 
-    it('closes mobile menu when submenu close is clicked', () => {
+    it('closes mobile menu when submenu close is clicked', async () => {
       render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
       
-      // Open mobile menu
-      const menuButton = screen.getByLabelText('Open navigation menu');
-      fireEvent.click(menuButton);
+      await waitFor(() => screen.getByText('ENGAGEMENT RINGS'));
       
-      waitFor(() => {
-        // Open submenu
-        const engagementRingsButton = screen.getByText('ENGAGEMENT RINGS');
-        fireEvent.click(engagementRingsButton);
-        
-        // Click close button in submenu
-        const closeButton = screen.getByTestId('submenu-close');
-        fireEvent.click(closeButton);
-        
-        // Mobile menu should be closed
-        expect(screen.getByLabelText('Open navigation menu')).toBeInTheDocument();
-      });
+      clickEngagementRings();
+      
+      const closeButton = screen.getByTestId('submenu-close');
+      fireEvent.click(closeButton);
+      
+      expect(screen.getByLabelText('Open navigation menu')).toBeInTheDocument();
     });
   });
 
   describe('Mobile Menu Items', () => {
-    it('renders menu items with links', () => {
-      render(<MenuHeader globalPhone="+44 123456789" />);
-      
+    const openMobileMenu = () => {
       const menuButton = screen.getByLabelText('Open navigation menu');
       fireEvent.click(menuButton);
+    };
+
+    const verifyBlogLink = () => {
+      const blogLink = screen.getByText('BLOG');
+      expect(blogLink.closest('a')).toHaveAttribute('href', '/blog');
+    };
+
+    const findExternalLinks = () => {
+      return screen.getAllByRole('link').filter(
+        (link) => link.getAttribute('target') === '_blank'
+      );
+    };
+
+    const verifySubmenuButton = () => {
+      const engagementRingsButton = screen.getByText('ENGAGEMENT RINGS');
+      expect(engagementRingsButton.closest('button')).toBeInTheDocument();
       
-      waitFor(() => {
-        // Items with links should be rendered as links
-        const blogLink = screen.getByText('BLOG');
-        expect(blogLink.closest('a')).toHaveAttribute('href', '/blog');
-      });
+      const rightArrow = screen.getByAltText('Right');
+      expect(rightArrow).toBeInTheDocument();
+    };
+
+    it('renders menu items with links', () => {
+      render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
+      
+      waitFor(verifyBlogLink);
     });
 
     it('renders external links with target and rel attributes', () => {
       render(<MenuHeader globalPhone="+44 123456789" />);
-      
-      const menuButton = screen.getByLabelText('Open navigation menu');
-      fireEvent.click(menuButton);
+      openMobileMenu();
       
       waitFor(() => {
-        // Find external link (if any in menuItems)
-        const externalLinks = screen.getAllByRole('link').filter(
-          (link) => link.getAttribute('target') === '_blank'
-        );
-        // At least check that external link handling works
+        const externalLinks = findExternalLinks();
         expect(externalLinks.length).toBeGreaterThanOrEqual(0);
       });
     });
 
     it('renders menu items with submenus as buttons', () => {
       render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
       
-      const menuButton = screen.getByLabelText('Open navigation menu');
-      fireEvent.click(menuButton);
-      
-      waitFor(() => {
-        const engagementRingsButton = screen.getByText('ENGAGEMENT RINGS');
-        expect(engagementRingsButton.closest('button')).toBeInTheDocument();
-        
-        // Should have right arrow icon for submenu
-        const rightArrow = screen.getByAltText('Right');
-        expect(rightArrow).toBeInTheDocument();
-      });
+      waitFor(verifySubmenuButton);
     });
   });
 
   describe('Contact Information Section', () => {
-    it('renders contact information in mobile menu', () => {
-      render(<MenuHeader globalPhone="+44 123456789" />);
-      
+    const openMobileMenu = () => {
       const menuButton = screen.getByLabelText('Open navigation menu');
       fireEvent.click(menuButton);
+    };
+
+    const verifyContactDetails = () => {
+      expect(screen.getByText('+44 (0) 2038051270')).toBeInTheDocument();
+      expect(screen.getByText('sales@abelini.com')).toBeInTheDocument();
+      expect(screen.getByText('LIVE CHAT')).toBeInTheDocument();
+      expect(screen.getByText('BOOK AN APPOINTMENT')).toBeInTheDocument();
+    };
+
+    const verifyContactIcons = () => {
+      expect(screen.getByAltText('Phone')).toBeInTheDocument();
+      expect(screen.getByAltText('Email')).toBeInTheDocument();
+      expect(screen.getByAltText('Chat')).toBeInTheDocument();
+    };
+
+    it('renders contact information in mobile menu', () => {
+      render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
       
-      waitFor(() => {
-        expect(screen.getByText('+44 (0) 2038051270')).toBeInTheDocument();
-        expect(screen.getByText('sales@abelini.com')).toBeInTheDocument();
-        expect(screen.getByText('LIVE CHAT')).toBeInTheDocument();
-        expect(screen.getByText('BOOK AN APPOINTMENT')).toBeInTheDocument();
-      });
+      waitFor(verifyContactDetails);
     });
 
     it('renders contact information icons', () => {
       render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
       
-      const menuButton = screen.getByLabelText('Open navigation menu');
-      fireEvent.click(menuButton);
-      
-      waitFor(() => {
-        expect(screen.getByAltText('Phone')).toBeInTheDocument();
-        expect(screen.getByAltText('Email')).toBeInTheDocument();
-        expect(screen.getByAltText('Chat')).toBeInTheDocument();
-      });
+      waitFor(verifyContactIcons);
     });
   });
 
   describe('Additional Links Section', () => {
-    it('renders additional links in mobile menu', () => {
-      render(<MenuHeader globalPhone="+44 123456789" />);
-      
+    const openMobileMenu = () => {
       const menuButton = screen.getByLabelText('Open navigation menu');
       fireEvent.click(menuButton);
+    };
+
+    const verifyAdditionalLinks = () => {
+      expect(screen.getByText('INDEPENDENT CUSTOMER REVIEWS')).toBeInTheDocument();
+      expect(screen.getByText('FAQS')).toBeInTheDocument();
+      expect(screen.getByText('FREE DELIVERY')).toBeInTheDocument();
+      expect(screen.getByText('MONEY BACK GUARANTEE')).toBeInTheDocument();
+    };
+
+    const verifyLinkHrefs = () => {
+      const reviewsLink = screen.getByText('INDEPENDENT CUSTOMER REVIEWS');
+      expect(reviewsLink.closest('a')).toHaveAttribute('href', '/customer-reviews');
       
-      waitFor(() => {
-        expect(screen.getByText('INDEPENDENT CUSTOMER REVIEWS')).toBeInTheDocument();
-        expect(screen.getByText('FAQS')).toBeInTheDocument();
-        expect(screen.getByText('FREE DELIVERY')).toBeInTheDocument();
-        expect(screen.getByText('MONEY BACK GUARANTEE')).toBeInTheDocument();
-      });
+      const faqLink = screen.getByText('FAQS');
+      expect(faqLink.closest('a')).toHaveAttribute('href', '/faq');
+    };
+
+    it('renders additional links in mobile menu', () => {
+      render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
+      
+      waitFor(verifyAdditionalLinks);
     });
 
     it('renders additional links with correct hrefs', () => {
       render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
       
-      const menuButton = screen.getByLabelText('Open navigation menu');
-      fireEvent.click(menuButton);
-      
-      waitFor(() => {
-        const reviewsLink = screen.getByText('INDEPENDENT CUSTOMER REVIEWS');
-        expect(reviewsLink.closest('a')).toHaveAttribute('href', '/customer-reviews');
-        
-        const faqLink = screen.getByText('FAQS');
-        expect(faqLink.closest('a')).toHaveAttribute('href', '/faq');
-      });
+      waitFor(verifyLinkHrefs);
     });
   });
 
   describe('Overlay Close', () => {
-    it('closes mobile menu when overlay is clicked', () => {
-      render(<MenuHeader globalPhone="+44 123456789" />);
-      
+    const openMobileMenu = () => {
       const menuButton = screen.getByLabelText('Open navigation menu');
       fireEvent.click(menuButton);
+    };
+
+    const verifyOverlayClosesMenu = async () => {
+      const overlay = screen.getByLabelText('Close navigation menu overlay');
+      expect(overlay).toBeInTheDocument();
       
-      waitFor(() => {
-        const overlay = screen.getByLabelText('Close navigation menu overlay');
-        expect(overlay).toBeInTheDocument();
-        
-        fireEvent.click(overlay);
-        
-        // Menu should be closed
-        expect(screen.getByLabelText('Open navigation menu')).toBeInTheDocument();
-      });
+      fireEvent.click(overlay);
+      
+      expect(screen.getByLabelText('Open navigation menu')).toBeInTheDocument();
+    };
+
+    it('closes mobile menu when overlay is clicked', () => {
+      render(<MenuHeader globalPhone="+44 123456789" />);
+      openMobileMenu();
+      
+      waitFor(verifyOverlayClosesMenu);
     });
   });
 
   describe('Sticky Navbar Icons', () => {
+    const simulateNavbarStuck = () => {
+      if (!mockObserverCallback) return;
+      
+      const mockEntry = { isIntersecting: false } as IntersectionObserverEntry;
+      mockObserverCallback([mockEntry]);
+    };
+
+    const findLeftStickyIcons = (container: HTMLElement) => {
+      return container.querySelectorAll('li:has([data-testid="topbar-icon-content"][data-items*="Phone"])');
+    };
+
+    const findRightStickyIcons = (container: HTMLElement) => {
+      return container.querySelectorAll('li:has([data-testid="topbar-icon-content"][data-items*="Login"])');
+    };
+
     it('shows sticky icons when navbar is stuck', () => {
       const { container } = render(<MenuHeader globalPhone="+44 123456789" />);
       
-      // Simulate scroll - navbar becomes stuck
-      if (mockObserverCallback) {
-        const mockEntry = {
-          isIntersecting: false,
-        } as IntersectionObserverEntry;
-        mockObserverCallback([mockEntry]);
-      }
+      simulateNavbarStuck();
 
       waitFor(() => {
-        // Check for sticky icons on left
-        const leftStickyIcons = container.querySelectorAll('li:has([data-testid="topbar-icon-content"][data-items*="Phone"])');
+        const leftStickyIcons = findLeftStickyIcons(container);
         expect(leftStickyIcons.length).toBeGreaterThan(0);
         
-        // Check for sticky icons on right
-        const rightStickyIcons = container.querySelectorAll('li:has([data-testid="topbar-icon-content"][data-items*="Login"])');
+        const rightStickyIcons = findRightStickyIcons(container);
         expect(rightStickyIcons.length).toBeGreaterThan(0);
       });
     });
 
     it('applies different padding when navbar is stuck', () => {
-      const { container } = render(<MenuHeader globalPhone="+44 123456789" />);
+      render(<MenuHeader globalPhone="+44 123456789" />);
       
-      // Simulate scroll
-      if (mockObserverCallback) {
-        const mockEntry = {
-          isIntersecting: false,
-        } as IntersectionObserverEntry;
-        mockObserverCallback([mockEntry]);
-      }
+      simulateNavbarStuck();
 
       waitFor(() => {
         const engagementRings = screen.getByText('Engagement Rings');
-        expect(engagementRings).toHaveClass('px-2'); // Stuck padding
+        expect(engagementRings).toHaveClass('px-2');
       });
     });
   });
 
   describe('MenuDropdown Edge Cases', () => {
-    it('handles MenuDropdown with image_only type', async () => {
-      const { container } = render(<MenuHeader globalPhone="+44 123456789" />);
+    const triggerHoverAndWaitForDropdown = async (container: HTMLElement, linkText: string) => {
+      const link = screen.getByText(linkText);
+      fireEvent.mouseEnter(link);
       
-      // Hover over "Bracelets" which has image_only in column "ce-1"
-      const bracelets = screen.getByText('Bracelets');
-      fireEvent.mouseEnter(bracelets);
-      
-      // Wait for dropdown to render and check for image_only content
       await waitFor(() => {
         const dropdown = container.querySelector('.absolute.z-30');
         expect(dropdown).toBeInTheDocument();
-        
-        // Check for image with alt="image" which is used in image_only case
-        const images = container.querySelectorAll('img[alt="image"]');
-        expect(images.length).toBeGreaterThan(0);
       });
+    };
+
+    const findImageOnlyContent = (container: HTMLElement) => {
+      const images = container.querySelectorAll('img[alt="image"]');
+      return images;
+    };
+
+    const findButtonWithTheme = (container: HTMLElement) => {
+      const buttons = container.querySelectorAll('button.theme_button_hmenu');
+      return buttons;
+    };
+
+    const findVisitStoreButton = (buttons: NodeListOf<Element>) => {
+      return Array.from(buttons).find(btn => 
+        btn.textContent?.includes('Visit our store')
+      );
+    };
+
+    it('handles MenuDropdown with image_only type', async () => {
+      const { container } = render(<MenuHeader globalPhone="+44 123456789" />);
+      
+      await triggerHoverAndWaitForDropdown(container, 'Bracelets');
+      
+      const images = findImageOnlyContent(container);
+      expect(images.length).toBeGreaterThan(0);
     });
 
     it('handles MenuDropdown with image_with_button type', async () => {
       const { container } = render(<MenuHeader globalPhone="+44 123456789" />);
       
-      // Hover over "QuickShip" which has image_with_button in column "cd-1"
-      const quickShip = screen.getByText('QuickShip');
-      fireEvent.mouseEnter(quickShip);
+      await triggerHoverAndWaitForDropdown(container, 'QuickShip');
       
-      await waitFor(() => {
-        const dropdown = container.querySelector('.absolute.z-30');
-        expect(dropdown).toBeInTheDocument();
-        
-        // Check for button with theme_button_hmenu class which is used in image_with_button case
-        const buttons = container.querySelectorAll('button.theme_button_hmenu');
-        expect(buttons.length).toBeGreaterThan(0);
-        
-        // Check for the button text
-        const visitStoreButton = Array.from(buttons).find(btn => 
-          btn.textContent?.includes('Visit our store')
-        );
-        expect(visitStoreButton).toBeInTheDocument();
-      });
+      const buttons = findButtonWithTheme(container);
+      expect(buttons.length).toBeGreaterThan(0);
+      
+      const visitStoreButton = findVisitStoreButton(buttons);
+      expect(visitStoreButton).toBeInTheDocument();
     });
 
     it('handles MenuDropdown default case with unknown type', () => {
-      // Create a test component that uses mocked data with unknown type
-      // We'll directly test the MenuDropdown component's default case
-      // by creating a scenario where an unknown type is passed
-      
-      // Since MenuDropdown is an internal component, we test it indirectly
-      // by ensuring the component handles edge cases gracefully
-      // The default case is a defensive fallback that returns <h5>Error Here</h5>
-      
-      // To properly test this, we would need to:
-      // 1. Export MenuDropdown separately, OR
-      // 2. Mock dataForNavigation to include unknown type, OR  
-      // 3. Accept that this is defensive code that shouldn't occur in production
-      
-      // For now, we verify the component structure handles it
       const { container } = render(<MenuHeader globalPhone="+44 123456789" />);
       expect(container).toBeInTheDocument();
       
-      // The default case (line 466) is only reachable if an invalid type exists in dataForNavigation
-      // Since our data is valid, this case is defensive and hard to test without
-      // modifying the actual data structure or exporting MenuDropdown separately
+      // The default case is defensive code for invalid types in dataForNavigation
+      // Since our data is valid, this case is not reachable without modifying
+      // the actual data structure or exporting MenuDropdown separately
     });
   });
 });
