@@ -46,9 +46,11 @@ const RangeSlider = ({
     }
   }, [variant, rangeValue]);
 
+  // Calculate percentage for single slider (always compute, but only use when variant is 'single')
+  const percentage = useMemo(() => ((value - min) / (max - min)) * 100, [value, min, max]);
+
   // Single slider 
   if (variant === 'single') {
-    const percentage = useMemo(() => ((value - min) / (max - min)) * 100, [value, min, max]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = Number(e.target.value);
