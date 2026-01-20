@@ -101,17 +101,4 @@ describe('Review Component', () => {
     expect(screen.getByText('I love this product')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
-
-  // it('calls carousel navigation functions', () => {
-  //   render(<Review />);
-
-  //   const nextBtn = screen.getByRole('button', { name: /next/i });
-  //   const prevBtn = screen.getByRole('button', { name: /previous/i });
-
-  //   fireEvent.click(nextBtn);
-  //   fireEvent.click(prevBtn);
-
-  //   expect(mockScrollNext).toHaveBeenCalled();
-  //   expect(mockScrollPrev).toHaveBeenCalled();
-  // });
 });

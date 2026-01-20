@@ -245,7 +245,7 @@ const Review = () => {
                   >
                     {reviewsData?.google_reviews.map((review, i) => (
                       <div
-                        key={i}
+                        key={review.review_id}
                         /* Combined s-item-new and s-item-2 logic:
                           - w-[320px] h-[300px]: Fixed dimensions from your CSS
                           - border-black/10: Mapping rgba(0,0,0,.1)
@@ -261,7 +261,7 @@ const Review = () => {
                           <div className="flex justify-center mt-3 gap-1">
                             {[...Array(5)].map((_, index) => (
                               <Image 
-                                key={index} // <--- Add this line
+                                key={`${review.review_id}-star-${index}`}
                                 src="/assets/images/icons/star.svg" 
                                 alt="Star" 
                                 className="!w-5"
