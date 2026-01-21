@@ -27,6 +27,124 @@ export async function loader(args: Route.LoaderArgs) {
 }
 
 /**
+ * Check if a handle is an article by searching through blogs
+ */
+async function findArticleByHandle(
+  context: Route.LoaderArgs['context'],
+  articleHandle: string,
+  blogs: {nodes: Array<{handle: string}>} | null | undefined,
+): Promise<{blog: any; article: any} | null> {
+  if (!blogs?.nodes) {
+    return null;
+  }
+
+  for (const blogNode of blogs.nodes) {
+    try {
+      const articleCheckResult = await context.storefront.query(
+        `#graphql
+          query CheckArticle($blogHandle: String!, $articleHandle: String!) {
+            blog(handle: $blogHandle) {
+              articleByHandle(handle: $articleHandle) {
+                handle
+              }
+            }
+          }
+        `,
+        {
+          variables: {
+            blogHandle: blogNode.handle,
+            articleHandle,
+          },
+        },
+      );
+
+      if (articleCheckResult?.blog?.articleByHandle) {
+        return await loadFullArticleData(context, blogNode.handle, articleHandle);
+      }
+    } catch (redirectError: any) {
+      // If it's a redirect, re-throw it
+      if (redirectError?.status === 302 || redirectError?.status === 301 || redirectError?.status === 307) {
+        throw redirectError;
+      }
+      // Otherwise continue searching
+      continue;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Load full article data including blog information
+ */
+async function loadFullArticleData(
+  context: Route.LoaderArgs['context'],
+  blogHandle: string,
+  articleHandle: string,
+): Promise<{blog: any; article: any} | null> {
+  const fullArticleResult = await context.storefront.query(
+    `#graphql
+      query ArticleData($blogHandle: String!, $articleHandle: String!) {
+        blog(handle: $blogHandle) {
+          title
+          handle
+          articleByHandle(handle: $articleHandle) {
+            handle
+            title
+            contentHtml
+            publishedAt
+            author: authorV2 {
+              name
+            }
+            image {
+              id
+              altText
+              url
+              width
+              height
+            }
+            seo {
+              description
+              title
+            }
+          }
+        }
+      }
+    `,
+    {
+      variables: {
+        blogHandle,
+        articleHandle,
+      },
+    },
+  );
+
+  const articleBlog = fullArticleResult?.blog;
+  const article = articleBlog?.articleByHandle;
+
+  if (article && articleBlog) {
+    return {blog: articleBlog, article};
+  }
+
+  return null;
+}
+
+/**
+ * Create default blogs structure
+ */
+function createDefaultBlogs() {
+  return {
+    nodes: [],
+    pageInfo: {
+      hasNextPage: false,
+      hasPreviousPage: false,
+      endCursor: null,
+      startCursor: null,
+    },
+  };
+}
+
+/**
  * Load data necessary for rendering content above the fold. This is the critical data
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
@@ -55,102 +173,26 @@ async function loadCriticalData({context, request, params}: Route.LoaderArgs) {
   ]);
 
   const blog = blogResult?.blog;
-  const blogs = blogsResult?.blogs;
+  const blogs = blogsResult?.blogs || createDefaultBlogs();
 
-  // If blog not found, it might be an article handle
-  // Check if it's an article and redirect to the article route
+  // If blog not found, check if it's an article handle
   if (!blog) {
-    // Try to find it as an article by searching through blogs
-    if (blogs?.nodes) {
-      for (const blogNode of blogs.nodes) {
-        try {
-          const articleCheckResult = await context.storefront.query(
-            `#graphql
-              query CheckArticle($blogHandle: String!, $articleHandle: String!) {
-                blog(handle: $blogHandle) {
-                  articleByHandle(handle: $articleHandle) {
-                    handle
-                  }
-                }
-              }
-            `,
-            {
-              variables: {
-                blogHandle: blogNode.handle,
-                articleHandle: params.blogHandle,
-              },
-            },
-          );
+    const articleData = await findArticleByHandle(context, params.blogHandle, blogsResult?.blogs);
+    
+    if (articleData) {
+      redirectIfHandleIsLocalized(request, {
+        handle: params.blogHandle,
+        data: articleData.article,
+      });
 
-          if (articleCheckResult?.blog?.articleByHandle) {
-            // It's an article, not a blog
-            // Since React Router matched this route first, we need to handle it here
-            // Load the full article data and return it
-            const fullArticleResult = await context.storefront.query(
-              `#graphql
-                query ArticleData($blogHandle: String!, $articleHandle: String!) {
-                  blog(handle: $blogHandle) {
-                    title
-                    handle
-                    articleByHandle(handle: $articleHandle) {
-                      handle
-                      title
-                      contentHtml
-                      publishedAt
-                      author: authorV2 {
-                        name
-                      }
-                      image {
-                        id
-                        altText
-                        url
-                        width
-                        height
-                      }
-                      seo {
-                        description
-                        title
-                      }
-                    }
-                  }
-                }
-              `,
-              {
-                variables: {
-                  blogHandle: blogNode.handle,
-                  articleHandle: params.blogHandle,
-                },
-              },
-            );
-
-            const articleBlog = fullArticleResult?.blog;
-            const article = articleBlog?.articleByHandle;
-
-            if (article && articleBlog) {
-              redirectIfHandleIsLocalized(request, {
-                handle: params.blogHandle,
-                data: article,
-              });
-
-              return {
-                isArticle: true,
-                article,
-                blog: articleBlog,
-                blogs: blogs || {nodes: [], pageInfo: {hasNextPage: false, hasPreviousPage: false, endCursor: null, startCursor: null}},
-              };
-            }
-          }
-        } catch (redirectError: any) {
-          // If it's a redirect, re-throw it
-          if (redirectError?.status === 302 || redirectError?.status === 301 || redirectError?.status === 307) {
-            throw redirectError;
-          }
-          // Otherwise continue searching
-          continue;
-        }
-      }
+      return {
+        isArticle: true,
+        article: articleData.article,
+        blog: articleData.blog,
+        blogs,
+      };
     }
-    // Not found as blog or article
+
     throw new Response('Not found', {status: 404});
   }
 
@@ -162,7 +204,7 @@ async function loadCriticalData({context, request, params}: Route.LoaderArgs) {
 
   return {
     blog,
-    blogs: blogs || {nodes: [], pageInfo: {hasNextPage: false, hasPreviousPage: false, endCursor: null, startCursor: null}},
+    blogs,
   };
 }
 
