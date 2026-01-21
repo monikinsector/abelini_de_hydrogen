@@ -15,11 +15,11 @@ interface BlogCategoriesProps {
 export function BlogCategories({
   blogs,
   selectedBlogHandle,
-}: BlogCategoriesProps) {
+}: Readonly<BlogCategoriesProps>) {
   return (
     <div className="flex flex-wrap justify-around items-center blogs-grid my-6">
       <Link
-        className={`blog ${!selectedBlogHandle ? 'active' : ''}`}
+        className={`blog ${selectedBlogHandle ? '' : 'active'}`}
         prefetch="intent"
         to="/blog"
       >

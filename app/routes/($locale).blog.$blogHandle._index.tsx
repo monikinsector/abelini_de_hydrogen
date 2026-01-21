@@ -1,5 +1,5 @@
-import {useLoaderData, redirect} from 'react-router';
-import type {Route} from './+types/blogs.$blogHandle._index';
+import {useLoaderData} from 'react-router';
+import type {Route} from './+types/blog.$blogHandle._index';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import type {ArticleItemFragment} from 'storefrontapi.generated';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';

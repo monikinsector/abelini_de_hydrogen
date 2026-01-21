@@ -66,7 +66,6 @@ async function loadCriticalData({context, request, params}: Route.LoaderArgs) {
           break;
         }
       } catch (e) {
-        // Continue searching through other blogs
         continue;
       }
     }

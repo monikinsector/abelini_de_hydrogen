@@ -9,15 +9,15 @@ import type {ArticleItemFragment} from 'storefrontapi.generated';
 export function ArticleItem({
   article,
   loading,
-}: {
+}: Readonly<{
   article: ArticleItemFragment;
   loading?: HTMLImageElement['loading'];
-}) {
+}>) {
   const publishedAt = new Intl.DateTimeFormat('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  }).format(new Date(article.publishedAt!));
+  }).format(new Date(article.publishedAt));
 
   return (
     <div className="col-span-1 blog-article mb-6" key={article.id}>

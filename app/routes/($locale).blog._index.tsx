@@ -167,11 +167,20 @@ function buildSearchPaginationVariables(
 ) {
   const isForward = 'first' in articlePaginationVariables;
 
+  if (isForward) {
+    return {
+      first: articlePaginationVariables.first || DEFAULT_PAGE_SIZE,
+      last: undefined,
+      endCursor: articlePaginationVariables.endCursor || undefined,
+      startCursor: undefined,
+    };
+  }
+
   return {
-    first: isForward ? articlePaginationVariables.first || DEFAULT_PAGE_SIZE : undefined,
-    last: !isForward ? articlePaginationVariables.last || DEFAULT_PAGE_SIZE : undefined,
-    endCursor: isForward ? articlePaginationVariables.endCursor || undefined : undefined,
-    startCursor: !isForward ? articlePaginationVariables.startCursor || undefined : undefined,
+    first: undefined,
+    last: articlePaginationVariables.last || DEFAULT_PAGE_SIZE,
+    endCursor: undefined,
+    startCursor: articlePaginationVariables.startCursor || undefined,
   };
 }
 
