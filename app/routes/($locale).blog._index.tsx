@@ -1,25 +1,47 @@
 import {useLoaderData} from 'react-router';
 import type {Route} from './+types/blogs._index';
 import {getPaginationVariables} from '@shopify/hydrogen';
-import type {ArticleItemFragment} from 'storefrontapi.generated';
+import type {ArticleItemFragment, BlogsQuery} from 'storefrontapi.generated';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ArticleItem} from '~/components/Blog/ArticleItem';
 import {BlogCategories} from '~/components/Blog/BlogCategories';
+
+// Type definitions
+type BlogNode = BlogsQuery['blogs']['nodes'][0];
 
 // Constants
 const DEFAULT_PAGE_SIZE = 12;
 const MAX_BLOGS_LIMIT = 250; // Shopify's max limit
 
-// Shared empty connection structure
-const EMPTY_CONNECTION = {
-  nodes: [],
-  pageInfo: {
-    hasNextPage: false,
-    hasPreviousPage: false,
-    endCursor: null,
-    startCursor: null,
-  },
-} as const;
+/**
+ * Creates an empty connection structure (mutable to satisfy type requirements)
+ */
+function createEmptyConnection() {
+  return {
+    nodes: [],
+    pageInfo: {
+      hasNextPage: false,
+      hasPreviousPage: false,
+      endCursor: null,
+      startCursor: null,
+    },
+  };
+}
+
+/**
+ * Creates an empty loader state with empty blogs and articles
+ */
+function createEmptyLoaderState(blogs = createEmptyConnection()): {
+  blogs: ReturnType<typeof createEmptyConnection>;
+  articles: ReturnType<typeof createEmptyConnection>;
+  selectedBlog: BlogNode | null;
+} {
+  return {
+    blogs,
+    articles: createEmptyConnection(),
+    selectedBlog: null,
+  };
+}
 
 // Shared ArticleItem fragment to avoid duplication
 const ARTICLE_ITEM_FRAGMENT = `
@@ -61,11 +83,7 @@ export async function loader(args: Route.LoaderArgs) {
   } catch (error) {
     console.error('Error in blog loader:', error);
     // Return empty state instead of throwing to prevent 404
-    return {
-      blogs: EMPTY_CONNECTION,
-      articles: EMPTY_CONNECTION,
-      selectedBlog: null,
-    };
+    return createEmptyLoaderState();
   }
 }
 
@@ -84,11 +102,7 @@ async function loadCriticalData({context, request}: Route.LoaderArgs) {
   } catch (error) {
     console.error('Error in loadCriticalData:', error);
     // Return empty state instead of throwing to prevent 404
-    return {
-      blogs: EMPTY_CONNECTION,
-      articles: EMPTY_CONNECTION,
-      selectedBlog: null,
-    };
+    return createEmptyLoaderState();
   }
 }
 
@@ -118,11 +132,7 @@ async function loadAllArticles({
     const articles = articlesResult?.articles;
 
     if (!articles) {
-      return {
-        blogs: blogs || EMPTY_CONNECTION,
-        articles: EMPTY_CONNECTION,
-        selectedBlog: null,
-      };
+      return createEmptyLoaderState(blogs || createEmptyConnection());
     }
 
     const nodes = Array.isArray(articles.nodes) ? articles.nodes : [];
@@ -133,7 +143,7 @@ async function loadAllArticles({
     );
 
     return {
-      blogs: blogs || EMPTY_CONNECTION,
+      blogs: blogs || createEmptyConnection(),
       articles: {
         nodes,
         pageInfo,
@@ -207,18 +217,10 @@ async function loadBlogsFallback(context: Route.LoaderArgs['context']) {
       },
     });
 
-    return {
-      blogs: blogsResult?.blogs || EMPTY_CONNECTION,
-      articles: EMPTY_CONNECTION,
-      selectedBlog: null,
-    };
+    return createEmptyLoaderState(blogsResult?.blogs || createEmptyConnection());
   } catch (blogsError) {
     console.error('Error fetching blogs:', blogsError);
-    return {
-      blogs: EMPTY_CONNECTION,
-      articles: EMPTY_CONNECTION,
-      selectedBlog: null,
-    };
+    return createEmptyLoaderState();
   }
 }
 
@@ -273,15 +275,29 @@ export default function Blogs() {
 }
 
 // GraphQL Queries
+// Shared query variables and pageInfo fragment to avoid duplication
+const PAGINATION_VARIABLES = `
+  $country: CountryCode
+  $endCursor: String
+  $first: Int
+  $language: LanguageCode
+  $last: Int
+  $startCursor: String
+` as const;
+
+const PAGE_INFO_FRAGMENT = `
+  pageInfo {
+    hasNextPage
+    hasPreviousPage
+    startCursor
+    endCursor
+  }
+` as const;
+
 // NOTE: https://shopify.dev/docs/api/storefront/latest/objects/blog
 const BLOGS_QUERY = `#graphql
   query Blogs(
-    $country: CountryCode
-    $endCursor: String
-    $first: Int
-    $language: LanguageCode
-    $last: Int
-    $startCursor: String
+    ${PAGINATION_VARIABLES}
   ) @inContext(country: $country, language: $language) {
     blogs(
       first: $first,
@@ -289,12 +305,7 @@ const BLOGS_QUERY = `#graphql
       before: $startCursor,
       after: $endCursor
     ) {
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
+      ${PAGE_INFO_FRAGMENT}
       nodes {
         title
         handle
@@ -313,12 +324,7 @@ const BLOGS_QUERY = `#graphql
 // The search API supports pagination with 'after' and 'before' cursors
 const ALL_ARTICLES_QUERY = `#graphql
   query AllArticles(
-    $country: CountryCode
-    $endCursor: String
-    $first: Int
-    $language: LanguageCode
-    $last: Int
-    $startCursor: String
+    ${PAGINATION_VARIABLES}
   ) @inContext(country: $country, language: $language) {
     articles: search(
       query: "*",
@@ -333,12 +339,7 @@ const ALL_ARTICLES_QUERY = `#graphql
           ...ArticleItem
         }
       }
-      pageInfo {
-        hasPreviousPage
-        hasNextPage
-        endCursor
-        startCursor
-      }
+      ${PAGE_INFO_FRAGMENT}
     }
   }
   ${ARTICLE_ITEM_FRAGMENT}
