@@ -287,7 +287,8 @@ function usePredictiveSearch(): UsePredictiveSearchReturn {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   if (fetcher?.state === 'loading') {
-    term.current = String(fetcher.formData?.get('q') || '');
+    const queryValue = fetcher.formData?.get('q');
+    term.current = typeof queryValue === 'string' ? queryValue : '';
   }
 
   // capture the search input element as a ref

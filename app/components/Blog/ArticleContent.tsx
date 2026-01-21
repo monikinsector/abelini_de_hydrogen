@@ -12,7 +12,7 @@ interface ArticleContentProps {
  * Article Content Component
  * Displays the full article content with title, image, and body
  */
-export function ArticleContent({article}: ArticleContentProps) {
+export function ArticleContent({article}: Readonly<ArticleContentProps>) {
   const {title, image, contentHtml, author, publishedAt} = article;
 
   const publishedDate = new Intl.DateTimeFormat('en-US', {
