@@ -50,13 +50,23 @@ export const meta: Route.MetaFunction = () => {
 };
 
 export async function loader(args: Route.LoaderArgs) {
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
+  try {
+    // Start fetching non-critical data without blocking time to first byte
+    const deferredData = loadDeferredData(args);
 
-  // Await the critical data required to render initial state of the page
-  const criticalData = await loadCriticalData(args);
+    // Await the critical data required to render initial state of the page
+    const criticalData = await loadCriticalData(args);
 
-  return {...deferredData, ...criticalData};
+    return {...deferredData, ...criticalData};
+  } catch (error) {
+    console.error('Error in blog loader:', error);
+    // Return empty state instead of throwing to prevent 404
+    return {
+      blogs: EMPTY_CONNECTION,
+      articles: EMPTY_CONNECTION,
+      selectedBlog: null,
+    };
+  }
 }
 
 /**
@@ -64,12 +74,22 @@ export async function loader(args: Route.LoaderArgs) {
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
 async function loadCriticalData({context, request}: Route.LoaderArgs) {
-  const articlePaginationVariables = getPaginationVariables(request, {
-    pageBy: DEFAULT_PAGE_SIZE,
-  });
+  try {
+    const articlePaginationVariables = getPaginationVariables(request, {
+      pageBy: DEFAULT_PAGE_SIZE,
+    });
 
-  // Fetch all blogs and all articles
-  return await loadAllArticles({context, articlePaginationVariables});
+    // Fetch all blogs and all articles
+    return await loadAllArticles({context, articlePaginationVariables});
+  } catch (error) {
+    console.error('Error in loadCriticalData:', error);
+    // Return empty state instead of throwing to prevent 404
+    return {
+      blogs: EMPTY_CONNECTION,
+      articles: EMPTY_CONNECTION,
+      selectedBlog: null,
+    };
+  }
 }
 
 /**

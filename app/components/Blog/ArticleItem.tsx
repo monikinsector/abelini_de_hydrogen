@@ -21,7 +21,7 @@ export function ArticleItem({
 
   return (
     <div className="col-span-1 blog-article mb-6" key={article.id}>
-      <Link to={`/blog/${article.blog.handle}/${article.handle}`}>
+      <Link to={`/blog/${article.handle}`}>
         {article.image && (
           <div className="blog-article-image mb-4">
             <Image

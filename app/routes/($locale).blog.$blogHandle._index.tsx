@@ -1,10 +1,11 @@
-import {useLoaderData} from 'react-router';
+import {useLoaderData, redirect} from 'react-router';
 import type {Route} from './+types/blogs.$blogHandle._index';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import type {ArticleItemFragment} from 'storefrontapi.generated';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ArticleItem} from '~/components/Blog/ArticleItem';
 import {BlogCategories} from '~/components/Blog/BlogCategories';
+import {ArticleContent} from '~/components/Blog/ArticleContent';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
 // Constants
@@ -56,6 +57,103 @@ async function loadCriticalData({context, request, params}: Route.LoaderArgs) {
   const blog = blogResult?.blog;
   const blogs = blogsResult?.blogs;
 
+  // If blog not found, it might be an article handle
+  // Check if it's an article and redirect to the article route
+  if (!blog) {
+    // Try to find it as an article by searching through blogs
+    if (blogs?.nodes) {
+      for (const blogNode of blogs.nodes) {
+        try {
+          const articleCheckResult = await context.storefront.query(
+            `#graphql
+              query CheckArticle($blogHandle: String!, $articleHandle: String!) {
+                blog(handle: $blogHandle) {
+                  articleByHandle(handle: $articleHandle) {
+                    handle
+                  }
+                }
+              }
+            `,
+            {
+              variables: {
+                blogHandle: blogNode.handle,
+                articleHandle: params.blogHandle,
+              },
+            },
+          );
+
+          if (articleCheckResult?.blog?.articleByHandle) {
+            // It's an article, not a blog
+            // Since React Router matched this route first, we need to handle it here
+            // Load the full article data and return it
+            const fullArticleResult = await context.storefront.query(
+              `#graphql
+                query ArticleData($blogHandle: String!, $articleHandle: String!) {
+                  blog(handle: $blogHandle) {
+                    title
+                    handle
+                    articleByHandle(handle: $articleHandle) {
+                      handle
+                      title
+                      contentHtml
+                      publishedAt
+                      author: authorV2 {
+                        name
+                      }
+                      image {
+                        id
+                        altText
+                        url
+                        width
+                        height
+                      }
+                      seo {
+                        description
+                        title
+                      }
+                    }
+                  }
+                }
+              `,
+              {
+                variables: {
+                  blogHandle: blogNode.handle,
+                  articleHandle: params.blogHandle,
+                },
+              },
+            );
+
+            const articleBlog = fullArticleResult?.blog;
+            const article = articleBlog?.articleByHandle;
+
+            if (article && articleBlog) {
+              redirectIfHandleIsLocalized(request, {
+                handle: params.blogHandle,
+                data: article,
+              });
+
+              return {
+                isArticle: true,
+                article,
+                blog: articleBlog,
+                blogs: blogs || {nodes: [], pageInfo: {hasNextPage: false, hasPreviousPage: false, endCursor: null, startCursor: null}},
+              };
+            }
+          }
+        } catch (redirectError: any) {
+          // If it's a redirect, re-throw it
+          if (redirectError?.status === 302 || redirectError?.status === 301 || redirectError?.status === 307) {
+            throw redirectError;
+          }
+          // Otherwise continue searching
+          continue;
+        }
+      }
+    }
+    // Not found as blog or article
+    throw new Response('Not found', {status: 404});
+  }
+
   if (!blog?.articles) {
     throw new Response('Not found', {status: 404});
   }
@@ -78,7 +176,35 @@ function loadDeferredData({context}: Route.LoaderArgs) {
 }
 
 export default function Blog() {
-  const {blog, blogs} = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>();
+  
+  // Check if this is an article (handled by blog route when article handle matches)
+  if (data.isArticle) {
+    const {article, blog, blogs} = data;
+    return (
+      <section>
+        <div className="container-fluid px-4 lg:px-10 my-6">
+          <div className="blogs">
+            <h1 className="text-h2 font-bold text-primary mx-auto text-center my-6">
+              {blog.title}
+            </h1>
+
+            {/* Blog Categories */}
+            <BlogCategories
+              blogs={blogs}
+              selectedBlogHandle={blog.handle}
+            />
+
+            {/* Article Content */}
+            <ArticleContent article={article} />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Otherwise, it's a blog listing
+  const {blog, blogs} = data;
   const {articles} = blog;
 
   return (
