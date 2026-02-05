@@ -3,11 +3,12 @@ import { cn } from "~/lib/utils";
 
 interface FilterDropdownProps {
   label: string;
+  count?: number;
   isOpen?: boolean;
   onClick?: () => void;
 }
 
-const FilterDropdown = ({ label, isOpen, onClick }: FilterDropdownProps) => {
+const FilterDropdown = ({ label, count, isOpen, onClick }: FilterDropdownProps) => {
   return (
     <button
       onClick={onClick}
@@ -19,6 +20,9 @@ const FilterDropdown = ({ label, isOpen, onClick }: FilterDropdownProps) => {
       )}
     >
       {label}
+      {typeof count === 'number' && (
+        <span className="ml-1 text-gray-500">({count})</span>
+      )}
       <Image src="/assets/images/icons/c_down.svg" alt="Down" width={14}/>
     </button>
   );

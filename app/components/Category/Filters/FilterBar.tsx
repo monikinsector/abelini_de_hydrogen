@@ -1,6 +1,6 @@
-import { useState, lazy } from "react";
+import React, { useState, lazy } from "react";
 import FilterDropdown from "./FilterDropdown";
-import StylePanel from "./StylePanel";
+// import StylePanel from "./StylePanel";
 import { cn } from "~/lib/utils";
 import { Image } from "@shopify/hydrogen";
 import { Link } from "react-router";
@@ -11,20 +11,18 @@ const MobileFilterModal = lazy(() => import('./MobileFilterModal'))
 
 
 interface FilterProps {
-  viewMode: "list" | "grid",
+  viewMode: "list" | "grid";
   setViewMode: (type: "list" | "grid") => void;
-  isMobile: boolean
+  isMobile: boolean;
+  filters?: any[];
+  selectedFilters?: any[];
+  onFilterChange?: (filterId: string, value: string) => void;
+  sortParam?: string;
+  onSortChange?: (sort: string) => void;
+  totalCount?: number;
 }
 
-const filterOptions: StyleTypes[] = [
-  "Style",
-  "Metal",
-  "Stonetype",
-  "Shape",
-  "Setting Type",
-  "By Recipient",
-  "Carat",
-];
+
 
 const filterToggleOptions = [
   "Lab Grown Diamond",
@@ -42,15 +40,89 @@ const viewTypes: Array<{ type: "list" | "grid", isVertical: boolean }> = [
   },
 ]
 
-const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
+const FilterBar = ({ viewMode, setViewMode, isMobile, filters, selectedFilters, onFilterChange, sortParam, onSortChange, totalCount }: FilterProps) => {
   const [diamondType, setDiamondType] = useState(["Diamond"]);
-  const [activeFilter, setActiveFilter] = useState<StyleTypes | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [activeFilterObj, setActiveFilterObj] = useState<any | null>(null);
   const [selectedStyles, setSelectedStyles] = useState<string[]>(["Classic Solitaire"]);
   const [mobileModalOpen, setMobileModalOpen] = useState(false);
+  // State for mobile filter selections
+  const [mobileSelections, setMobileSelections] = useState<Record<string, string[]>>({});
+
+  // Sync mobileSelections with selectedFilters when modal opens
+  React.useEffect(() => {
+    if (mobileModalOpen) {
+      const initial: Record<string, string[]> = {};
+      (selectedFilters || []).forEach(f => {
+        if (!initial[f.id]) initial[f.id] = [];
+        initial[f.id].push(f.value);
+      });
+      setMobileSelections(initial);
+    }
+  }, [mobileModalOpen, selectedFilters]);
+
+  // Handler for toggling filter value in mobile modal
+  const handleMobileOptionToggle = (filterId: string, value: string) => {
+    // Single-select for Style, Metal, Stone Type, Shape
+    const singleSelectLabels = ["style", "metal", "stone_type", "shape"];
+    const isSingleSelect = singleSelectLabels.some(label => filterId.toLowerCase().includes(label));
+    setMobileSelections(prev => {
+      if (isSingleSelect) {
+        // Only one value allowed
+        return { ...prev, [filterId]: [value] };
+      } else {
+        // Multi-select allowed
+        const current = prev[filterId] || [];
+        const exists = current.includes(value);
+        const updated = exists ? current.filter(v => v !== value) : [...current, value];
+        return { ...prev, [filterId]: updated };
+      }
+    });
+  };
+
+  // Handler for applying mobile filter selections
+  const handleMobileApply = () => {
+    // Flatten mobileSelections to array of {id, value}
+    const newSelected: any[] = [];
+    Object.entries(mobileSelections).forEach(([id, values]) => {
+      values.forEach(value => newSelected.push({ id, value }));
+    });
+    // Call onFilterChange for each selected filter
+    if (onFilterChange) {
+      // Clear all first
+      (selectedFilters || []).forEach(f => onFilterChange(f.id, ''));
+      // Then apply new
+      newSelected.forEach(f => onFilterChange(f.id, f.value));
+    }
+    setMobileModalOpen(false);
+  };
 
 
-  const handleFilterClick = (filter: StyleTypes) => {
-    setActiveFilter(activeFilter === filter ? null : filter);
+  const handleFilterClick = (filterLabel: string) => {
+    if (activeFilter === filterLabel) {
+      setActiveFilter(null);
+      setActiveFilterObj(null);
+    } else {
+      setActiveFilter(filterLabel);
+      const found = dynamicFilters.find(f => f.label === filterLabel);
+      setActiveFilterObj(found || null);
+    }
+  };
+
+  // Handler for selecting a filter value
+  const handleSelectFilterValue = (filterId: string, value: string, metaobjectId?: string) => {
+    const singleSelectLabels = ["style", "metal", "stone_type", "shape"];
+    const isSingleSelect = singleSelectLabels.some(label => filterId.toLowerCase().includes(label));
+    if (onFilterChange) {
+      if (isSingleSelect) {
+        // Clear previous selection for this filter before setting new one
+        onFilterChange(filterId, '');
+      }
+      // Pass metaobjectId if available, otherwise fallback to value
+      onFilterChange(filterId, metaobjectId || value);
+    }
+    setActiveFilter(null);
+    setActiveFilterObj(null);
   };
 
   const handleStyleToggle = (style: string) => {
@@ -70,16 +142,22 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
   }
   
 
+
+  // Only show dynamic filters of type LIST with values
+  const dynamicFilters = (filters || []).filter(f => f.type === 'LIST' && Array.isArray(f.values) && f.values.length > 0 && f.label.toLowerCase() !== 'availability');
+
   if (isMobile) {
+    // Calculate selected filter count from selectedFilters (not mobileSelections)
+        const selectedCount = (selectedFilters || []).length;
     return (
       <>
         <div className="flex justify-between w-full">
           <button className="flex items-center gap-2 cursor-pointer" onClick={() => setMobileModalOpen(true)}>
             <Image src="/assets/images/icons/filter_icon.svg" alt="Filter Icon" width={16}/>
-            <p className="text-[#111111] text-[14px]">Filters (1)</p>
+            <p className="text-[#111111] text-[14px]">Filters ({selectedCount})</p>
           </button>
           <div className="flex items-center gap-2">
-            <p className="text-[#111111] text-[14px]">304 Results</p>
+                <p className="text-[#111111] text-[14px]">{typeof totalCount === 'number' ? totalCount : ''} Results</p>
             <Image src="/assets/images/icons/sorting.svg" alt="Sorting Icon" width={16}/>
           </div>
         </div>
@@ -87,13 +165,13 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
           <MobileFilterModal
             isOpen={mobileModalOpen}
             onClose={() => setMobileModalOpen(false)}
-            selections={{}}
-            onOptionToggle={() => { }}
-            onApply={() => { }}
+            selections={mobileSelections}
+            onOptionToggle={handleMobileOptionToggle}
+            onApply={handleMobileApply}
+            dynamicFilters={dynamicFilters}
           />
         </div>
       </>
-
     )
   }
   if (viewMode == "list") {
@@ -145,7 +223,7 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
           ))}
         </div>
 
-        <FilterStyleListAccordion />
+        <FilterStyleListAccordion dynamicFilters={dynamicFilters} selectedFilters={selectedFilters as any[]} onFilterChange={onFilterChange ?? (() => {})} />
       </div>
     )
   }
@@ -196,12 +274,13 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
           </div>
 
           <div className="flex items-center flex-wrap gap-2">
-            {filterOptions.map((filter) => (
+            {dynamicFilters.map((filter) => (
               <FilterDropdown
-                key={filter}
-                label={filter}
-                isOpen={activeFilter === filter}
-                onClick={() => handleFilterClick(filter)}
+                key={filter.id}
+                label={filter.label}
+                count={filter.values?.reduce((acc: number, v: any) => acc + (typeof v.count === 'number' ? v.count : 0), 0)}
+                isOpen={activeFilter === filter.label}
+                onClick={() => handleFilterClick(filter.label)}
               />
             ))}
           </div>
@@ -211,27 +290,90 @@ const FilterBar = ({ viewMode, setViewMode, isMobile }: FilterProps) => {
           <Link to={"/"} className="flex items-center gap-2 text-[14px] bg-white rounded-2xl px-2 py-0 border-1 border-[#ef9000]">Quickship <Image src="/assets/images/icons/quickship_icon.svg" alt="Quickship" width={20} /></Link>
           <SortDropdown
             options={[
-              { label: 'Price (Low > High)', value: 'low_high' },
-              { label: 'Best Seller', value: 'best_seller' },
-              { label: 'Most Recommended', value: 'most_recommended' },
-              { label: 'Most Viewed', value: 'most_viewed' },
-              { label: 'New Arrivals', value: 'new_arrivals' },
-              { label: 'Price (High > Low)', value: 'high_low' },
+              { label: 'Manual', value: 'MANUAL' },
+              { label: 'Best Seller', value: 'BEST_SELLING' },
+              { label: 'Price (Low > High)', value: 'PRICE_ASC' },
+              { label: 'Price (High > Low)', value: 'PRICE_DESC' },
+              { label: 'A - Z', value: 'ALPHA_ASC' },
+              { label: 'Z - A', value: 'ALPHA_DESC' },
+              { label: 'Oldest - Newest', value: 'CREATED' },
+              { label: 'New Arrivals', value: 'CREATED_DESC' },
             ]}
-            onChange={(value) => console.log(value)}
+            onChange={onSortChange}
+            value={sortParam}
           />
         </div>
       </div>
 
       {/* Expandable Panel */}
-      {activeFilter && (
-        <div className="absolute bg-white z-99 w-full border-1 border-[#dee2e6]">
-          <StylePanel
-            activeFilter={activeFilter}
-            selectedStyles={selectedStyles}
-            onStyleToggle={handleStyleToggle}
-            onClose={() => setActiveFilter(null)}
-          />
+      {activeFilter && activeFilterObj && (
+        <div className="absolute bg-white z-99 w-full border-1 border-[#dee2e6] left-0">
+          <div className="px-5 py-6">
+            <div className="flex flex-wrap gap-2">
+              {activeFilterObj.values && activeFilterObj.values.length > 0 ? (
+                activeFilterObj.values
+                  .filter((option: any) => option.metaobject && option.metaobject.code && option.metaobject.code.trim() !== "")
+                  .map((option: any) => {
+                    const code = option.metaobject.code.toLowerCase();
+                    const label = activeFilterObj.label ? activeFilterObj.label.toLowerCase() : "";
+                    const isShapeOrSettingType = ["shape", "setting type"].includes(label);
+                    const isMetalOrStoneType = ["metal", "stonetype", "stone type"].includes(label);
+                    const imageName = isShapeOrSettingType ? `${code}.svg` : `${code}_100x50.png`;
+                    // Set image size: 40x40 for metal/stone type, 60x30 for others
+                    const imgWidth = isMetalOrStoneType ? 40 : 60;
+                    const imgHeight = isMetalOrStoneType ? 40 : 30;
+                    // Add all metaobject fields as data attributes
+                    const metaAttrs = Object.entries(option.metaobject)
+                      .filter(([k]) => k !== 'code')
+                      .reduce((acc, [k, v]) => {
+                        acc[`data-${k.replace(/([A-Z])/g, '-$1').toLowerCase()}`] = v;
+                        return acc;
+                      }, {} as Record<string, any>);
+                    // Check if this value is selected
+                    const isSelected = Array.isArray(selectedFilters) && (selectedFilters as any[]).some(f => f.id === activeFilterObj.id && (f.value === option.label || f.value === option.metaobject?.id));
+                    return (
+                      <div
+                        className="max-w-[90px] group mt-2 px-2 relative flex flex-col items-center cursor-pointer"
+                        key={option.id}
+                        data-code={code}
+                        {...metaAttrs}
+                        onClick={() => handleSelectFilterValue(activeFilterObj.id, option.label, option.metaobject?.id)}
+                      >
+                        <div className={cn(
+                          "p-2 rounded-2xl border-[0.7px]",
+                          isSelected ? "border-[#E07A5F]" : "border-white",
+                          "group-hover:border-[#E07A5F]"
+                        )}>
+                          <Image src={`https://cdn.shopify.com/s/files/1/0933/1789/0388/files/${imageName}`} alt={option.label} width={imgWidth} height={imgHeight}/>
+                        </div>
+                          <p className={cn(
+                            "text-[12px] mt-1 text-[#111111] text-thin text-center leading-[13px]"
+                          )}>
+                          {option.label}
+                          {typeof option.count === 'number' && (
+                            <span className="ml-1 text-gray-500">({option.count})</span>
+                          )}
+                        </p>
+                      </div>
+                    );
+                  })
+              ) : (
+                <div className="bg-filter-panel p-6">
+                  <div className="max-w-7xl mx-auto">
+                    <p className="text-filter-placeholder text-sm text-center">
+                      No Options Available Right Now
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <button
+            onClick={() => { setActiveFilter(null); setActiveFilterObj(null); }}
+            className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-filter-close-hover transition-colors cursor-pointer"
+          >
+            <Image src="/assets/images/icons/x_white.svg" alt="Close" className="text-white" width={16}/>
+          </button>
         </div>
       )}
 

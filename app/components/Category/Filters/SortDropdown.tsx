@@ -11,16 +11,19 @@ type DropdownProps = {
   options: DropdownOption[];
   placeholder?: string;
   onChange?: (value: string) => void;
+  value?: string;
 };
 
 function SortDropdown({
   options,
   placeholder = 'Select an option',
   onChange,
+  value,
 }: Readonly<DropdownProps>) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<DropdownOption>({label: "Best Seller", value: "best_seller"});
   const ref = useRef<HTMLDivElement>(null);
+  // Find the selected option from value prop
+  const selected = options.find(opt => opt.value === value) || options[0];
 
   // Close on outside click
   useEffect(() => {
@@ -35,7 +38,6 @@ function SortDropdown({
   }, []);
 
   const selectOption = (option: DropdownOption) => {
-    setSelected(option);
     setOpen(false);
     onChange?.(option.value);
   };

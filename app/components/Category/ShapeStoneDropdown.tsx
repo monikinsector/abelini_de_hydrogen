@@ -6,6 +6,8 @@ type ShapeStoneDropdownProps = {
   stoneLabel?: string;
   onShapeChange?: (value: string) => void;
   onStoneChange?: (value: string) => void;
+  shapeOptions?: string[];
+  stoneOptions?: string[];
 };
 
 const SHAPE_OPTIONS: string[] = [
@@ -18,6 +20,7 @@ const SHAPE_OPTIONS: string[] = [
   "Heart",
   "Marquise",
   "Cushion",
+  "Radiant"
 ];
 
 const STONE_OPTIONS: string[] = [
@@ -30,27 +33,53 @@ const STONE_OPTIONS: string[] = [
   "Tanzanite",
   "Amethyst",
   "Garnet",
+  "Black Diamond"
 ];
+
+const SHAPE_CODES: Record<string, string> = {
+  Round: "rnd",
+  Princess: "prn",
+  Emerald: "emr",
+  Asscher: "asc",
+  Oval: "ovl",
+  Pear: "per",
+  Heart: "hrt",
+  Marquise: "mqs",
+  Cushion: "cus",
+  Radiant: "rdt",
+};
+
+const STONE_CODES: Record<string, string> = {
+  "Lab Grown Diamond": "lbg",
+  "Natural Diamond": "di",
+  Moissanite: "msnt",
+  "Blue Sapphire": "bs",
+  Ruby: "rb",
+  Emerald: "em",
+  Tanzanite: "tz",
+  Amethyst: "amethyst",
+  Garnet: "gr",
+  "Black Diamond": "bd"
+};
+
 
 function ShapeStoneDropdownBase({
   shapeLabel = "Round",
   stoneLabel = "Lab Grown Diamond",
   onShapeChange,
   onStoneChange,
+  shapeOptions = SHAPE_OPTIONS,
+  stoneOptions = STONE_OPTIONS,
 }: Readonly<ShapeStoneDropdownProps>) {
   const [shapeOpen, setShapeOpen] = useState(false);
   const [stoneOpen, setStoneOpen] = useState(false);
-  const [selectedShape, setSelectedShape] = useState(shapeLabel);
-  const [selectedStone, setSelectedStone] = useState(stoneLabel);
 
   const handleShapeSelect = (value: string) => {
-    setSelectedShape(value);
     setShapeOpen(false);
     onShapeChange?.(value);
   };
 
   const handleStoneSelect = (value: string) => {
-    setSelectedStone(value);
     setStoneOpen(false);
     onStoneChange?.(value);
   };
@@ -63,18 +92,17 @@ function ShapeStoneDropdownBase({
           type="button"
           onClick={() => {
             setShapeOpen((prev) => !prev);
-            // ensure only one dropdown open at a time
             if (!shapeOpen) setStoneOpen(false);
           }}
           className="w-full flex items-center gap-2 px-2 py-1 border border-gray-200 rounded-full bg-white hover:border-gray-300 transition-colors"
         >
-          <Image
-            src="/assets/images/icons/rnd.svg"
-            alt={selectedShape}
-            width={16}
-          />
+          {(() => {
+            const code = SHAPE_CODES[shapeLabel] || "rnd";
+            const url = `https://cdn.shopify.com/s/files/1/0933/1789/0388/files/${code}.svg`;
+            return <Image src={url} alt={shapeLabel} width={16} />;
+          })()}
           <span className="text-[10px] text-gray-700 flex-1 text-left truncate">
-            {selectedShape}
+            {shapeLabel}
           </span>
           <Image
             src="/assets/images/icons/c_down.svg"
@@ -84,16 +112,21 @@ function ShapeStoneDropdownBase({
         </button>
         {shapeOpen && (
           <div className="absolute left-0 right-0 top-full mt-1 z-20 rounded-xl border border-gray-200 bg-white shadow-md max-h-48 overflow-auto">
-            {SHAPE_OPTIONS.map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => handleShapeSelect(option)}
-                className="w-full px-3 py-1.5 text-left text-[11px] text-gray-700 hover:bg-gray-50"
-              >
-                {option}
-              </button>
-            ))}
+            {shapeOptions.map((option) => {
+              const code = SHAPE_CODES[option] || "rnd";
+              const url = `https://cdn.shopify.com/s/files/1/0933/1789/0388/files/${code}.svg`;
+              return (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => handleShapeSelect(option)}
+                  className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[11px] text-gray-700 hover:bg-gray-50"
+                >
+                  <Image src={url} alt={option} width={16} />
+                  <span>{option}</span>
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
@@ -108,9 +141,13 @@ function ShapeStoneDropdownBase({
           }}
           className="w-full flex items-center gap-2 px-2 py-1 border border-gray-200 rounded-full bg-white hover:border-gray-300 transition-colors"
         >
-          <Image src="/assets/images/lbg.png" alt={selectedStone} width={16} />
+          {(() => {
+            const code = STONE_CODES[stoneLabel] || "lbg";
+            const url = `https://cdn.shopify.com/s/files/1/0933/1789/0388/files/${code}.png`;
+            return <Image src={url} alt={stoneLabel} width={16} />;
+          })()}
           <span className="text-[10px] text-gray-700 flex-1 text-left truncate">
-            {selectedStone}
+            {stoneLabel}
           </span>
           <Image
             src="/assets/images/icons/c_down.svg"
@@ -120,16 +157,21 @@ function ShapeStoneDropdownBase({
         </button>
         {stoneOpen && (
           <div className="absolute left-0 right-0 top-full mt-1 z-20 rounded-xl border border-gray-200 bg-white shadow-md max-h-48 overflow-auto">
-            {STONE_OPTIONS.map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => handleStoneSelect(option)}
-                className="w-full px-3 py-1.5 text-left text-[11px] text-gray-700 hover:bg-gray-50"
-              >
-                {option}
-              </button>
-            ))}
+            {stoneOptions.map((option) => {
+              const code = STONE_CODES[option] || "lbg";
+              const url = `https://cdn.shopify.com/s/files/1/0933/1789/0388/files/${code}.png`;
+              return (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => handleStoneSelect(option)}
+                  className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-[11px] text-gray-700 hover:bg-gray-50"
+                >
+                  <Image src={url} alt={option} width={16} />
+                  <span>{option}</span>
+                </button>
+              );
+            })}
           </div>
         )}
       </div>

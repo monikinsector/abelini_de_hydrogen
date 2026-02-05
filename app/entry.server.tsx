@@ -21,7 +21,8 @@ export default async function handleRequest(
     },
     imgSrc: [
       "'self'", 
-      'https://integrations.etrusted.com'
+      'https://integrations.etrusted.com',
+      'https://cdn.shopify.com'
     ]
   });
 

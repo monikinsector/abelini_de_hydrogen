@@ -36,7 +36,7 @@ export const features: Feature[] = [
     },
 ]
 
-export const ringCategories: RingCategory[] = new Array(21).fill({name: "Classic Solitaire"});
+export const ringCategories: RingCategory[] = new Array(21).fill({name: "Classic Solitaire", code: "solitaire"});
 
 export const sampleRings = [
     {
