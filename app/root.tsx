@@ -15,6 +15,7 @@ import favicon from '~/assets/favicon.svg';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import tailwindCss from './styles/tailwind.css?url';
 import carouselCss from './styles/carousel.css?url';
+import ringCategoryCss from './styles/ringcategory.css?url';
 import {PageLayout} from './components/PageLayout';
 /**
  * Zendesk Script for live chat
@@ -200,6 +201,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={tailwindCss}></link>
         <link rel="stylesheet" href={carouselCss}></link>
+        <link rel="stylesheet" href={ringCategoryCss}></link>
         {/* <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link> */}
         <Meta />

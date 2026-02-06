@@ -1,0 +1,8 @@
+/*
+  RingCategory custom styles
+*/
+.ring-category-selected {
+  border-color: #ef9000 !important;
+  font-weight: bold !important;
+  color: #ef9000 !important;
+}
