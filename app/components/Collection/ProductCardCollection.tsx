@@ -1,4 +1,4 @@
-import React, {memo, useState} from "react";
+import React, {memo, useState, useMemo} from "react";
 import {Image} from "@shopify/hydrogen";
 import {Link} from "react-router";
 import {cn} from "~/lib/utils";
@@ -11,6 +11,7 @@ interface MetalOption {
 
 interface ProductCardCollectionProps {
   product: any;
+  activeFilterCodes?: { stone_type?: string; metal?: string; shape?: string };
 }
 
 const defaultMetals: MetalOption[] = [
@@ -20,23 +21,51 @@ const defaultMetals: MetalOption[] = [
   { name: "Metal Platinum Gold", color: "radial-gradient(50% 50% at 0 0, #e5e4e2 0%, #b0b0b0 100%)" },
 ];
 
-const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => {
+const ProductCardCollection = memo(({ product, activeFilterCodes }: ProductCardCollectionProps) => {
   // Extract dynamic options from product.variants or product.options
-  const metals = (product.options?.find(o => o.name.toLowerCase() === 'metal')?.values || []).filter((m: string) => [
+  const metals = (product.options?.find((o: { name: string }) => o.name.toLowerCase() === 'metal')?.values || []).filter((m: string) => [
     '9K White Gold', '9K Yellow Gold', '9K Rose Gold', 'Platinum'
   ].includes(m));
-  const shapes = product.options?.find(o => o.name.toLowerCase() === 'shape')?.values || [];
-  const stones = product.options?.find(o => o.name.toLowerCase() === 'stone type' || o.name.toLowerCase() === 'stonetype')?.values || [];
+  const shapes = product.options?.find((o: { name: string }) => o.name.toLowerCase() === 'shape')?.values || [];
+  const stones = product.options?.find((o: { name: string }) => o.name.toLowerCase() === 'stone type' || o.name.toLowerCase() === 'stonetype')?.values || [];
 
   // Defensive: avoid undefined state if arrays are empty
-  const initialShape = Array.isArray(shapes) && shapes.length > 0 ? shapes[0] : '';
-  const initialStone = Array.isArray(stones) && stones.length > 0 ? stones[0] : '';
-  const initialMetal = Array.isArray(metals) && metals.length > 0 ? metals[0] : '';
+  let initialShape: string = Array.isArray(shapes) && shapes.length > 0 ? String(shapes[0]) : '';
+  let initialStone: string = Array.isArray(stones) && stones.length > 0 ? String(stones[0]) : '';
+  let initialMetal: string = Array.isArray(metals) && metals.length > 0 ? String(metals[0]) : '';
+
+  // If activeFilterCodes is provided, use its code for default selection
+  if (typeof activeFilterCodes !== 'undefined') {
+    if (activeFilterCodes.stone_type && stones.includes(activeFilterCodes.stone_type)) {
+      initialStone = activeFilterCodes.stone_type;
+    }
+    if (activeFilterCodes.metal && metals.includes(activeFilterCodes.metal)) {
+      initialMetal = activeFilterCodes.metal;
+    }
+    if (activeFilterCodes.shape && shapes.includes(activeFilterCodes.shape)) {
+      initialShape = activeFilterCodes.shape;
+    }
+  }
 
   const [selectedShape, setSelectedShape] = useState(initialShape);
   const [selectedStone, setSelectedStone] = useState(initialStone);
   const [activeMetal, setActiveMetal] = useState(initialMetal);
   const [isWishlisted, setIsWishlisted] = useState(false);
+
+  // Update dropdowns when activeFilterCodes changes
+  React.useEffect(() => {
+    if (activeFilterCodes) {
+      if (activeFilterCodes.stone_type && stones.includes(activeFilterCodes.stone_type)) {
+        setSelectedStone(activeFilterCodes.stone_type);
+      }
+      if (activeFilterCodes.metal && metals.includes(activeFilterCodes.metal)) {
+        setActiveMetal(activeFilterCodes.metal);
+      }
+      if (activeFilterCodes.shape && shapes.includes(activeFilterCodes.shape)) {
+        setSelectedShape(activeFilterCodes.shape);
+      }
+    }
+  }, [activeFilterCodes, stones, metals, shapes]);
 
   const variants = product.variants?.nodes || [];
 
@@ -44,18 +73,18 @@ const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => 
   const getAvailableMetals = (shape: string, stone: string) => {
     const metalSet = new Set<string>();
     variants.forEach((variant: any) => {
-      const vMetal = variant.selectedOptions?.find((o: any) => o.name.toLowerCase() === 'metal')?.value;
-      const vShape = variant.selectedOptions?.find((o: any) => o.name.toLowerCase() === 'shape')?.value;
-      const vStone = variant.selectedOptions?.find((o: any) => (o.name.toLowerCase() === 'stone type' || o.name.toLowerCase() === 'stonetype'))?.value;
+      const vMetal: string = variant.selectedOptions?.find((o: { name: string }) => o.name.toLowerCase() === 'metal')?.value;
+      const vShape: string = variant.selectedOptions?.find((o: { name: string }) => o.name.toLowerCase() === 'shape')?.value;
+      const vStone: string = variant.selectedOptions?.find((o: { name: string }) => (o.name.toLowerCase() === 'stone type' || o.name.toLowerCase() === 'stonetype'))?.value;
       if (vShape === shape && vStone === stone && vMetal) {
         metalSet.add(vMetal);
       }
     });
-    return metals.filter(m => metalSet.has(m));
+    return metals.filter((m: string) => metalSet.has(m));
   };
 
   // Linked option logic: filter metal options based on selected shape and stone
-  const linkedMetalOptions = getAvailableMetals(selectedShape, selectedStone);
+  const linkedMetalOptions = getAvailableMetals(String(selectedShape), String(selectedStone));
 
   // When selectedShape or selectedStone changes, auto-select first available metal if current is not valid
   React.useEffect(() => {
@@ -68,59 +97,66 @@ const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => 
   const getAvailableShapes = (metal: string, stone: string) => {
     const shapeSet = new Set<string>();
     variants.forEach((variant: any) => {
-      const vMetal = variant.selectedOptions?.find((o: any) => o.name.toLowerCase() === 'metal')?.value;
-      const vStone = variant.selectedOptions?.find((o: any) => (o.name.toLowerCase() === 'stone type' || o.name.toLowerCase() === 'stonetype'))?.value;
-      const vShape = variant.selectedOptions?.find((o: any) => o.name.toLowerCase() === 'shape')?.value;
+      const vMetal: string = variant.selectedOptions?.find((o: { name: string }) => o.name.toLowerCase() === 'metal')?.value;
+      const vStone: string = variant.selectedOptions?.find((o: { name: string }) => (o.name.toLowerCase() === 'stone type' || o.name.toLowerCase() === 'stonetype'))?.value;
+      const vShape: string = variant.selectedOptions?.find((o: { name: string }) => o.name.toLowerCase() === 'shape')?.value;
       if (vMetal === metal && vStone === stone && vShape) {
         shapeSet.add(vShape);
       }
     });
-    return shapes.filter(s => shapeSet.has(s));
+    return shapes.filter((s: string) => shapeSet.has(s));
   };
 
   // Helper: get available stones for selected metal and shape
   const getAvailableStones = (metal: string, shape: string) => {
     const stoneSet = new Set<string>();
     variants.forEach((variant: any) => {
-      const vMetal = variant.selectedOptions?.find((o: any) => o.name.toLowerCase() === 'metal')?.value;
-      const vShape = variant.selectedOptions?.find((o: any) => o.name.toLowerCase() === 'shape')?.value;
-      const vStone = variant.selectedOptions?.find((o: any) => (o.name.toLowerCase() === 'stone type' || o.name.toLowerCase() === 'stonetype'))?.value;
+      const vMetal: string = variant.selectedOptions?.find((o: { name: string }) => o.name.toLowerCase() === 'metal')?.value;
+      const vShape: string = variant.selectedOptions?.find((o: { name: string }) => o.name.toLowerCase() === 'shape')?.value;
+      const vStone: string = variant.selectedOptions?.find((o: { name: string }) => (o.name.toLowerCase() === 'stone type' || o.name.toLowerCase() === 'stonetype'))?.value;
       if (vMetal === metal && vShape === shape && vStone) {
         stoneSet.add(vStone);
       }
     });
-    return stones.filter(st => stoneSet.has(st));
+    return stones.filter((st: string) => stoneSet.has(st));
   };
 
   // Linked option logic: filter shape options based on selected metal and stone
-  const linkedShapeOptions = getAvailableShapes(activeMetal, selectedStone);
+  const linkedShapeOptions = getAvailableShapes(String(activeMetal), String(selectedStone));
   // Linked option logic: filter stone options based on selected metal and shape
-  const linkedStoneOptions = getAvailableStones(activeMetal, selectedShape);
+  const linkedStoneOptions = getAvailableStones(String(activeMetal), String(selectedShape));
 
   // When selectedStone changes, auto-select first available shape for that stone
   React.useEffect(() => {
-    const availableShapes = getAvailableShapes(activeMetal, selectedStone);
-    if (!availableShapes.includes(selectedShape)) {
+    const availableShapes = getAvailableShapes(String(activeMetal), String(selectedStone));
+    if (!availableShapes.includes(String(selectedShape))) {
       setSelectedShape(availableShapes[0] || '');
     }
   }, [selectedStone, activeMetal, variants.length]);
 
   // When selectedShape changes, auto-select first available stone for that shape
   React.useEffect(() => {
-    const availableStones = getAvailableStones(activeMetal, selectedShape);
-    if (!availableStones.includes(selectedStone)) {
+    const availableStones = getAvailableStones(String(activeMetal), String(selectedShape));
+    if (!availableStones.includes(String(selectedStone))) {
       setSelectedStone(availableStones[0] || '');
     }
   }, [selectedShape, activeMetal, variants.length]);
 
   // Find variant matching selected options (recompute on every render)
-  const selectedVariant = variants.find((variant: any) => {
+  const selectedVariant = React.useMemo(() => {
     return (
-      (!activeMetal || variant.selectedOptions?.find((o: any) => o.name.toLowerCase() === 'metal')?.value === activeMetal) &&
-      (!selectedShape || variant.selectedOptions?.find((o: any) => o.name.toLowerCase() === 'shape')?.value === selectedShape) &&
-      (!selectedStone || variant.selectedOptions?.find((o: any) => (o.name.toLowerCase() === 'stone type' || o.name.toLowerCase() === 'stonetype'))?.value === selectedStone)
+      variants.find((variant: any) => {
+        const vMetal = variant.selectedOptions?.find((o: { name: string }) => o.name.toLowerCase() === 'metal')?.value;
+        const vShape = variant.selectedOptions?.find((o: { name: string }) => o.name.toLowerCase() === 'shape')?.value;
+        const vStone = variant.selectedOptions?.find((o: { name: string }) => (o.name.toLowerCase() === 'stone type' || o.name.toLowerCase() === 'stonetype'))?.value;
+        return (
+          (!activeMetal || vMetal === activeMetal) &&
+          (!selectedShape || vShape === selectedShape) &&
+          (!selectedStone || vStone === selectedStone)
+        );
+      }) || variants[0]
     );
-  }) || variants[0];
+  }, [variants, activeMetal, selectedShape, selectedStone]);
 
   // Use custom keyword metafield for product URL if available
   const keyword = product.keywordMetafield?.value;
@@ -144,11 +180,35 @@ const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => 
   };
 
   // Helper: get shape/stone code
-  const SHAPE_CODES = {
-    Round: "rnd", Princess: "prn", Emerald: "emr", Asscher: "asc", Oval: "ovl", Pear: "per", Heart: "hrt", Marquise: "mqs", Cushion: "cus", Radiant: "rdt"
+  const getShapeCode = (shape: string): string => {
+    switch (shape) {
+      case 'Round': return 'rnd';
+      case 'Princess': return 'prn';
+      case 'Emerald': return 'emr';
+      case 'Asscher': return 'asc';
+      case 'Oval': return 'ovl';
+      case 'Pear': return 'per';
+      case 'Heart': return 'hrt';
+      case 'Marquise': return 'mqs';
+      case 'Cushion': return 'cus';
+      case 'Radiant': return 'rdt';
+      default: return '';
+    }
   };
-  const STONE_CODES = {
-    "Lab Grown Diamond": "di", "Natural Diamond": "di", Moissanite: "di", "Blue Sapphire": "bs", Ruby: "rb", Emerald: "em", Tanzanite: "tz", Amethyst: "amethyst", Garnet: "gr", "Black Diamond": "bd"
+  const getStoneCode = (stone: string): string => {
+    switch (stone) {
+      case 'Lab Grown Diamond':
+      case 'Natural Diamond':
+      case 'Moissanite': return 'di';
+      case 'Blue Sapphire': return 'bs';
+      case 'Ruby': return 'rb';
+      case 'Emerald': return 'em';
+      case 'Tanzanite': return 'tz';
+      case 'Amethyst': return 'amethyst';
+      case 'Garnet': return 'gr';
+      case 'Black Diamond': return 'bd';
+      default: return '';
+    }
   };
 
   // Build image filenames for selected variant
@@ -156,9 +216,9 @@ const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => 
   if (baseParts.length < 13) baseParts = ["product","images","default","setpln","bandpln","shnkstd","none","med","ww","di","rnd","300","0001.jpg"];
 
   // Replace metal, stone, shape
-  baseParts[8] = getMetalCode(activeMetal);
-  baseParts[9] = STONE_CODES[selectedStone] || baseParts[9];
-  baseParts[10] = SHAPE_CODES[selectedShape] || baseParts[10];
+  baseParts[8] = getMetalCode(String(activeMetal));
+  baseParts[9] = getStoneCode(String(selectedStone)) || baseParts[9];
+  baseParts[10] = getShapeCode(String(selectedShape)) || baseParts[10];
   // Force position 11 to '300' always
   baseParts[11] = '300';
 
@@ -178,7 +238,7 @@ const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => 
   let counters = [];
   let variantIndex = -1;
   if (categoryImageCounterMetafield && variants.length) {
-    counters = categoryImageCounterMetafield.split(",").map(v => parseInt(v.trim(),10));
+    counters = categoryImageCounterMetafield.split(",").map((v: string) => parseInt(v.trim(),10));
     variantIndex = variants.findIndex((variant: any) => variant.id === selectedVariant.id);
     if (variantIndex >= 0 && counters[variantIndex] > 0) {
       showFourth = true;
@@ -234,14 +294,12 @@ const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => 
       <div className="relative bg-[#fcfbf9] aspect-square m-2 overflow-hidden">
         <Link to={productUrl} className="block w-full h-full">
           <Image
-            src={image}
+            src={image.endsWith('.avif') ? image : image + '?width=500&crop=center'}
             alt={product.title}
             className="mix-blend-multiply"
             loading="lazy"
             decoding="async"
             sizes="(max-width: 768px) 100vw, 25vw"
-            // Only add width/crop params for non-AVIF images
-            {...(!image.endsWith('.avif') ? {src: image + '?width=500&crop=center'} : {})}
           />
         </Link>
         <button
@@ -260,7 +318,7 @@ const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => 
       {/* Metal radios (designer style) */}
       {showSelectors && (
         <div className="flex justify-center gap-2 py-3">
-          {linkedMetalOptions.map((metal) => (
+          {linkedMetalOptions.map((metal: string) => (
             <button
               key={metal}
               onMouseEnter={() => setActiveMetal(metal)}
@@ -275,6 +333,7 @@ const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => 
               title={metal}
               type="button"
               tabIndex={0}
+              aria-pressed={activeMetal === metal}
             />
           ))}
         </div>
@@ -292,7 +351,7 @@ const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => 
       )}
       <div className="md:h-12 h-auto px-4">
         <div className="hidden group-hover:flex justify-center gap-2 animate-fade-in">
-          {thumbnails.slice(0, 4).map((thumb, index) => {
+          {thumbnails.slice(0, 4).map((thumb: string, index: number) => {
             const isActive = index === mainImageIndex;
             return (
               <div
@@ -306,12 +365,11 @@ const ProductCardCollection = memo(({ product }: ProductCardCollectionProps) => 
                 tabIndex={0}
               >
                 <Image
-                  src={thumb}
+                  src={thumb.endsWith('.avif') ? thumb : thumb + '?width=100&crop=center'}
                   alt={`Image ${index + 1}`}
                   loading="lazy"
                   decoding="async"
                   sizes="(max-width: 768px) 20vw, 5vw"
-                  {...(!thumb.endsWith('.avif') ? {src: thumb + '?width=100&crop=center'} : {})}
                 />
               </div>
             );

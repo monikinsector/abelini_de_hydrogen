@@ -113,6 +113,7 @@ function ShapeStoneDropdownBase({
         {shapeOpen && (
           <div className="absolute left-0 right-0 top-full mt-1 z-20 rounded-xl border border-gray-200 bg-white shadow-md max-h-48 overflow-auto">
             {shapeOptions.map((option) => {
+              console.log("shapeOptions", shapeOptions);
               const code = SHAPE_CODES[option] || "rnd";
               const url = `https://cdn.shopify.com/s/files/1/0933/1789/0388/files/${code}.svg`;
               return (

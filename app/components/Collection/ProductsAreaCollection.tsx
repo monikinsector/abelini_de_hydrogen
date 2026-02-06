@@ -55,6 +55,46 @@ const ProductsAreaCollection = ({
     }
   };
 
+  // Ref for the product grid wrapper
+  const gridRef = React.useRef<HTMLDivElement>(null);
+
+  // Infinite scroll effect with loading guard
+  const loadingRef = React.useRef(false);
+  React.useEffect(() => {
+    loadingRef.current = loadingMore;
+  }, [loadingMore]);
+
+  React.useEffect(() => {
+    if (!onLoadMore) return;
+    const handleScroll = () => {
+      const grid = gridRef.current;
+      if (!grid) return;
+      const rect = grid.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      // If user has scrolled past half of the grid
+      if (rect.top < windowHeight && (windowHeight - rect.top) > rect.height / 2) {
+        if (!loadingRef.current) {
+          loadingRef.current = true;
+          onLoadMore();
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [onLoadMore, products.length]);
+
+  // Build active filter codes for stone_type, metal, shape
+  const activeFilterCodes = { stone_type: undefined, metal: undefined, shape: undefined };
+  if (Array.isArray(selectedFilters)) {
+    selectedFilters.forEach(f => {
+      if (f.metaobject && f.metaobject.type && f.metaobject.code) {
+        if (f.metaobject.type === 'stone_type') activeFilterCodes.stone_type = f.metaobject.code;
+        if (f.metaobject.type === 'metal') activeFilterCodes.metal = f.metaobject.code;
+        if (f.metaobject.type === 'shape') activeFilterCodes.shape = f.metaobject.code;
+      }
+    });
+  }
+
   return (
     <>
       {viewMode == "grid" && (
@@ -74,7 +114,7 @@ const ProductsAreaCollection = ({
         </div>
       )}
 
-      <div className="grid grid-cols-3 md:grid-cols-4 gap-4 bg-white border-t border-t-gray-300 py-6 px-4">
+      <div className="grid grid-cols-3 md:grid-cols-4 gap-4 bg-white border-t border-t-gray-300 py-6 px-4" ref={gridRef}>
         <div className="col-span-3 block md:hidden">
           <FilterBar
             viewMode={"list"}
@@ -128,7 +168,7 @@ const ProductsAreaCollection = ({
               if (item.type === 'banner') {
                 return renderBanner(item.data, item.key);
               } else {
-                return <ProductCardCollection key={item.key} product={item.data} />;
+                return <ProductCardCollection key={item.key} product={item.data} activeFilterCodes={activeFilterCodes} />;
               }
             });
           })()}
