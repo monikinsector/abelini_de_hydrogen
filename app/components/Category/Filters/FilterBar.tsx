@@ -294,9 +294,6 @@ const FilterBar = ({ viewMode, setViewMode, isMobile, filters, selectedFilters, 
               { label: 'Best Seller', value: 'BEST_SELLING' },
               { label: 'Price (Low > High)', value: 'PRICE_ASC' },
               { label: 'Price (High > Low)', value: 'PRICE_DESC' },
-              { label: 'A - Z', value: 'ALPHA_ASC' },
-              { label: 'Z - A', value: 'ALPHA_DESC' },
-              { label: 'Oldest - Newest', value: 'CREATED' },
               { label: 'New Arrivals', value: 'CREATED_DESC' },
             ]}
             onChange={onSortChange}
@@ -312,7 +309,21 @@ const FilterBar = ({ viewMode, setViewMode, isMobile, filters, selectedFilters, 
             <div className="flex flex-wrap gap-2">
               {activeFilterObj.values && activeFilterObj.values.length > 0 ? (
                 activeFilterObj.values
-                  .filter((option: any) => option.metaobject && option.metaobject.code && option.metaobject.code.trim() !== "")
+                  .filter((option: any) => {
+                    if (
+                      activeFilterObj.label &&
+                      activeFilterObj.label.toLowerCase() === "metal"
+                    ) {
+                      const name = option.metaobject.name?.toLowerCase() || "";
+                      // console.log("name active", name);
+                      return (
+                        name.includes("9k") ||
+                        name.includes("silver") ||
+                        name.includes("platinum")
+                      );
+                    }
+                    return option.metaobject && option.metaobject.code && option.metaobject.code.trim() !== "";
+                  })
                   .map((option: any) => {
                     const code = option.metaobject.code.toLowerCase();
                     const label = activeFilterObj.label ? activeFilterObj.label.toLowerCase() : "";
@@ -331,21 +342,29 @@ const FilterBar = ({ viewMode, setViewMode, isMobile, filters, selectedFilters, 
                       }, {} as Record<string, any>);
                     // Check if this value is selected
                     const isSelected = Array.isArray(selectedFilters) && (selectedFilters as any[]).some(f => f.id === activeFilterObj.id && (f.value === option.label || f.value === option.metaobject?.id));
+                    // Add required attributes for filter_param logic
+                    const groupId = option.metaobject?.filter_group_id || option.metaobject?.group_id || option.metaobject?.groupId;
+                    const filterIdAttr = option.metaobject?.filter_id || option.metaobject?.id || option.metaobject?.filterId;
                     return (
                       <div
                         className="max-w-[90px] group mt-2 px-2 relative flex flex-col items-center cursor-pointer"
                         key={option.id}
                         data-code={code}
+                        data-metaobject-id={option.metaobject?.id || ''}
+                        data-label={option.label}
+                        data-filter_group_id={groupId || ''}
+                        data-filter_id={filterIdAttr || ''}
                         {...metaAttrs}
                         onClick={() => handleSelectFilterValue(activeFilterObj.id, option.label, option.metaobject?.id)}
                       >
-                        <div className={cn(
-                          "p-2 rounded-2xl border-[0.7px]",
-                          isSelected ? "border-[#E07A5F]" : "border-white",
-                          "group-hover:border-[#E07A5F]"
-                        )}>
-                          <Image src={`https://cdn.shopify.com/s/files/1/0933/1789/0388/files/${imageName}`} alt={option.label} width={imgWidth} height={imgHeight}/>
-                        </div>
+                        <a href={option.url || ''}>
+                          <div className={cn(
+                            "p-2 rounded-2xl border-[0.7px]",
+                            isSelected ? "border-[#E07A5F]" : "border-white",
+                            "group-hover:border-[#E07A5F]"
+                          )}>
+                            <Image src={`https://cdn.shopify.com/s/files/1/0933/1789/0388/files/${imageName}`} alt={option.label} width={imgWidth} height={imgHeight}/>
+                          </div>
                           <p className={cn(
                             "text-[12px] mt-1 text-[#111111] text-thin text-center leading-[13px]"
                           )}>
@@ -353,7 +372,8 @@ const FilterBar = ({ viewMode, setViewMode, isMobile, filters, selectedFilters, 
                           {typeof option.count === 'number' && (
                             <span className="ml-1 text-gray-500">({option.count})</span>
                           )}
-                        </p>
+                          </p>
+                        </a>
                       </div>
                     );
                   })

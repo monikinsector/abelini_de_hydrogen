@@ -326,7 +326,7 @@ async function loadCriticalData({context, params, request, sortKey, reverse, fil
 
   // Debug: print enrichedFilters JSON to verify filter values
   // eslint-disable-next-line no-console
-  console.log('[DEBUG] enrichedFilters:', JSON.stringify(enrichedFilters, null, 2));
+  // console.log('[DEBUG] enrichedFilters:', JSON.stringify(enrichedFilters, null, 2));
 
   // Calculate total available product count from filters
   let totalProductCount = 0;

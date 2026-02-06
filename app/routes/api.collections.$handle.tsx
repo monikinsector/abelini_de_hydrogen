@@ -3,9 +3,13 @@
 import { getPaginationVariables } from '@shopify/hydrogen';
 
 export async function loader({ context, params, request }: any) {
-  const { handle } = params;
-  const { storefront } = context;
   const url = new URL(request.url);
+  // Support collection_id as query param (for dummy handle)
+  let id = url.searchParams.get('collection_id');
+  if (!id) {
+    id = params.id;
+  }
+  const { storefront } = context;
   // Handle sort param from query string
   const sortParam = url.searchParams.get('sort') || 'MANUAL';
   // Map sortParam to Storefront API sortKey and reverse
@@ -57,7 +61,7 @@ export async function loader({ context, params, request }: any) {
 
   const { country, language } = storefront.i18n;
   const variables = {
-    handle,
+    id,
     first: 48,
     endCursor,
     country,
@@ -349,7 +353,7 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
 const COLLECTION_QUERY = `#graphql
   ${PRODUCT_ITEM_FRAGMENT}
   query Collection(
-    $handle: String!
+    $id: ID!
     $country: CountryCode
     $language: LanguageCode
     $first: Int
@@ -358,7 +362,7 @@ const COLLECTION_QUERY = `#graphql
     $sortKey: ProductCollectionSortKeys
     $reverse: Boolean
   ) @inContext(country: $country, language: $language) {
-    collection(handle: $handle) {
+    collection(id: $id) {
       id
       handle
       title
